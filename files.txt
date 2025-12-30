@@ -1,0 +1,531 @@
+================================================================================
+                    KIDS GAME PLATFORM - PROJECT DOCUMENTATION
+================================================================================
+
+OVERVIEW
+--------
+A Hebrew-language educational game platform for children ages 3-5. Built with
+React + Vite, featuring mobile-responsive design, RTL layout, and gamification
+elements like scoring and progress tracking.
+
+TECH STACK
+----------
+- React 18 with Vite
+- React Router DOM for navigation
+- Framer Motion for animations
+- CSS Modules with CSS Custom Properties
+- LocalStorage for persistence
+
+FEATURES
+--------
+- 3-step onboarding flow (welcome, name, age selection)
+- 3 game categories: Counting (ספירה), Colors (צבעים), Logic (חשיבה)
+- Scoring system: 16/8/4/2/1 points based on attempts
+- Cute mascot character with mood states
+- Mobile-first responsive design
+- Audio infrastructure for voice instructions
+
+================================================================================
+                              FILE STRUCTURE
+================================================================================
+
+ROOT FILES
+----------
+
+./index.html
+    Main HTML entry point. Sets up Hebrew RTL direction, includes meta tags
+    for mobile, and loads the React app.
+
+./package.json
+    NPM package configuration with dependencies (react, react-router-dom,
+    framer-motion) and scripts (dev, build, preview).
+
+./package-lock.json
+    NPM dependency lock file for consistent installations.
+
+./vite.config.js
+    Vite configuration with React plugin setup.
+
+./eslint.config.js
+    ESLint configuration for code quality and React best practices.
+
+./README.md
+    Project readme with setup instructions.
+
+./files.txt
+    This file - comprehensive project documentation.
+
+================================================================================
+                              PUBLIC FOLDER
+================================================================================
+
+./public/audio/README.md
+    Documentation listing all audio files for game instructions and
+    voice feedback. Includes TTS generation instructions.
+
+./public/audio/*.mp3
+    Game instruction audio files (Hebrew TTS):
+    - count-*.mp3 - Counting game instructions
+    - find-*.mp3 - Color finding game instructions
+    - shadow-*.mp3 - Shadow match game instructions
+    - whats-different-*.mp3 - What's different game instructions
+    - pattern-*.mp3 - Pattern completion game instructions
+    - match-*.mp3 - Match pairs game instructions
+
+./public/sounds/*.mp3
+    Voice feedback audio files (Hebrew TTS, he-IL-HilaNeural):
+    - correct-1.mp3 to correct-4.mp3 - Correct answer phrases
+      (כל הכבוד, נהדר, יופי, מצוין) - rate +5%, pitch +3Hz
+    - wrong-1.mp3 to wrong-4.mp3 - Wrong answer phrases
+      (טעות/לא נכון/אופס/כמעט + נסה שוב) - rate -5%, pitch -2Hz
+    - complete-1.mp3 to complete-3.mp3 - Game completion phrases
+      (סיימנו, כל הכבוד סיימת, מדהים עשית את זה) - rate +10%, pitch +5Hz
+    - encourage-1.mp3 to encourage-3.mp3 - Encouragement phrases
+      (בוא ננסה עוד פעם, אפשר לנסות שוב, אל תוותר) - rate 0%, pitch +2Hz
+
+================================================================================
+                              SOURCE CODE (src/)
+================================================================================
+
+ENTRY POINTS
+------------
+
+./src/main.jsx
+    React app entry point. Wraps App with BrowserRouter, UserProvider,
+    and GameProvider for routing and state management.
+
+./src/App.jsx
+    Main App component with route definitions:
+    - "/" -> Onboarding (redirects to /home if completed)
+    - "/home" -> Home page with category selection
+    - "/category/:categoryId" -> Game list per category
+    - "/game/:gameId" -> Game player
+
+./src/index.css
+    Main CSS entry point. Imports modular styles from ./styles/ folder.
+
+--------------------------------------------------------------------------------
+                              STYLES (src/styles/)
+--------------------------------------------------------------------------------
+
+./src/styles/variables.css
+    CSS Custom Properties (design tokens):
+    - Color palette (primary, secondary, accent, success, error, neutrals)
+    - Typography scale (xs to 4xl)
+    - Spacing system (xs to 4xl)
+    - Border radii, shadows, transitions
+    - Z-index layers
+    - Touch-friendly size variables (44px minimum touch target)
+    - Responsive breakpoints (480px, 768px)
+
+./src/styles/base.css
+    Global base styles:
+    - CSS reset (box-sizing, margins)
+    - RTL direction for Hebrew
+    - Body and root styles
+    - Button, link, image defaults
+    - Scrollbar styling
+    - Focus styles for accessibility
+    - Safe area padding for notched devices
+    - Utility classes (.no-select, .sr-only, .touch-target)
+
+./src/styles/animations.css
+    Keyframe animations and utility classes:
+    - bounce, shake, pulse, pop, float, spin, confetti, wiggle, glow
+    - fadeIn, slideUp, scaleIn
+    - Animation delay utilities (.delay-1 through .delay-5)
+    - Reduced motion support (@prefers-reduced-motion)
+
+./src/styles/theme.js
+    JavaScript theme object (for programmatic access to theme values).
+
+--------------------------------------------------------------------------------
+                              CONTEXT (src/context/)
+--------------------------------------------------------------------------------
+
+./src/context/UserContext.jsx
+    User state management:
+    - name: User's name from onboarding
+    - age: Selected age (3, 4, or 5)
+    - totalScore: Accumulated score across all games
+    - hasCompletedOnboarding: Flag for redirect logic
+    - Persists to localStorage
+
+./src/context/GameContext.jsx
+    Game session state management:
+    - currentQuestion: Active question index
+    - score: Current game score
+    - attempts: Attempts on current question
+    - Scoring logic: 16 (1st try), 8, 4, 2, 1 (5th+)
+    - checkAnswer(), nextQuestion(), resetGame() methods
+
+--------------------------------------------------------------------------------
+                              DATA (src/data/)
+--------------------------------------------------------------------------------
+
+./src/data/categories.js
+    Category definitions array:
+    - counting: "ספירה" - Learn counting 1-10
+    - colors: "צבעים" - Identify and match colors
+    - logic: "חשיבה" - Logic and matching games
+    Each has: id, name, description, icon, color
+
+./src/data/games/index.js
+    Games registry and helper functions:
+    - games object with all game definitions
+    - getGameById(id) - Get single game
+    - getGamesByCategory(categoryId) - Filter games by category
+
+./src/data/games/countAnimals.js
+    "Count the Animals" game data:
+    - 5 questions with different animals (fish, butterflies, birds, dogs, cats)
+    - Each question has: instruction text, correct answer, options,
+      animal type, count, positions, and audio URL placeholder
+
+./src/data/games/findColor.js
+    "Find the Color" game data:
+    - 5 questions about finding colored items
+    - Items: red apple, yellow banana, blue ball, pink flower, green frog
+    - Each has: instruction, correct answer, item options with colors
+
+./src/data/games/shadowMatch.js
+    "Shadow Match" game data:
+    - 5 questions matching items to shadows
+    - Items: cat, elephant, star, car, flower
+    - Each has: main item, shadow options, correct shadow ID
+
+./src/data/games/countShapes.js
+    "Count the Shapes" game data (סופרים צורות):
+    - 5 questions counting geometric shapes
+    - Shapes: circles, squares, triangles, stars, hearts
+    - Uses CountingQuestion component with shape SVGs
+
+./src/data/games/whatsDifferent.js
+    "What's Different?" game data (מה שונה?):
+    - 5 questions finding the odd one out
+    - 4 items shown, 3 alike, find the different one
+    - Uses SelectionQuestion component
+
+./src/data/games/completePattern.js
+    "Complete the Pattern" game data (השלימו את הדפוס):
+    - 5 questions with visual patterns using emoji in instruction
+    - Child picks what comes next in the sequence
+    - Uses SelectionQuestion component with shape/color SVGs
+
+./src/data/games/matchPairs.js
+    "Match the Pairs" game data (התאימו זוגות):
+    - 5 questions about matching related items
+    - Pairs: Dog→bone, Bird→nest, Fish→water, Rabbit→carrot, Mouse→cheese
+    - Uses SelectionQuestion component with animal/item SVGs
+
+--------------------------------------------------------------------------------
+                              HOOKS (src/hooks/)
+--------------------------------------------------------------------------------
+
+./src/hooks/useAudio.js
+    Audio playback hook with random voice feedback selection:
+    - playCorrect() - Play random correct answer voice (4 variations: כל הכבוד, נהדר, יופי, מצוין)
+    - playWrong() - Play random wrong answer voice (4 variations: טעות/לא נכון/אופס/כמעט)
+    - playComplete() - Play random game completion voice (3 variations)
+    - playEncourage() - Play random encouragement voice (3 variations)
+    - playSound(type) - Play sound effects (click, star)
+    - playInstruction(url) - Play voice instruction audio
+    - stopInstruction() - Stop current instruction
+    - stopAllAudio() - Stop all audio playback
+    - Uses getRandomItem() helper for variety in feedback
+    - Handles autoplay errors gracefully
+
+--------------------------------------------------------------------------------
+                              PAGES (src/pages/)
+--------------------------------------------------------------------------------
+
+./src/pages/index.js
+    Page exports barrel file.
+
+./src/pages/Onboarding.jsx
+    3-step onboarding flow controller:
+    - Step 0: WelcomeScreen
+    - Step 1: NameInput
+    - Step 2: AgeSelector
+    - Redirects to /home when complete
+
+./src/pages/Home.jsx
+    Main dashboard after onboarding:
+    - Header with user greeting and score
+    - Category cards grid (ספירה, צבעים, חשיבה)
+    - Floating decorations
+
+./src/pages/Category.jsx
+    Game list for selected category:
+    - Header with back button and category info
+    - List of games with icons, descriptions, question counts
+    - Play buttons for each game
+
+./src/pages/Game.jsx
+    Main game player:
+    - Progress bar with step indicators
+    - Score display with multiplier
+    - Renders appropriate question component based on game type
+    - Handles answer feedback with mascot
+    - Audio button for instructions
+    - Shows GameComplete when finished
+
+./src/pages/Home.module.css
+./src/pages/Category.module.css
+./src/pages/Game.module.css
+    CSS Modules for each page with mobile-responsive styles.
+
+--------------------------------------------------------------------------------
+                    COMPONENTS - COMMON (src/components/common/)
+--------------------------------------------------------------------------------
+
+./src/components/common/index.js
+    Common components barrel export.
+
+./src/components/common/Button.jsx
+    Reusable button component:
+    - Variants: primary, secondary, accent, success, ghost
+    - Sizes: small, medium, large, xlarge
+    - Props: fullWidth, disabled, onClick, icon
+
+./src/components/common/Card.jsx
+    Selectable card component for game options:
+    - Sizes: small, medium, large, xlarge
+    - States: selected, correct, wrong, disabled
+    - Touch-friendly with animations
+
+./src/components/common/ProgressBar.jsx
+    Game progress indicator:
+    - Step labels (1-5) showing completion status
+    - Animated fill bar
+    - Current step highlight
+
+./src/components/common/ScoreDisplay.jsx
+    Score badge component:
+    - Shows current score with star icon
+    - Multiplier badge (x2)
+    - Animated on score changes
+
+./src/components/common/AudioButton.jsx
+    Circular audio play button:
+    - Speaker icon
+    - Ripple animation when playing
+    - Sizes: small, medium, large
+
+./src/components/common/Mascot.jsx
+    Cute fox mascot character (inline SVG):
+    - Moods: happy, excited, thinking, sad
+    - Sizes: small, medium, large
+    - Used for feedback and encouragement
+
+./src/components/common/Button.module.css
+./src/components/common/Card.module.css
+./src/components/common/ProgressBar.module.css
+./src/components/common/ScoreDisplay.module.css
+./src/components/common/AudioButton.module.css
+./src/components/common/Mascot.module.css
+    CSS Modules for each common component with responsive styles.
+
+--------------------------------------------------------------------------------
+                    COMPONENTS - GAME (src/components/game/)
+--------------------------------------------------------------------------------
+
+./src/components/game/index.js
+    Game components barrel export.
+
+./src/components/game/CountingQuestion.jsx
+    Counting game question renderer:
+    - Displays animals/shapes as inline SVGs at random positions
+    - Number option cards for answers
+    - Supports animals: fish, butterfly, bird, dog, cat
+    - Supports shapes: circle, square, triangle, star, heart
+
+./src/components/game/SelectionQuestion.jsx
+    Color/selection game question renderer:
+    - Displays items as inline SVGs
+    - Card options for selection
+    - Supports fruits: apple (red/green/yellow), banana, strawberry, grapes, orange
+    - Supports balls: red, blue, green, yellow
+    - Supports flowers: pink, yellow, red, purple
+    - Supports shapes: circle/square (various colors), triangle, star, heart
+    - Supports match-pairs items: bone, carrot, cheese, fish, nest, doghouse,
+      fishbowl, cave, water, house
+    - Supports nature: sun, tree, cloud
+
+./src/components/game/ShadowQuestion.jsx
+    Shadow matching game question renderer:
+    - Main item display (colored)
+    - Shadow silhouette options (grayscale)
+    - Match item to correct shadow
+
+./src/components/game/GameComplete.jsx
+    Game completion celebration screen:
+    - Excited mascot
+    - Star rating (1-3 based on score percentage)
+    - Score display with progress bar
+    - Congratulation message
+    - Play again / Home buttons
+    - Confetti animation
+
+./src/components/game/CountingQuestion.module.css
+./src/components/game/SelectionQuestion.module.css
+./src/components/game/ShadowQuestion.module.css
+./src/components/game/GameComplete.module.css
+    CSS Modules for each game component with responsive styles.
+
+--------------------------------------------------------------------------------
+                 COMPONENTS - ONBOARDING (src/components/onboarding/)
+--------------------------------------------------------------------------------
+
+./src/components/onboarding/index.js
+    Onboarding components barrel export.
+
+./src/components/onboarding/WelcomeScreen.jsx
+    Initial welcome screen:
+    - Large greeting title "שלום! 👋"
+    - Subtitle about learning games
+    - Feature icons (counting, colors, logic)
+    - Excited mascot
+    - "בואו נתחיל!" button
+    - Floating decorations
+
+./src/components/onboarding/NameInput.jsx
+    Name input step:
+    - "מה השם שלך?" title
+    - Text input field
+    - Continue/Skip buttons
+    - Progress dots
+
+./src/components/onboarding/AgeSelector.jsx
+    Age selection step:
+    - "בני כמה אתם?" title
+    - Three age buttons (3, 4, 5) with emojis
+    - Visual selection feedback
+    - Progress dots
+
+./src/components/onboarding/WelcomeScreen.module.css
+./src/components/onboarding/NameInput.module.css
+./src/components/onboarding/AgeSelector.module.css
+    CSS Modules for each onboarding component with responsive styles.
+
+================================================================================
+                              FOLDER STRUCTURE
+================================================================================
+
+kids-game/
+├── index.html              # HTML entry point
+├── package.json            # NPM configuration
+├── vite.config.js          # Vite configuration
+├── eslint.config.js        # ESLint configuration
+├── files.txt               # This documentation file
+├── public/
+│   ├── audio/
+│   │   ├── README.md       # Audio documentation + TTS instructions
+│   │   └── *.mp3           # Game instruction audio files
+│   └── sounds/
+│       └── *.mp3           # Voice feedback audio (correct/wrong/complete/encourage)
+└── src/
+    ├── main.jsx            # React entry point
+    ├── App.jsx             # Main app with routes
+    ├── index.css           # CSS entry (imports styles/)
+    ├── styles/
+    │   ├── variables.css   # CSS custom properties
+    │   ├── base.css        # Global base styles
+    │   └── animations.css  # Keyframe animations
+    ├── context/
+    │   ├── UserContext.jsx # User state management
+    │   └── GameContext.jsx # Game state management
+    ├── data/
+    │   ├── categories.js   # Category definitions
+    │   └── games/
+    │       ├── index.js    # Games registry
+    │       ├── countAnimals.js
+    │       ├── countShapes.js
+    │       ├── findColor.js
+    │       ├── shadowMatch.js
+    │       ├── whatsDifferent.js
+    │       ├── completePattern.js
+    │       └── matchPairs.js
+    ├── hooks/
+    │   └── useAudio.js     # Audio playback hook
+    ├── pages/
+    │   ├── index.js
+    │   ├── Onboarding.jsx
+    │   ├── Home.jsx
+    │   ├── Category.jsx
+    │   ├── Game.jsx
+    │   └── *.module.css
+    └── components/
+        ├── common/
+        │   ├── index.js
+        │   ├── Button.jsx
+        │   ├── Card.jsx
+        │   ├── ProgressBar.jsx
+        │   ├── ScoreDisplay.jsx
+        │   ├── AudioButton.jsx
+        │   ├── Mascot.jsx
+        │   └── *.module.css
+        ├── game/
+        │   ├── index.js
+        │   ├── CountingQuestion.jsx
+        │   ├── SelectionQuestion.jsx
+        │   ├── ShadowQuestion.jsx
+        │   ├── GameComplete.jsx
+        │   └── *.module.css
+        └── onboarding/
+            ├── index.js
+            ├── WelcomeScreen.jsx
+            ├── NameInput.jsx
+            ├── AgeSelector.jsx
+            └── *.module.css
+
+================================================================================
+                              NOTES FOR DEVELOPERS
+================================================================================
+
+ADDING NEW GAMES
+----------------
+1. Create game data file in src/data/games/
+2. Export from src/data/games/index.js
+3. If new question type needed, create component in src/components/game/
+4. Add handling in src/pages/Game.jsx
+
+ADDING AUDIO
+------------
+1. Place audio files in public/sounds/ (effects) or public/audio/ (instructions)
+2. Reference in game data files with URLs like "/audio/filename.mp3"
+3. Audio will auto-play on question load via useAudio hook (1 second delay)
+
+GENERATING TTS AUDIO (Hebrew)
+-----------------------------
+Uses edge-tts library (Microsoft Edge's free neural TTS):
+
+Installation: pip install edge-tts
+
+Generate single file:
+  edge-tts --voice "he-IL-HilaNeural" --text "הטקסט בעברית" --write-media "public/audio/filename.mp3"
+
+Available Hebrew voices:
+  - he-IL-HilaNeural (female, recommended for kids)
+  - he-IL-AvriNeural (male)
+
+Optional modifiers for more expressive speech:
+  --rate "+10%"    (faster)
+  --rate "-10%"    (slower)
+  --pitch "+5Hz"   (higher pitch)
+  --pitch "-5Hz"   (lower pitch)
+
+STYLING
+-------
+- Use CSS variables from src/styles/variables.css
+- All components use CSS Modules (*.module.css)
+- Breakpoints: 480px (mobile), 768px (tablet)
+- Touch targets: minimum 44px
+
+RTL SUPPORT
+-----------
+- HTML dir="rtl" set in index.html
+- CSS handles RTL automatically
+- Text alignment defaults to right
+
+================================================================================

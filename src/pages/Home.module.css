@@ -1,0 +1,245 @@
+/* ===========================================
+   Home Page - Mobile-first Design
+   =========================================== */
+
+.container {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: linear-gradient(180deg, var(--color-background) 0%, var(--color-background-alt) 100%);
+  padding: var(--space-lg);
+  padding-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom, 0px));
+  position: relative;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg) var(--space-2xl);
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--space-3xl);
+}
+
+.greeting {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.greetingText {
+  display: flex;
+  flex-direction: column;
+}
+
+.hello {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+}
+
+.name {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.main {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: var(--z-base);
+}
+
+.title {
+  text-align: center;
+  font-size: clamp(var(--font-size-xl), 6vw, var(--font-size-2xl));
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-3xl);
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: var(--space-2xl);
+}
+
+.categoryCard {
+  padding: var(--space-2xl);
+  border-radius: var(--radius-2xl);
+  cursor: pointer;
+  transition: all var(--transition-slow);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.categoryCard:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.categoryCard:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.categoryIcon {
+  font-size: clamp(48px, 12vw, 64px);
+  display: block;
+  margin-bottom: var(--space-lg);
+}
+
+.categoryName {
+  font-size: clamp(var(--font-size-lg), 5vw, var(--font-size-xl));
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.categoryDescription {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.categoryBar {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 6px;
+}
+
+/* Decorations */
+.decorations {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.decoration {
+  position: absolute;
+  font-size: 32px;
+  opacity: 0.3;
+  animation: float 4s ease-in-out infinite;
+}
+
+.dec1 {
+  top: 15%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.dec2 {
+  top: 40%;
+  right: 8%;
+  animation-delay: 1s;
+}
+
+.dec3 {
+  bottom: 20%;
+  left: 15%;
+  animation-delay: 2s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-md);
+  }
+
+  .header {
+    flex-direction: column;
+    gap: var(--space-lg);
+    text-align: center;
+    padding: var(--space-lg);
+  }
+
+  .greeting {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .title {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .categories {
+    gap: var(--space-lg);
+  }
+
+  .categoryCard {
+    padding: var(--space-xl);
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .container {
+    padding: var(--space-sm);
+  }
+
+  .header {
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-xl);
+    padding: var(--space-md);
+  }
+
+  .name {
+    font-size: var(--font-size-lg);
+  }
+
+  .title {
+    margin-bottom: var(--space-xl);
+  }
+
+  .categories {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .categoryCard {
+    padding: var(--space-lg);
+    border-radius: var(--radius-xl);
+  }
+
+  .categoryIcon {
+    font-size: 40px;
+    margin-bottom: var(--space-md);
+  }
+
+  .decoration {
+    font-size: 24px;
+  }
+}
+
+/* Landscape mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .header {
+    margin-bottom: var(--space-md);
+    padding: var(--space-sm) var(--space-lg);
+  }
+
+  .categories {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  .categoryCard {
+    padding: var(--space-md);
+  }
+
+  .categoryIcon {
+    font-size: 32px;
+    margin-bottom: var(--space-sm);
+  }
+}

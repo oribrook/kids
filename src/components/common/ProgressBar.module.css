@@ -1,0 +1,68 @@
+/* ===========================================
+   Progress Bar - Mobile-first Design
+   =========================================== */
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 var(--space-xs);
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  width: clamp(24px, 6vw, 28px);
+  height: clamp(24px, 6vw, 28px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: #ECEFF1;
+  transition: all var(--transition-slow);
+}
+
+.label.completed {
+  background: var(--color-secondary);
+  color: white;
+}
+
+.label.current {
+  background: var(--color-secondary);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(78, 205, 196, 0.4);
+}
+
+.track {
+  width: 100%;
+  background: var(--color-border);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.5s ease;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .labels {
+    padding: 0;
+  }
+
+  .label {
+    width: 22px;
+    height: 22px;
+    font-size: var(--font-size-xs);
+  }
+}

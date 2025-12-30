@@ -1,0 +1,75 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { UserProvider, useUser } from './context/UserContext';
+import { GameProvider } from './context/GameContext';
+import { Onboarding, Home, Category, Game } from './pages';
+import './index.css';
+
+// Protected route wrapper - redirects to onboarding if not completed
+function ProtectedRoute({ children }) {
+  const { user } = useUser();
+
+  if (!user.hasCompletedOnboarding) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+}
+
+// Redirect from onboarding if already completed
+function OnboardingRoute() {
+  const { user } = useUser();
+
+  if (user.hasCompletedOnboarding) {
+    return <Navigate to="/home" replace />;
+  }
+
+  return <Onboarding />;
+}
+
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<OnboardingRoute />} />
+      <Route
+        path="/home"
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/category/:categoryId"
+        element={
+          <ProtectedRoute>
+            <Category />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/game/:gameId"
+        element={
+          <ProtectedRoute>
+            <Game />
+          </ProtectedRoute>
+        }
+      />
+      {/* Fallback route */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <UserProvider>
+        <GameProvider>
+          <AppRoutes />
+        </GameProvider>
+      </UserProvider>
+    </BrowserRouter>
+  );
+}
+
+export default App;

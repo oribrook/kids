@@ -1,0 +1,121 @@
+/* ===========================================
+   CSS Variables - Design Tokens
+   =========================================== */
+
+:root {
+  /* Colors - Primary */
+  --color-primary: #FF6B6B;
+  --color-primary-light: #FF8080;
+  --color-primary-dark: #E85555;
+
+  /* Colors - Secondary */
+  --color-secondary: #4ECDC4;
+  --color-secondary-light: #5FD8D0;
+  --color-secondary-dark: #3DBDB4;
+
+  /* Colors - Accent */
+  --color-accent: #FFE66D;
+  --color-accent-light: #FFF080;
+  --color-accent-dark: #F5D85E;
+
+  /* Colors - Success/Error */
+  --color-success: #7ED321;
+  --color-success-light: #8FE432;
+  --color-error: #FF4757;
+  --color-error-light: #FF6B78;
+
+  /* Colors - Neutrals */
+  --color-text: #2D3436;
+  --color-text-secondary: #636E72;
+  --color-text-muted: #B0BEC5;
+  --color-background: #FFF9E6;
+  --color-background-alt: #FFECD2;
+  --color-surface: #FFFFFF;
+  --color-border: #E0E0E0;
+
+  /* Category Colors */
+  --color-counting: #74B9FF;
+  --color-colors: #FD79A8;
+  --color-logic: #FDCB6E;
+
+  /* Typography */
+  --font-family: 'Rubik', 'Arial', sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-md: 18px;
+  --font-size-lg: 22px;
+  --font-size-xl: 28px;
+  --font-size-2xl: 36px;
+  --font-size-3xl: 48px;
+  --font-size-4xl: 64px;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-2xl: 24px;
+  --space-3xl: 32px;
+  --space-4xl: 48px;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 50%;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-button: 0 4px 0 rgba(0, 0, 0, 0.2);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s ease;
+
+  /* Z-index layers */
+  --z-base: 1;
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-fixed: 30;
+  --z-modal: 50;
+  --z-tooltip: 100;
+
+  /* Mobile breakpoints (for reference in JS) */
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+
+  /* Touch-friendly sizes */
+  --touch-target-min: 44px;
+  --touch-target-comfortable: 56px;
+}
+
+/* Mobile-first responsive variables */
+@media (max-width: 480px) {
+  :root {
+    --font-size-base: 14px;
+    --font-size-lg: 18px;
+    --font-size-xl: 22px;
+    --font-size-2xl: 28px;
+    --font-size-3xl: 36px;
+    --font-size-4xl: 48px;
+
+    --space-lg: 12px;
+    --space-xl: 16px;
+    --space-2xl: 20px;
+    --space-3xl: 24px;
+  }
+}

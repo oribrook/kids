@@ -1,0 +1,125 @@
+/* ===========================================
+   Card Component - Mobile-friendly
+   =========================================== */
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-normal);
+  border: 4px solid transparent;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.card:active {
+  transform: scale(0.98);
+}
+
+/* Sizes - responsive with clamp */
+.small {
+  width: clamp(60px, 18vw, 80px);
+  height: clamp(60px, 18vw, 80px);
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  border-width: 3px;
+}
+
+.medium {
+  width: clamp(90px, 25vw, 120px);
+  height: clamp(90px, 25vw, 120px);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+}
+
+.large {
+  width: clamp(120px, 30vw, 160px);
+  height: clamp(120px, 30vw, 160px);
+  padding: var(--space-lg);
+  border-radius: var(--radius-xl);
+}
+
+.xlarge {
+  width: clamp(140px, 35vw, 200px);
+  height: clamp(140px, 35vw, 200px);
+  padding: var(--space-xl);
+  border-radius: var(--radius-2xl);
+}
+
+/* States */
+.selected {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 4px rgba(78, 205, 196, 0.3);
+}
+
+.correct {
+  border-color: var(--color-success);
+  background: linear-gradient(180deg, #E8F5E9 0%, #C8E6C9 100%);
+  box-shadow: 0 0 0 4px rgba(126, 211, 33, 0.3);
+  animation: correctPop 0.3s ease;
+}
+
+.wrong {
+  border-color: var(--color-error);
+  background: linear-gradient(180deg, #FFEBEE 0%, #FFCDD2 100%);
+  animation: shake 0.3s ease;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+@keyframes correctPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 480px) {
+  .card {
+    border-width: 3px;
+  }
+
+  .small {
+    width: 60px;
+    height: 60px;
+    padding: var(--space-xs);
+    border-width: 2px;
+  }
+
+  .medium {
+    width: 80px;
+    height: 80px;
+    padding: var(--space-sm);
+  }
+
+  .large {
+    width: 100px;
+    height: 100px;
+    padding: var(--space-md);
+  }
+
+  .xlarge {
+    width: 120px;
+    height: 120px;
+    padding: var(--space-lg);
+  }
+}
