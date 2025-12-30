@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { UserProvider, useUser } from './context/UserContext';
 import { GameProvider } from './context/GameContext';
+import { BackgroundMusicProvider } from './context/BackgroundMusicContext';
 import { Onboarding, Home, Category, Game } from './pages';
+import { MusicToggle } from './components/common';
 import './index.css';
 
 // Protected route wrapper - redirects to onboarding if not completed
@@ -63,11 +65,14 @@ function AppRoutes() {
 function App() {
   return (
     <BrowserRouter>
-      <UserProvider>
-        <GameProvider>
-          <AppRoutes />
-        </GameProvider>
-      </UserProvider>
+      <BackgroundMusicProvider>
+        <UserProvider>
+          <GameProvider>
+            <MusicToggle />
+            <AppRoutes />
+          </GameProvider>
+        </UserProvider>
+      </BackgroundMusicProvider>
     </BrowserRouter>
   );
 }
