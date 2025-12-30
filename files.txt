@@ -24,6 +24,7 @@ FEATURES
 - Cute mascot character with mood states
 - Mobile-first responsive design
 - Audio infrastructure for voice instructions
+- Background music with mute/unmute toggle
 
 ================================================================================
                               FILE STRUCTURE
@@ -82,6 +83,8 @@ ROOT FILES
       (סיימנו, כל הכבוד סיימת, מדהים עשית את זה) - rate +10%, pitch +5Hz
     - encourage-1.mp3 to encourage-3.mp3 - Encouragement phrases
       (בוא ננסה עוד פעם, אפשר לנסות שוב, אל תוותר) - rate 0%, pitch +2Hz
+    - background-music.mp3 - Background music (Mixkit "Playground Fun", royalty-free)
+      3:02 duration, loops at 30% volume, auto-starts on first interaction
 
 ================================================================================
                               SOURCE CODE (src/)
@@ -158,6 +161,12 @@ ENTRY POINTS
     - attempts: Attempts on current question
     - Scoring logic: 16 (1st try), 8, 4, 2, 1 (5th+)
     - checkAnswer(), nextQuestion(), resetGame() methods
+
+./src/context/BackgroundMusicContext.jsx
+    Background music state management:
+    - Auto-starts on first user click/touch (browser autoplay policy)
+    - Loops /sounds/background-music.mp3 at 30% volume
+    - toggleMute(), startMusic(), stopMusic() methods
 
 --------------------------------------------------------------------------------
                               DATA (src/data/)
@@ -318,12 +327,19 @@ ENTRY POINTS
     - Sizes: small, medium, large
     - Used for feedback and encouragement
 
+./src/components/common/MusicToggle.jsx
+    Floating music mute/unmute button:
+    - Fixed position top-left corner
+    - Speaker icon with sound waves / muted icon
+    - Hebrew aria-labels for accessibility
+
 ./src/components/common/Button.module.css
 ./src/components/common/Card.module.css
 ./src/components/common/ProgressBar.module.css
 ./src/components/common/ScoreDisplay.module.css
 ./src/components/common/AudioButton.module.css
 ./src/components/common/Mascot.module.css
+./src/components/common/MusicToggle.module.css
     CSS Modules for each common component with responsive styles.
 
 --------------------------------------------------------------------------------
@@ -434,7 +450,8 @@ kids-game/
     │   └── animations.css  # Keyframe animations
     ├── context/
     │   ├── UserContext.jsx # User state management
-    │   └── GameContext.jsx # Game state management
+    │   ├── GameContext.jsx # Game state management
+    │   └── BackgroundMusicContext.jsx # Background music state
     ├── data/
     │   ├── categories.js   # Category definitions
     │   └── games/
@@ -464,6 +481,7 @@ kids-game/
         │   ├── ScoreDisplay.jsx
         │   ├── AudioButton.jsx
         │   ├── Mascot.jsx
+        │   ├── MusicToggle.jsx
         │   └── *.module.css
         ├── game/
         │   ├── index.js
