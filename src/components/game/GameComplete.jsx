@@ -1,13 +1,8 @@
-import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mascot, Button } from '../common';
 import styles from './GameComplete.module.css';
 
-function GameComplete({ score, maxScore, stars, onPlayAgain, onGoHome, onComplete }) {
-  useEffect(() => {
-    onComplete?.();
-  }, [onComplete]);
-
+function GameComplete({ score, maxScore, stars, onPlayAgain }) {
   const percentage = Math.round((score / maxScore) * 100);
 
   const getMessageByStars = () => {
@@ -139,9 +134,6 @@ function GameComplete({ score, maxScore, stars, onPlayAgain, onGoHome, onComplet
         >
           <Button onClick={onPlayAgain} variant="primary" size="large" icon="🔄">
             שחקו שוב
-          </Button>
-          <Button onClick={onGoHome} variant="secondary" size="large" icon="📋">
-            חזרה לתפריט
           </Button>
         </motion.div>
       </div>

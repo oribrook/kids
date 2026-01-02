@@ -1,16 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGame } from '../context/GameContext';
 import { useUser } from '../context/UserContext';
 import { useAudio } from '../hooks/useAudio';
-import { getGameById } from '../data/games';
+import { getGameById, getQuestionsForDifficulty } from '../data/games';
 import { getCategoryById } from '../data/categories';
 import { ProgressBar, ScoreDisplay, AudioButton, Card, Button, Mascot } from '../components/common';
 import GameComplete from '../components/game/GameComplete';
 import CountingQuestion from '../components/game/CountingQuestion';
 import SelectionQuestion from '../components/game/SelectionQuestion';
 import ShadowQuestion from '../components/game/ShadowQuestion';
+import TimedQuestion from '../components/game/TimedQuestion';
+import MemoryQuestion from '../components/game/MemoryQuestion';
 import styles from './Game.module.css';
 
 function Game() {
@@ -20,21 +22,54 @@ function Game() {
   const category = game ? getCategoryById(game.categoryId) : null;
 
   const { gameState, startGame, submitAnswer, getCurrentQuestion, getProgress, getStars } = useGame();
-  const { addScore, recordGamePlayed } = useUser();
+  const { addScore, recordGamePlayed, currentDifficulty } = useUser();
   const { playCorrect, playWrong, playInstruction, playComplete } = useAudio();
+
+  // Get questions for current difficulty
+  const questions = useMemo(() => {
+    if (!game) return [];
+    return getQuestionsForDifficulty(game, currentDifficulty);
+  }, [game, currentDifficulty]);
 
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
 
+  // Multi-select state: { optionId: 'selected' | 'correct' | 'wrong' }
+  const [multiSelectState, setMultiSelectState] = useState({});
+  const [multiSelectCorrectCount, setMultiSelectCorrectCount] = useState(0);
+
+  // Track the previous isComplete value to detect transition from false -> true
+  // Initialize to true to prevent playing on mount when context has stale isComplete=true
+  const prevIsCompleteRef = useRef(true);
+
   const currentQuestion = getCurrentQuestion();
   const progress = getProgress();
 
   useEffect(() => {
-    if (game) {
-      startGame(game);
+    if (game && questions.length > 0) {
+      // Pass game with difficulty-specific questions
+      const gameWithQuestions = {
+        ...game,
+        questions: questions,
+      };
+      startGame(gameWithQuestions);
     }
-  }, [game, startGame]);
+  }, [game, questions, startGame]);
+
+  // Handle game completion - play audio only when isComplete transitions from false to true
+  useEffect(() => {
+    if (gameState.isComplete && !prevIsCompleteRef.current) {
+      // Transition from false -> true: game just completed, play audio
+      prevIsCompleteRef.current = true;
+      playComplete();
+      addScore(gameState.score);
+      recordGamePlayed(game.id, gameState.score, getStars());
+    } else if (!gameState.isComplete && prevIsCompleteRef.current) {
+      // Transition from true -> false: game was reset, allow audio again for next completion
+      prevIsCompleteRef.current = false;
+    }
+  }, [gameState.isComplete, gameState.score, game?.id, playComplete, addScore, recordGamePlayed, getStars]);
 
   // Auto-play instruction audio 1 second after new question loads
   useEffect(() => {
@@ -66,7 +101,14 @@ function Game() {
     if (game.id === 'count-animals' || game.id === 'count-shapes') {
       correct = answerValue === currentQuestion.correctAnswer;
     } else {
-      correct = answerId === currentQuestion.correctAnswerId;
+      // Check if the selected option has isCorrect: true (supports multiple correct answers)
+      const selectedOption = currentQuestion.options?.find(opt => opt.id === answerId);
+      if (selectedOption?.isCorrect) {
+        correct = true;
+      } else {
+        // Fallback to legacy correctAnswerId check
+        correct = answerId === currentQuestion.correctAnswerId;
+      }
     }
 
     setIsCorrect(correct);
@@ -96,30 +138,121 @@ function Game() {
     }
   };
 
-  const handleGameComplete = () => {
-    playComplete();
-    addScore(gameState.score);
-    recordGamePlayed(game.id, gameState.score, getStars());
+  // Handle multi-select answer (for questions with multiSelect: true)
+  const handleMultiSelectAnswer = (optionId, isOptionCorrect) => {
+    // If already processed this option, ignore
+    if (multiSelectState[optionId] === 'correct' || multiSelectState[optionId] === 'wrong') {
+      return;
+    }
+
+    if (isOptionCorrect) {
+      // Correct selection!
+      playCorrect();
+      const newCorrectCount = multiSelectCorrectCount + 1;
+      setMultiSelectCorrectCount(newCorrectCount);
+      setMultiSelectState(prev => ({ ...prev, [optionId]: 'correct' }));
+
+      // Check if all correct answers found
+      const totalCorrect = currentQuestion.correctCount ||
+        currentQuestion.options.filter(opt => opt.isCorrect).length;
+
+      if (newCorrectCount >= totalCorrect) {
+        // All found! Complete the question
+        setShowFeedback(true);
+        setIsCorrect(true);
+        setTimeout(() => {
+          submitAnswer(true);
+          setSelectedAnswer(null);
+          setShowFeedback(false);
+          setIsCorrect(null);
+          setMultiSelectState({});
+          setMultiSelectCorrectCount(0);
+        }, 1500);
+      }
+    } else {
+      // Wrong selection - show error immediately
+      playWrong();
+      setMultiSelectState(prev => ({ ...prev, [optionId]: 'wrong' }));
+      setShowFeedback(true);
+      setIsCorrect(false);
+
+      // Brief delay then advance (wrong answer)
+      setTimeout(() => {
+        submitAnswer(false);
+        setSelectedAnswer(null);
+        setShowFeedback(false);
+        setIsCorrect(null);
+        setMultiSelectState({});
+        setMultiSelectCorrectCount(0);
+      }, 1000);
+    }
+  };
+
+  // Handle intro multi-select answer (for introduction questions - all correct, plays word audio)
+  const handleIntroMultiSelectAnswer = (optionId, optionAudio) => {
+    // If already selected, replay the audio
+    if (multiSelectState[optionId] === 'correct') {
+      if (optionAudio) {
+        playInstruction(optionAudio);
+      }
+      return;
+    }
+
+    // Play the word audio
+    if (optionAudio) {
+      playInstruction(optionAudio);
+    }
+
+    const newCorrectCount = multiSelectCorrectCount + 1;
+    setMultiSelectCorrectCount(newCorrectCount);
+    setMultiSelectState(prev => ({ ...prev, [optionId]: 'correct' }));
+
+    // Check if all options selected
+    const totalOptions = currentQuestion.options.length;
+
+    if (newCorrectCount >= totalOptions) {
+      // All selected! Complete the question
+      setShowFeedback(true);
+      setIsCorrect(true);
+      setTimeout(() => {
+        submitAnswer(true);
+        setSelectedAnswer(null);
+        setShowFeedback(false);
+        setIsCorrect(null);
+        setMultiSelectState({});
+        setMultiSelectCorrectCount(0);
+      }, 1500);
+    }
   };
 
   const handlePlayAgain = () => {
-    startGame(game);
+    navigate(`/category/${game.categoryId}`);
   };
 
-  const handleGoHome = () => {
-    navigate('/home');
-  };
+  // Handle time up for timed games (must be before early return to follow hooks rules)
+  const handleTimeUp = useCallback(() => {
+    if (showFeedback) return;
+    setShowFeedback(true);
+    setIsCorrect(false);
+    playWrong();
+
+    // Auto-advance after delay
+    setTimeout(() => {
+      submitAnswer(false);
+      setSelectedAnswer(null);
+      setShowFeedback(false);
+      setIsCorrect(null);
+    }, 1500);
+  }, [showFeedback, playWrong, submitAnswer]);
 
   // Show completion screen
   if (gameState.isComplete) {
     return (
       <GameComplete
         score={gameState.score}
-        maxScore={game.questions.length * 16}
+        maxScore={questions.length * 16}
         stars={getStars()}
         onPlayAgain={handlePlayAgain}
-        onGoHome={handleGoHome}
-        onComplete={handleGameComplete}
       />
     );
   }
@@ -136,12 +269,41 @@ function Game() {
       onAnswer: handleAnswer,
     };
 
-    if (game.id === 'count-animals' || game.id === 'count-shapes') {
+    // Check game type first for special handling
+    if (game.gameType === 'timed') {
+      return (
+        <TimedQuestion
+          {...commonProps}
+          timeLimit={game.timeLimit || 10}
+          onTimeUp={handleTimeUp}
+        />
+      );
+    }
+
+    if (game.gameType === 'memory') {
+      return (
+        <MemoryQuestion
+          {...commonProps}
+          memoryTime={game.memoryTime || 3}
+        />
+      );
+    }
+
+    // Standard games - use specific question components
+    if (game.id === 'count-animals' || game.id === 'count-shapes' || game.id === 'speed-count') {
       return <CountingQuestion {...commonProps} />;
     } else if (game.id === 'shadow-match') {
       return <ShadowQuestion {...commonProps} />;
     } else {
-      return <SelectionQuestion {...commonProps} />;
+      // SelectionQuestion - pass multi-select props if needed
+      return (
+        <SelectionQuestion
+          {...commonProps}
+          multiSelectState={multiSelectState}
+          onMultiSelectAnswer={handleMultiSelectAnswer}
+          onIntroMultiSelectAnswer={handleIntroMultiSelectAnswer}
+        />
+      );
     }
   };
 
@@ -158,7 +320,7 @@ function Game() {
         <div className={styles.progressWrapper}>
           <ProgressBar
             current={gameState.currentQuestionIndex + 1}
-            total={game.questions.length}
+            total={questions.length}
             color={category.color}
             showLabels={true}
           />

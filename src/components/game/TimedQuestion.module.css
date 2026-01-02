@@ -1,0 +1,156 @@
+/* ===========================================
+   TimedQuestion - Timed Challenge Component
+   =========================================== */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Timer Section */
+.timerWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.timerBar {
+  flex: 1;
+  height: 12px;
+  background: var(--color-background-alt);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.timerFill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: background-color 0.3s ease;
+}
+
+.timerText {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  min-width: 40px;
+  text-align: center;
+  color: var(--color-text);
+  transition: all 0.3s ease;
+}
+
+.timerText.urgent {
+  color: var(--color-error);
+  animation: pulse 0.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* Time's Up Overlay */
+.timeUpOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: var(--z-modal);
+  background: rgba(255, 255, 255, 0.95);
+  padding: var(--space-2xl) var(--space-3xl);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+
+.timeUpText {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-error);
+}
+
+/* Options Grid */
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
+}
+
+.optionContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--space-md);
+  min-height: 80px;
+}
+
+.numberSvg {
+  width: 60px;
+  height: 75px;
+}
+
+.numberText {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .timerWrapper {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .timerBar {
+    height: 8px;
+  }
+
+  .timerText {
+    font-size: var(--font-size-lg);
+    min-width: 32px;
+  }
+
+  .options {
+    gap: var(--space-md);
+  }
+
+  .optionContent {
+    font-size: var(--font-size-lg);
+    padding: var(--space-sm);
+    min-height: 60px;
+  }
+
+  .timeUpOverlay {
+    padding: var(--space-xl) var(--space-2xl);
+  }
+
+  .timeUpText {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* Landscape mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .container {
+    gap: var(--space-md);
+  }
+
+  .options {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+  }
+
+  .optionContent {
+    min-height: 50px;
+    padding: var(--space-xs);
+  }
+}

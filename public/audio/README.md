@@ -43,6 +43,27 @@
 - `match-rabbit.mp3` - "מה מתאים לארנב?"
 - `match-mouse.mp3` - "מה מתאים לעכבר?"
 
+### Game: Select Letter (letters - Easy)
+- `select-alef.mp3` - "בחרו את האות א"
+- `select-mem.mp3` - "בחרו את האות מ"
+- `select-shin.mp3` - "בחרו את האות ש"
+- `select-lamed.mp3` - "בחרו את האות ל"
+- `select-he.mp3` - "בחרו את האות ה"
+
+### Game: First Letter (letters - Medium)
+- `first-letter-naalayim.mp3` - "באיזו אות מתחילה המילה נעליים"
+- `first-letter-bayit.mp3` - "באיזו אות מתחילה המילה בית"
+- `first-letter-shemesh.mp3` - "באיזו אות מתחילה המילה שמש"
+- `first-letter-kelev.mp3` - "באיזו אות מתחילה המילה כלב"
+- `first-letter-tapuach.mp3` - "באיזו אות מתחילה המילה תפוח"
+
+### Game: Double Letter (letters - Hard)
+- `double-letter-banana.mp3` - "איזו אות מופיעה פעמיים במילה בננה"
+- `double-letter-aba.mp3` - "איזו אות מופיעה פעמיים במילה אבא"
+- `double-letter-ima.mp3` - "איזו אות מופיעה פעמיים במילה אמא"
+- `double-letter-mamtak.mp3` - "איזו אות מופיעה פעמיים במילה ממתק"
+- `double-letter-sababa.mp3` - "איזו אות מופיעה פעמיים במילה סבבה"
+
 ---
 
 ## Voice Feedback Audio Files (public/sounds/)

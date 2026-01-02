@@ -11,20 +11,30 @@
 }
 
 .animalsArea {
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: min(90vw, 400px);
-  height: min(60vw, 250px);
+  min-height: min(60vw, 250px);
   background: var(--color-surface);
   border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-md);
-  overflow: hidden;
+  padding: var(--space-lg);
+}
+
+.animalsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  max-width: 100%;
 }
 
 .animalWrapper {
-  position: absolute;
-  transform: translate(-50%, -50%);
   width: clamp(50px, 15vw, 80px);
   height: clamp(50px, 15vw, 80px);
+  flex-shrink: 0;
 }
 
 .animalSvg {
@@ -55,7 +65,7 @@
 
   .animalsArea {
     width: min(85vw, 350px);
-    height: min(55vw, 220px);
+    min-height: min(55vw, 220px);
   }
 
   .animalWrapper {
@@ -76,9 +86,13 @@
 
   .animalsArea {
     width: calc(100vw - 32px);
-    height: 45vw;
     min-height: 160px;
     border-radius: var(--radius-xl);
+    padding: var(--space-md);
+  }
+
+  .animalsGrid {
+    gap: var(--space-xs);
   }
 
   .animalWrapper {
@@ -102,7 +116,6 @@
 
   .animalsArea {
     width: 40vw;
-    height: 35vh;
     min-height: 120px;
   }
 

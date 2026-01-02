@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useUser } from '../context/UserContext';
-import { Mascot, ScoreDisplay } from '../components/common';
+import { useUser, DIFFICULTY_INFO } from '../context/UserContext';
+import { Mascot, ScoreDisplay, DifficultySelector } from '../components/common';
 import { categories } from '../data/categories';
 import styles from './Home.module.css';
 
 function Home() {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, currentDifficulty } = useUser();
 
   const handleCategoryClick = (categoryId) => {
     navigate(`/category/${categoryId}`);
@@ -26,6 +26,14 @@ function Home() {
         </div>
         <ScoreDisplay score={user.totalScore} showMultiplier={false} />
       </header>
+
+      {/* Difficulty Selector */}
+      <div className={styles.difficultySection}>
+        <DifficultySelector />
+        <span className={styles.difficultyLabel}>
+          רמה: {DIFFICULTY_INFO[currentDifficulty].label} {DIFFICULTY_INFO[currentDifficulty].icon}
+        </span>
+      </div>
 
       {/* Main content */}
       <main className={styles.main}>

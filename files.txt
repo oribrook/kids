@@ -19,12 +19,13 @@ TECH STACK
 FEATURES
 --------
 - 3-step onboarding flow (welcome, name, age selection)
-- 3 game categories: Counting (ספירה), Colors (צבעים), Logic (חשיבה)
+- 4 game categories: Counting (ספירה), Colors (צבעים), Logic (חשיבה), Letters (אותיות)
 - Scoring system: 16/8/4/2/1 points based on attempts
 - Cute mascot character with mood states
 - Mobile-first responsive design
 - Audio infrastructure for voice instructions
 - Background music with mute/unmute toggle
+- Difficulty levels: Easy, Medium, Hard (with age-appropriate games)
 
 ================================================================================
                               FILE STRUCTURE
@@ -72,6 +73,24 @@ ROOT FILES
     - whats-different-*.mp3 - What's different game instructions
     - pattern-*.mp3 - Pattern completion game instructions
     - match-*.mp3 - Match pairs game instructions
+    - hineh-alef.mp3 - "הינה האות א" (Learn Alef intro)
+    - find-alef.mp3 - "מצאו את האות א" (Find the letter Alef)
+    - word-starts-alef.mp3 - "איזו מילה מתחילה באות א?" (Which word starts with Alef)
+    - intro-bet.mp3 - "זאת האות ב. המילה בית מתחילה באות ב" (Learn Bet intro)
+    - find-bet.mp3 - "מצאו את האות ב" (Find the letter Bet)
+    - word-starts-bet.mp3 - "איזו מילה מתחילה באות ב?" (Which word starts with Bet)
+    - mark-all-alef-bet.mp3 - "סמנו את כל האותיות א ו-ב" (Multi-select: mark all Alef and Bet)
+    - quiz-find-alef.mp3 - "מצאו את האות א" (Quiz: find Alef)
+    - quiz-find-bet.mp3 - "מצאו את האות ב" (Quiz: find Bet)
+    - quiz-find-gimel.mp3 - "מצאו את האות ג" (Quiz: find Gimel)
+    - quiz-find-dalet.mp3 - "מצאו את האות ד" (Quiz: find Dalet)
+    - quiz-find-he.mp3 - "מצאו את האות ה" (Quiz: find He)
+    - quiz-what-letter-word.mp3 - "באיזו אות מתחילה המילה?" (Quiz: what letter does word start with)
+    - quiz-word-starts-alef.mp3 - "איזו מילה מתחילה באות א?" (Quiz: which word starts with Alef)
+    - quiz-word-starts-bet.mp3 - "איזו מילה מתחילה באות ב?" (Quiz: which word starts with Bet)
+    - quiz-word-starts-gimel.mp3 - "איזו מילה מתחילה באות ג?" (Quiz: which word starts with Gimel)
+    - quiz-word-starts-dalet.mp3 - "איזו מילה מתחילה באות ד?" (Quiz: which word starts with Dalet)
+    - quiz-word-starts-he.mp3 - "איזו מילה מתחילה באות ה?" (Quiz: which word starts with He)
 
 ./public/sounds/*.mp3
     Voice feedback audio files (Hebrew TTS, he-IL-HilaNeural):
@@ -177,6 +196,7 @@ ENTRY POINTS
     - counting: "ספירה" - Learn counting 1-10
     - colors: "צבעים" - Identify and match colors
     - logic: "חשיבה" - Logic and matching games
+    - letters: "אותיות" - Learn Hebrew letters (new!)
     Each has: id, name, description, icon, color
 
 ./src/data/games/index.js
@@ -223,9 +243,132 @@ ENTRY POINTS
 
 ./src/data/games/matchPairs.js
     "Match the Pairs" game data (התאימו זוגות):
-    - 5 questions about matching related items
-    - Pairs: Dog→bone, Bird→nest, Fish→water, Rabbit→carrot, Mouse→cheese
-    - Uses SelectionQuestion component with animal/item SVGs
+    - 15 questions (5 per difficulty: easy/medium/hard)
+    - Easy: Dog→bone, Bird→nest, Fish→water, Rabbit→carrot, Mouse→cheese
+    - Medium: Bee→honey, Lion→savanna, Elephant→river, Butterfly→flower, Turtle→shell
+    - Hard: Chef→knife, Painter→brush, Sunflower→sun, Owl→mouse, Rain→rainbow
+    - Uses SelectionQuestion component with animal/item/tool SVGs
+
+./src/data/games/speedCount.js
+    "Speed Count" timed game data (ספירה מהירה):
+    - 5 questions with 8-second time limit each
+    - Count emojis quickly: stars, hearts, flowers, apples, balls
+    - Hard difficulty only (7-12 items to count)
+    - Uses TimedQuestion component with countdown timer
+
+./src/data/games/memoryColors.js
+    "Memory Colors" game data (זכרו את הצבעים):
+    - 5 questions with 4-second memorization phase
+    - Memorize color sequence, then answer questions about it
+    - Questions: "What was in the middle?", "What was first?", "What was last?",
+      "What was NOT shown?", "How many colors were there?"
+    - Hard difficulty only
+    - Uses MemoryQuestion component with color SVGs
+
+./src/data/games/selectLetter.js
+    "Select the Letter" game data (בחרו את האות):
+    - 5 questions - listen to letter name (audio only), select the visual letter
+    - Letters: א, מ, ש, ל, ה
+    - Easy difficulty only
+    - Uses SelectionQuestion component with Hebrew letter SVG icons
+
+./src/data/games/firstLetter.js
+    "First Letter" game data (האות הראשונה):
+    - 5 questions - identify which letter a word starts with
+    - Shows word image (shoes, house, sun, dog, apple)
+    - Words: נעליים→נ, בית→ב, שמש→ש, כלב→כ, תפוח→ת
+    - Medium difficulty only
+    - Uses SelectionQuestion with questionImage feature for word display
+
+./src/data/games/doubleLetter.js
+    "Double Letter" game data (אות כפולה):
+    - 5 questions - find which letter appears twice in a word
+    - Shows word image, child identifies the repeating letter
+    - Words: בננה→נ, אבא→א, אמא→א, ממתק→מ, סבבה→ב
+    - Hard difficulty only
+    - Uses SelectionQuestion with questionImage feature
+
+./src/data/games/learnAlef.js
+    "Learn the Letter Alef" game data (למדו את האות א):
+    - 6 questions teaching children the Hebrew letter א
+    - Q1: Introduction - "הינה האות א" - shows letter, ALL options correct
+    - Q2: Find letter א among other letters (א, ב, ש, מ)
+    - Q3: Find word starting with א (אבטיח vs כיסא, בית, ממתק)
+    - Q4: Find word starting with א (אוזן vs בננה, שמש, כלב)
+    - Q5: Find letter א among different letters (ל, א, ה, ד)
+    - Q6: Find word starting with א (אש vs בית, תפוח, כלב)
+    - Easy difficulty only
+    - Uses SelectionQuestion with questionImage feature
+    - Supports multiple correct answers via isCorrect flag on options
+
+./src/data/games/learnBet.js
+    "Learn the Letter Bet" game data (למדו את האות ב):
+    - 6 questions teaching children the Hebrew letter ב
+    - Q1: Introduction - "זאת האות ב. המילה בית מתחילה באות ב"
+      Shows letter ב + 5 words: בית, בלון, במבה, ברווז, בייגלה (ALL correct)
+    - Q2: Find letter ב among other letters (ב, ג, ה, נ)
+    - Q3: Find word starting with ב (בננה vs גמל, קוף, מיטה)
+    - Q4: Find letter ב among different letters (ש, מ, ב, כ)
+    - Q5: Review previous letter - Find letter א among letters
+    - Q6: MULTI-SELECT - Mark ALL א and ב letters (8 options, 4 correct)
+      Uses multiSelect: true flag for multi-select mode
+    - Easy difficulty only
+    - Uses SelectionQuestion with questionImage feature
+    - Introduces multi-select question type (select ALL correct answers)
+
+./src/data/games/learnGimel.js
+    "Learn the Letter Gimel" game data (למדו את האות ג):
+    - 6 questions teaching children the Hebrew letter ג
+    - Q1: Introduction - "זאת האות ג. המילה גמל מתחילה באות ג"
+      Shows letter ג + 5 words: גמל, גינה, גרביים, גזר, גשם (ALL correct)
+    - Q2: Find letter ג among other letters (ג, ה, נ, ז)
+    - Q3: Find word starting with ג (גזר vs בננה, אריה, מיטה)
+    - Q4: Find letter ג among different letters (ש, מ, ג, כ)
+    - Q5: Review previous letter - Find letter ב among letters
+    - Q6: MULTI-SELECT - Mark ALL א, ב, ג letters (12 options, 4 correct)
+    - Easy difficulty only
+    - Uses SelectionQuestion with questionImage feature
+
+./src/data/games/learnDalet.js
+    "Learn the Letter Dalet" game data (למדו את האות ד):
+    - 6 questions teaching children the Hebrew letter ד
+    - Q1: Introduction - "זאת האות ד. המילה דלת מתחילה באות ד"
+      Shows letter ד + 5 words: דלת, דג, דבורה, דגל, דשא (ALL correct)
+    - Q2: Find letter ד among other letters (ד, ר, ה, כ)
+    - Q3: Find word starting with ד (דינוזאור vs בננה, גמל, אריה)
+    - Q4: Find letter ד among different letters (ב, ג, ד, ו)
+    - Q5: Find word starting with ד (דבש vs בית, גזר, תפוח)
+    - Q6: MULTI-SELECT - Mark ALL א, ב, ג, ד letters (12 options, 4 correct)
+    - Easy difficulty only
+    - Uses SelectionQuestion with questionImage feature
+    - Word images needed: word-delet.png, word-dag.png, word-dvora.png,
+      word-degel.png, word-deshe.png, word-dinozaur.png, word-daf.png, word-dvash.png
+
+./src/data/games/learnHe.js
+    "Learn the Letter He" game data (למדו את האות ה):
+    - 6 questions teaching children the Hebrew letter ה
+    - Q1: Introduction - "זוהי האות hey, המילים הבאות מתחילות באות hey"
+      Shows letter ה + 4 words: הילד, הציפור, הבית, הבננה (ALL correct)
+    - Q2: Find letter ה among other letters (ה, ח, ת, מ)
+    - Q3: Find word starting with ה (הר vs בננה, גמל, דלת)
+    - Q4: Find letter ה among different letters (ב, ג, ד, ה)
+    - Q5: Find word starting with ה (הבדלה vs בית, גזר, דג)
+    - Q6: MULTI-SELECT - Mark ALL א, ב, ג, ד, ה letters (12 options, 5 correct)
+    - Easy difficulty only
+    - Uses SelectionQuestion with questionImage feature
+    - Word images needed: word-hayeled.png, word-hatzipor.png, word-habayit.png,
+      word-habanana.png, word-har.png, word-havdala.png
+
+./src/data/games/quizAlefHe.js
+    "Quiz Alef to He" game data (אבגדה - בוחן אותיות א-ה):
+    - 15 questions testing knowledge of letters א, ב, ג, ד, ה
+    - 3 question types per letter (pre-shuffled order):
+      Type 1: Find letter X among 9 letters (3x3 grid)
+      Type 2: What letter does word start with (9 letter options, shows word image)
+      Type 3: Which word starts with letter X (4 word options)
+    - Uses 9-option grid layout (optionsGrid9 CSS class)
+    - Easy difficulty only
+    - Audio files: quiz-find-*.mp3, quiz-what-letter-word.mp3, quiz-word-starts-*.mp3
 
 --------------------------------------------------------------------------------
                               HOOKS (src/hooks/)
@@ -278,6 +421,11 @@ ENTRY POINTS
     - Handles answer feedback with mascot
     - Audio button for instructions
     - Shows GameComplete when finished
+    - Supports multi-select questions (multiSelect: true flag)
+      Multi-select mode: user must find ALL correct answers
+      Wrong selection shows error immediately and advances
+    - Supports multiple correct answers via isCorrect flag on options
+      (checks option.isCorrect first, falls back to correctAnswerId)
 
 ./src/pages/Home.module.css
 ./src/pages/Category.module.css
@@ -351,28 +499,80 @@ ENTRY POINTS
 
 ./src/components/game/CountingQuestion.jsx
     Counting game question renderer:
-    - Displays animals/shapes as inline SVGs at random positions
+    - Displays animals/shapes as inline SVGs using CSS flexbox grid
+    - Items automatically centered both horizontally and vertically
+    - Layout uses flex-wrap for responsive item arrangement
     - Number option cards for answers
     - Supports animals: fish, butterfly, bird, dog, cat
     - Supports shapes: circle, square, triangle, star, heart
+    NOTE: Uses flexbox (.animalsGrid) instead of absolute positioning
+    for automatic centering regardless of item count.
 
 ./src/components/game/SelectionQuestion.jsx
-    Color/selection game question renderer:
-    - Displays items as inline SVGs
+    Color/selection game question renderer with 120+ inline SVG icons:
+    - Displays items as inline SVGs, falls back to text label if icon not found
     - Card options for selection
-    - Supports fruits: apple (red/green/yellow), banana, strawberry, grapes, orange
-    - Supports balls: red, blue, green, yellow
-    - Supports flowers: pink, yellow, red, purple
-    - Supports shapes: circle/square (various colors), triangle, star, heart
-    - Supports match-pairs items: bone, carrot, cheese, fish, nest, doghouse,
+    - Supports optional questionImage prop to display image above options
+    - Fruits: apple (red/green/yellow), banana, strawberry, grapes, orange
+    - Balls: red, blue, green, yellow, lightblue, purple, orange
+    - Flowers: pink, yellow, red, purple, generic flower
+    - Shapes: circle (red/blue/green/yellow/purple/orange/lightblue),
+      square (blue/green/black/orange), rectangle-green, triangle-orange,
+      star (yellow/orange), diamond-purple, heart (red/pink)
+    - Animals: cat, dog, mouse, bird, butterfly
+    - Match-pairs items: bone, carrot, cheese, fish-food, nest, doghouse,
       fishbowl, cave, water, house
-    - Supports nature: sun, tree, cloud
+    - Nature: sun, tree, cloud, honey, savanna, river, moon, rain, wind,
+      rainbow, snow, shell, leaf
+    - Tools: hammer, knife, brush, pen, scissors, ruler, spoon
+    - Food: bread, fruit
+    - Other: bag, hat, stone, bottle, cup, pool, fountain
+    - Hebrew Letters (22): alef, bet, gimel, dalet, he, vav, zayin, chet,
+      tet, yod, kaf, lamed, mem, nun, samech, ayin, peh, tsade, qof, resh,
+      shin, tav (teal background, white letter)
+    - Word Images: naalayim (shoes), bayit (house), shemesh (sun),
+      kelev (dog), tapuach (apple), banana, aba (dad), ima (mom),
+      mamtak (candy), sababa (thumbs up), avatiach (watermelon whole),
+      avatiach-slice (watermelon slice), kiseh (chair), avokado (avocado),
+      ochel (food plate)
+    - PNG Image Icons (in public/images/):
+      word-ozen.png (ear/אוזן), word-esh.png (fire/אש),
+      word-balon.png (balloon/בלון), word-bamba.png (Bamba snack/במבה),
+      word-barvaz.png (duck/ברווז), word-beigale.png (pretzel/בייגלה),
+      word-gamal.png (camel/גמל), word-kof.png (monkey/קוף),
+      word-mita.png (bed/מיטה)
+    - Supports multi-select mode via multiSelectState and onMultiSelectAnswer props
+      Shows checkmark overlay on correct selections in multi-select mode
 
 ./src/components/game/ShadowQuestion.jsx
     Shadow matching game question renderer:
-    - Main item display (colored)
-    - Shadow silhouette options (grayscale)
-    - Match item to correct shadow
+    - MainImages (13 colored items): cat, elephant, star, car, flower, dog,
+      giraffe, heart, plane, tree, horse, bird, house
+    - ShadowImages (37 shadow silhouettes): All #2D3436 color
+      Animals: cat, dog, rabbit, elephant, giraffe, lion, fox, wolf, horse,
+      donkey, zebra, camel, deer, bird, butterfly, bat, eagle
+      Shapes: star, circle, heart, diamond
+      Vehicles: car, plane, boat, helicopter
+      Nature: flower, tree, leaf, bush, mushroom, sun, snowflake, asterisk
+      Buildings: house, castle, tent, barn, tower
+    - Match colored item to correct shadow silhouette
+
+./src/components/game/MemoryQuestion.jsx
+    Memory challenge game question renderer:
+    - Two phases: "memorize" (countdown) and "answer"
+    - ColorIcons: SVG circles in red, blue, green, yellow, purple, orange
+    - colorNameMap: Maps Hebrew color names and emojis to icon keys
+    - Shows items to memorize, then hides and asks questions
+    - Skip button "זכרתי!" to end memorization early
+    - Used for memory-colors game (hard difficulty only)
+
+./src/components/game/TimedQuestion.jsx
+    Timed challenge game question renderer:
+    - Countdown timer with visual progress bar
+    - Auto-wrong when time expires
+    - Shows emoji display to count
+    - Number selection options
+    - Used for speed-count game (hard difficulty only)
 
 ./src/components/game/GameComplete.jsx
     Game completion celebration screen:
@@ -438,6 +638,9 @@ kids-game/
 │   ├── audio/
 │   │   ├── README.md       # Audio documentation + TTS instructions
 │   │   └── *.mp3           # Game instruction audio files
+│   ├── images/
+│   │   ├── word-ozen.png   # Ear icon (אוזן)
+│   │   └── word-esh.png    # Fire icon (אש)
 │   └── sounds/
 │       └── *.mp3           # Voice feedback audio (correct/wrong/complete/encourage)
 └── src/
@@ -453,7 +656,7 @@ kids-game/
     │   ├── GameContext.jsx # Game state management
     │   └── BackgroundMusicContext.jsx # Background music state
     ├── data/
-    │   ├── categories.js   # Category definitions
+    │   ├── categories.js   # Category definitions (4 categories)
     │   └── games/
     │       ├── index.js    # Games registry
     │       ├── countAnimals.js
@@ -462,7 +665,13 @@ kids-game/
     │       ├── shadowMatch.js
     │       ├── whatsDifferent.js
     │       ├── completePattern.js
-    │       └── matchPairs.js
+    │       ├── matchPairs.js
+    │       ├── speedCount.js
+    │       ├── memoryColors.js
+    │       ├── selectLetter.js   # Letters category (Easy)
+    │       ├── firstLetter.js    # Letters category (Medium)
+    │       ├── doubleLetter.js   # Letters category (Hard)
+    │       └── learnAlef.js      # Learn letter Alef (Easy)
     ├── hooks/
     │   └── useAudio.js     # Audio playback hook
     ├── pages/

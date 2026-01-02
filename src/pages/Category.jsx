@@ -1,17 +1,17 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getCategoryById } from '../data/categories';
-import { getGamesByCategory } from '../data/games';
-import { useUser } from '../context/UserContext';
+import { getGamesByCategory, getQuestionsForDifficulty } from '../data/games';
+import { useUser, DIFFICULTY_INFO } from '../context/UserContext';
 import { Button } from '../components/common';
 import styles from './Category.module.css';
 
 function Category() {
   const { categoryId } = useParams();
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, currentDifficulty } = useUser();
   const category = getCategoryById(categoryId);
-  const games = getGamesByCategory(categoryId);
+  const games = getGamesByCategory(categoryId, currentDifficulty);
 
   // Get best score for a game from play history
   const getBestScore = (gameId) => {
@@ -69,7 +69,8 @@ function Category() {
         <div className={styles.games}>
           {games.map((game, index) => {
             const bestPlay = getBestScore(game.id);
-            const maxScore = game.questions.length * 16;
+            const questions = getQuestionsForDifficulty(game, currentDifficulty);
+            const maxScore = questions.length * 16;
 
             return (
               <motion.div
@@ -88,7 +89,7 @@ function Category() {
                   <p className={styles.gameDescription}>{game.description}</p>
                   <div className={styles.gameStats}>
                     <span className={styles.questionCount}>
-                      {game.questions.length} שאלות
+                      {questions.length} שאלות
                     </span>
                     {bestPlay && (
                       <span className={styles.playedBadge}>

@@ -118,45 +118,26 @@ const AnimalIcons = {
 function CountingQuestion({ question, selectedAnswer, showFeedback, isCorrect, onAnswer }) {
   const AnimalIcon = AnimalIcons[question.image] || AnimalIcons.fish;
 
-  // Generate animal positions for visual display
-  const generateAnimalPositions = (count) => {
-    const positions = [];
-    const cols = Math.min(count, 3);
-    const rows = Math.ceil(count / cols);
-
-    for (let i = 0; i < count; i++) {
-      const row = Math.floor(i / cols);
-      const col = i % cols;
-      positions.push({
-        x: (col + 0.5) / cols,
-        y: (row + 0.5) / rows,
-        delay: i * 0.1,
-      });
-    }
-    return positions;
-  };
-
-  const animalPositions = generateAnimalPositions(question.imageCount);
+  // Generate array of items for grid display
+  const items = Array.from({ length: question.imageCount }, (_, i) => i);
 
   return (
     <div className={styles.container}>
-      {/* Animals display */}
+      {/* Animals display - using CSS grid for automatic centering */}
       <div className={styles.animalsArea}>
-        {animalPositions.map((pos, index) => (
-          <motion.div
-            key={index}
-            className={styles.animalWrapper}
-            style={{
-              left: `${pos.x * 100}%`,
-              top: `${pos.y * 100}%`,
-            }}
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: pos.delay, type: 'spring', stiffness: 300 }}
-          >
-            <AnimalIcon />
-          </motion.div>
-        ))}
+        <div className={styles.animalsGrid}>
+          {items.map((index) => (
+            <motion.div
+              key={index}
+              className={styles.animalWrapper}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: index * 0.1, type: 'spring', stiffness: 300 }}
+            >
+              <AnimalIcon />
+            </motion.div>
+          ))}
+        </div>
       </div>
 
       {/* Number options */}

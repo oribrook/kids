@@ -28,6 +28,15 @@ export const categories = [
     backgroundColor: '#FFF8E1',
     games: ['shadow-match'],
   },
+  {
+    id: 'letters',
+    name: 'אותיות',
+    description: 'לומדים להכיר אותיות',
+    icon: '🔤',
+    color: '#00CEC9',
+    backgroundColor: '#E0F7FA',
+    games: ['select-letter', 'first-letter', 'double-letter'],
+  },
 ];
 
 export const getCategoryById = (id) => {
