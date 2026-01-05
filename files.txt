@@ -359,6 +359,31 @@ ENTRY POINTS
     - Word images needed: word-hayeled.png, word-hatzipor.png, word-habayit.png,
       word-habanana.png, word-har.png, word-havdala.png
 
+./src/data/games/learnVav.js
+    "Learn the Letter Vav" game data (למדו את האות ו):
+    - 8 questions teaching children the Hebrew letter ו
+    - Q1: Introduction - "זוהי האות vav, המילים הבאות מתחילות באות vav"
+      Shows letter ו + 5 words: וילון, ווטרינר, ורד, ורוד, וופל (ALL correct)
+    - Q2: Introduction - "אפשר לכתוב את האות vav בשתי דרכים"
+      Shows image with two ways to write vav (vav-two-ways.png)
+    - Q3: MULTI-SELECT - Select all ו letters from 3x3 grid (3 correct)
+    - Q4: Find letter ו among 6 letters
+    - Q5: Find word starting with ו (ורד vs בננה, גמל, דלת)
+    - Q6: Find letter ו among different letters
+    - Q7: Find word starting with ו (וופל vs בית, גזר, הר)
+    - Q8: MULTI-SELECT - Mark last 4 letters ג, ד, ה, ו (12 options, 4 correct)
+    - Easy difficulty only
+    - Uses SelectionQuestion with questionImage feature
+    - Word images: word-vilon.png, word-veterinar.png, word-vered.png,
+      word-varod.png, word-waffle.png, vav-two-ways.png
+    - Audio: Uses "vav" pronunciation in TTS for correct letter sound
+
+LETTER GAMES - LAST QUESTION LOGIC:
+    The final question in each letter game should be a MULTI-SELECT asking
+    the child to select only the LAST 4 LETTERS learned (not all letters).
+    This keeps the game focused and avoids overwhelming children as more
+    letters are added. Example: For letter ו, ask for ג,ד,ה,ו (not א-ו).
+
 ./src/data/games/quizAlefHe.js
     "Quiz Alef to He" game data (אבגדה - בוחן אותיות א-ה):
     - 15 questions testing knowledge of letters א, ב, ג, ד, ה

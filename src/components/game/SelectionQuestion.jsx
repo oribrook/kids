@@ -1152,6 +1152,25 @@ const ItemIcons = {
   'word-havdala': () => (
     <img src="/images/word-havdala.png" alt="הבדלה" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),
+  // Letter ו (Vav) words
+  'word-vilon': () => (
+    <img src="/images/word-vilon.png" alt="וילון" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-veterinar': () => (
+    <img src="/images/word-veterinar.png" alt="ווטרינר" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-vered': () => (
+    <img src="/images/word-vered.png" alt="ורד" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-varod': () => (
+    <img src="/images/word-varod.png" alt="ורוד" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-waffle': () => (
+    <img src="/images/word-waffle.png" alt="וופל" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'vav-two-ways': () => (
+    <img src="/images/vav-two-ways.png" alt="ו" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
 };
 
 function SelectionQuestion({

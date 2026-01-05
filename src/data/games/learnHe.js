@@ -30,9 +30,28 @@ const learnHe = {
           { id: 'opt-4', image: 'word-habanana', label: 'הבננה', isCorrect: true, optionAudio: '/audio/word-habanana.mp3' },
         ],
       },
-      // Question 2: Find the letter shape among 4 random letters
+      // Question 2: Select all ה letters from 3x3 grid
       {
         id: 'lh-e2',
+        instruction: 'בחרו את כל האותיות ה',
+        instructionAudio: '/audio/select-all-he.mp3',
+        multiSelect: true,
+        options: [
+          { id: 'opt-1', image: 'letter-alef', label: 'א' },
+          { id: 'opt-2', image: 'letter-he', label: 'ה', isCorrect: true },
+          { id: 'opt-3', image: 'letter-bet', label: 'ב' },
+          { id: 'opt-4', image: 'letter-gimel', label: 'ג' },
+          { id: 'opt-5', image: 'letter-he', label: 'ה', isCorrect: true },
+          { id: 'opt-6', image: 'letter-dalet', label: 'ד' },
+          { id: 'opt-7', image: 'letter-he', label: 'ה', isCorrect: true },
+          { id: 'opt-8', image: 'letter-vav', label: 'ו' },
+          { id: 'opt-9', image: 'letter-zayin', label: 'ז' },
+        ],
+        correctCount: 3,
+      },
+      // Question 3: Find the letter shape among 4 random letters
+      {
+        id: 'lh-e3',
         instruction: 'מצאו את האות ה',
         instructionAudio: '/audio/find-he.mp3',
         options: [
@@ -45,9 +64,9 @@ const learnHe = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 3: Click on the item that starts with ה
+      // Question 4: Click on the item that starts with ה
       {
-        id: 'lh-e3',
+        id: 'lh-e4',
         instruction: 'איזו מילה מתחילה באות ה?',
         instructionAudio: '/audio/word-starts-he.mp3',
         options: [
@@ -58,9 +77,9 @@ const learnHe = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 4: Find the letter shape among different letters
+      // Question 5: Find the letter shape among different letters
       {
-        id: 'lh-e4',
+        id: 'lh-e5',
         instruction: 'מצאו את האות ה',
         instructionAudio: '/audio/find-he.mp3',
         options: [
@@ -73,9 +92,9 @@ const learnHe = {
         ],
         correctAnswerId: 'opt-4',
       },
-      // Question 5: Find another word starting with ה
+      // Question 6: Find another word starting with ה
       {
-        id: 'lh-e5',
+        id: 'lh-e6',
         instruction: 'איזו מילה מתחילה באות ה?',
         instructionAudio: '/audio/word-starts-he.mp3',
         options: [
@@ -86,9 +105,9 @@ const learnHe = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 6: Multi-select - mark ALL א, ב, ג, ד, ה
+      // Question 7: Multi-select - mark ALL א, ב, ג, ד, ה
       {
-        id: 'lh-e6',
+        id: 'lh-e7',
         instruction: 'סמנו את כל האותיות א, ב, ג, ד, ה',
         instructionAudio: '/audio/mark-all-alef-bet-gimel-dalet-he.mp3',
         multiSelect: true,

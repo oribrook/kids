@@ -78,18 +78,20 @@
 }
 
 .games {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
 }
 
 .gameCard {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--space-lg);
-  padding: var(--space-xl);
+  text-align: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
   background: var(--color-surface);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   cursor: pointer;
   transition: all var(--transition-normal);
@@ -106,33 +108,34 @@
 }
 
 .gameIcon {
-  font-size: clamp(36px, 10vw, 48px);
-  width: clamp(60px, 18vw, 80px);
-  height: clamp(60px, 18vw, 80px);
+  font-size: clamp(28px, 8vw, 36px);
+  width: clamp(44px, 12vw, 56px);
+  height: clamp(44px, 12vw, 56px);
   display: flex;
   align-items: center;
   justify-content: center;
   background: #F5F5F5;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   flex-shrink: 0;
 }
 
 .gameInfo {
   flex: 1;
   min-width: 0;
+  text-align: center;
 }
 
 .gameName {
-  font-size: clamp(var(--font-size-md), 4vw, var(--font-size-lg));
+  font-size: clamp(var(--font-size-sm), 3.5vw, var(--font-size-md));
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
   margin: 0 0 var(--space-xs) 0;
 }
 
 .gameDescription {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
-  margin: 0 0 var(--space-sm) 0;
+  margin: 0 0 var(--space-xs) 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -192,16 +195,16 @@
 }
 
 .playButton {
-  width: var(--touch-target-comfortable);
-  height: var(--touch-target-comfortable);
+  width: var(--touch-target-min);
+  height: var(--touch-target-min);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-full);
   color: white;
-  font-size: 20px;
+  font-size: 16px;
   flex-shrink: 0;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .empty {
@@ -259,7 +262,7 @@
 
   .header {
     border-radius: var(--radius-lg);
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--space-lg);
     padding: var(--space-sm) var(--space-md);
   }
 
@@ -274,33 +277,61 @@
   }
 
   .description {
-    font-size: var(--font-size-base);
-    margin-bottom: var(--space-xl);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-lg);
   }
 
   .games {
-    gap: var(--space-md);
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
   }
 
   .gameCard {
-    flex-direction: column;
-    text-align: center;
-    padding: var(--space-lg);
-    border-radius: var(--radius-lg);
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
   }
 
-  .gameInfo {
-    text-align: center;
+  .gameIcon {
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .gameName {
+    font-size: var(--font-size-xs);
+  }
+
+  .gameDescription {
+    display: none;
   }
 
   .gameStats {
     justify-content: center;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .questionCount {
+    font-size: 10px;
+    padding: 2px var(--space-xs);
+  }
+
+  .playedBadge {
+    padding: 2px var(--space-xs);
+  }
+
+  .starsDisplay {
+    font-size: 10px;
+  }
+
+  .scoreText {
+    font-size: 10px;
   }
 
   .playButton {
-    width: 100%;
-    height: var(--touch-target-min);
-    border-radius: var(--radius-lg);
-    margin-top: var(--space-sm);
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+    margin-top: var(--space-xs);
   }
 }

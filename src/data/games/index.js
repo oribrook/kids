@@ -15,6 +15,8 @@ import learnBet from './learnBet';
 import learnGimel from './learnGimel';
 import learnDalet from './learnDalet';
 import learnHe from './learnHe';
+import learnVav from './learnVav';
+import learnZayin from './learnZayin';
 import quizAlefHe from './quizAlefHe';
 
 // All games registry
@@ -35,6 +37,8 @@ export const games = {
   'learn-gimel': learnGimel,
   'learn-dalet': learnDalet,
   'learn-he': learnHe,
+  'learn-vav': learnVav,
+  'learn-zayin': learnZayin,
   'quiz-alef-he': quizAlefHe,
 };
 

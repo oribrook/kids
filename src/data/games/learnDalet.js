@@ -30,9 +30,28 @@ const learnDalet = {
           { id: 'opt-5', image: 'word-deshe', label: 'דשא', isCorrect: true, optionAudio: '/audio/word-deshe.mp3' },
         ],
       },
-      // Question 2: Find the letter shape among 4 random letters
+      // Question 2: Select all ד letters from 3x3 grid
       {
         id: 'ld-e2',
+        instruction: 'בחרו את כל האותיות ד',
+        instructionAudio: '/audio/select-all-dalet.mp3',
+        multiSelect: true,
+        options: [
+          { id: 'opt-1', image: 'letter-alef', label: 'א' },
+          { id: 'opt-2', image: 'letter-bet', label: 'ב' },
+          { id: 'opt-3', image: 'letter-dalet', label: 'ד', isCorrect: true },
+          { id: 'opt-4', image: 'letter-gimel', label: 'ג' },
+          { id: 'opt-5', image: 'letter-dalet', label: 'ד', isCorrect: true },
+          { id: 'opt-6', image: 'letter-he', label: 'ה' },
+          { id: 'opt-7', image: 'letter-vav', label: 'ו' },
+          { id: 'opt-8', image: 'letter-dalet', label: 'ד', isCorrect: true },
+          { id: 'opt-9', image: 'letter-zayin', label: 'ז' },
+        ],
+        correctCount: 3,
+      },
+      // Question 3: Find the letter shape among 4 random letters
+      {
+        id: 'ld-e3',
         instruction: 'מצאו את האות ד',
         instructionAudio: '/audio/find-dalet.mp3',
         options: [
@@ -45,9 +64,9 @@ const learnDalet = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 3: Click on the item that starts with ד
+      // Question 4: Click on the item that starts with ד
       {
-        id: 'ld-e3',
+        id: 'ld-e4',
         instruction: 'איזו מילה מתחילה באות ד?',
         instructionAudio: '/audio/word-starts-dalet.mp3',
         options: [
@@ -58,9 +77,9 @@ const learnDalet = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 4: Find the letter shape among different letters
+      // Question 5: Find the letter shape among different letters
       {
-        id: 'ld-e4',
+        id: 'ld-e5',
         instruction: 'מצאו את האות ד',
         instructionAudio: '/audio/find-dalet.mp3',
         options: [
@@ -73,9 +92,9 @@ const learnDalet = {
         ],
         correctAnswerId: 'opt-3',
       },
-      // Question 5: Find another word starting with ד
+      // Question 6: Find another word starting with ד
       {
-        id: 'ld-e5',
+        id: 'ld-e6',
         instruction: 'איזו מילה מתחילה באות ד?',
         instructionAudio: '/audio/word-starts-dalet.mp3',
         options: [
@@ -86,9 +105,9 @@ const learnDalet = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 6: Multi-select - mark ALL א, ב, ג, ד
+      // Question 7: Multi-select - mark ALL א, ב, ג, ד
       {
-        id: 'ld-e6',
+        id: 'ld-e7',
         instruction: 'סמנו את כל האותיות א, ב, ג, ד',
         instructionAudio: '/audio/mark-all-alef-bet-gimel-dalet.mp3',
         multiSelect: true,

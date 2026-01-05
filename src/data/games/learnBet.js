@@ -30,9 +30,28 @@ const learnBet = {
           { id: 'opt-5', image: 'word-beigale', label: 'בייגלה', isCorrect: true, optionAudio: '/audio/word-beigale.mp3' },
         ],
       },
-      // Question 2: Find the letter shape among 4 random letters
+      // Question 2: Select all ב letters from 3x3 grid
       {
         id: 'lb-e2',
+        instruction: 'בחרו את כל האותיות ב',
+        instructionAudio: '/audio/select-all-bet.mp3',
+        multiSelect: true,
+        options: [
+          { id: 'opt-1', image: 'letter-alef', label: 'א' },
+          { id: 'opt-2', image: 'letter-bet', label: 'ב', isCorrect: true },
+          { id: 'opt-3', image: 'letter-gimel', label: 'ג' },
+          { id: 'opt-4', image: 'letter-bet', label: 'ב', isCorrect: true },
+          { id: 'opt-5', image: 'letter-dalet', label: 'ד' },
+          { id: 'opt-6', image: 'letter-he', label: 'ה' },
+          { id: 'opt-7', image: 'letter-bet', label: 'ב', isCorrect: true },
+          { id: 'opt-8', image: 'letter-vav', label: 'ו' },
+          { id: 'opt-9', image: 'letter-zayin', label: 'ז' },
+        ],
+        correctCount: 3,
+      },
+      // Question 3: Find the letter shape among 4 random letters
+      {
+        id: 'lb-e3',
         instruction: 'מצאו את האות ב',
         instructionAudio: '/audio/find-bet.mp3',
         options: [
@@ -45,9 +64,9 @@ const learnBet = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 3: Click on the item that starts with ב
+      // Question 4: Click on the item that starts with ב
       {
-        id: 'lb-e3',
+        id: 'lb-e4',
         instruction: 'איזו מילה מתחילה באות ב?',
         instructionAudio: '/audio/word-starts-bet.mp3',
         options: [
@@ -58,9 +77,9 @@ const learnBet = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 4: Find the letter shape among different letters
+      // Question 5: Find the letter shape among different letters
       {
-        id: 'lb-e4',
+        id: 'lb-e5',
         instruction: 'מצאו את האות ב',
         instructionAudio: '/audio/find-bet.mp3',
         options: [
@@ -73,9 +92,9 @@ const learnBet = {
         ],
         correctAnswerId: 'opt-3',
       },
-      // Question 5: Find the letter Alef - reviewing previous letter!
+      // Question 6: Find the letter Alef - reviewing previous letter!
       {
-        id: 'lb-e5',
+        id: 'lb-e6',
         instruction: 'מצאו את האות א',
         instructionAudio: '/audio/find-alef.mp3',
         options: [
@@ -86,9 +105,9 @@ const learnBet = {
         ],
         correctAnswerId: 'opt-2',
       },
-      // Question 6: Multi-select - mark ALL א and ב
+      // Question 7: Multi-select - mark ALL א and ב
       {
-        id: 'lb-e6',
+        id: 'lb-e7',
         instruction: 'סמנו את כל האותיות א ו-ב',
         instructionAudio: '/audio/mark-all-alef-bet.mp3',
         multiSelect: true,

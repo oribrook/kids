@@ -28,9 +28,28 @@ const learnAlef = {
           { id: 'opt-3', image: 'word-ochel', label: 'אוכל', isCorrect: true, optionAudio: '/audio/word-ochel.mp3' },
         ],
       },
-      // Question 2: Find the letter shape among 4 random letters
+      // Question 2: Select all א letters from 3x3 grid
       {
         id: 'la-e2',
+        instruction: 'בחרו את כל האותיות א',
+        instructionAudio: '/audio/select-all-alef.mp3',
+        multiSelect: true,
+        options: [
+          { id: 'opt-1', image: 'letter-alef', label: 'א', isCorrect: true },
+          { id: 'opt-2', image: 'letter-bet', label: 'ב' },
+          { id: 'opt-3', image: 'letter-gimel', label: 'ג' },
+          { id: 'opt-4', image: 'letter-alef', label: 'א', isCorrect: true },
+          { id: 'opt-5', image: 'letter-dalet', label: 'ד' },
+          { id: 'opt-6', image: 'letter-he', label: 'ה' },
+          { id: 'opt-7', image: 'letter-vav', label: 'ו' },
+          { id: 'opt-8', image: 'letter-alef', label: 'א', isCorrect: true },
+          { id: 'opt-9', image: 'letter-zayin', label: 'ז' },
+        ],
+        correctCount: 3,
+      },
+      // Question 3: Find the letter shape among 4 random letters
+      {
+        id: 'la-e3',
         instruction: 'מצאו את האות א',
         instructionAudio: '/audio/find-alef.mp3',
         options: [
@@ -43,9 +62,9 @@ const learnAlef = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 3: Click on the item that starts with א
+      // Question 4: Click on the item that starts with א
       {
-        id: 'la-e3',
+        id: 'la-e4',
         instruction: 'איזו מילה מתחילה באות א?',
         instructionAudio: '/audio/word-starts-alef.mp3',
         options: [
@@ -56,9 +75,9 @@ const learnAlef = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 4: Click on another item that starts with א - using אוזן
+      // Question 5: Click on another item that starts with א - using אוזן
       {
-        id: 'la-e4',
+        id: 'la-e5',
         instruction: 'איזו מילה מתחילה באות א?',
         instructionAudio: '/audio/word-starts-alef.mp3',
         options: [
@@ -69,9 +88,9 @@ const learnAlef = {
         ],
         correctAnswerId: 'opt-2',
       },
-      // Question 5: Find the letter shape among 4 letters (different set)
+      // Question 6: Find the letter shape among 4 letters (different set)
       {
-        id: 'la-e5',
+        id: 'la-e6',
         instruction: 'מצאו את האות א',
         instructionAudio: '/audio/find-alef.mp3',
         options: [
@@ -84,9 +103,9 @@ const learnAlef = {
         ],
         correctAnswerId: 'opt-2',
       },
-      // Question 6: Click on item that starts with א - using אש
+      // Question 7: Click on item that starts with א - using אש
       {
-        id: 'la-e6',
+        id: 'la-e7',
         instruction: 'איזו מילה מתחילה באות א?',
         instructionAudio: '/audio/word-starts-alef.mp3',
         options: [

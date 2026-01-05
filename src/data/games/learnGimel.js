@@ -30,9 +30,28 @@ const learnGimel = {
           { id: 'opt-5', image: 'word-geshem', label: 'גשם', isCorrect: true, optionAudio: '/audio/word-geshem.mp3' },
         ],
       },
-      // Question 2: Find the letter shape among 4 random letters
+      // Question 2: Select all ג letters from 3x3 grid
       {
         id: 'lg-e2',
+        instruction: 'בחרו את כל האותיות ג',
+        instructionAudio: '/audio/select-all-gimel.mp3',
+        multiSelect: true,
+        options: [
+          { id: 'opt-1', image: 'letter-alef', label: 'א' },
+          { id: 'opt-2', image: 'letter-gimel', label: 'ג', isCorrect: true },
+          { id: 'opt-3', image: 'letter-bet', label: 'ב' },
+          { id: 'opt-4', image: 'letter-dalet', label: 'ד' },
+          { id: 'opt-5', image: 'letter-gimel', label: 'ג', isCorrect: true },
+          { id: 'opt-6', image: 'letter-he', label: 'ה' },
+          { id: 'opt-7', image: 'letter-gimel', label: 'ג', isCorrect: true },
+          { id: 'opt-8', image: 'letter-vav', label: 'ו' },
+          { id: 'opt-9', image: 'letter-zayin', label: 'ז' },
+        ],
+        correctCount: 3,
+      },
+      // Question 3: Find the letter shape among 4 random letters
+      {
+        id: 'lg-e3',
         instruction: 'מצאו את האות ג',
         instructionAudio: '/audio/find-gimel.mp3',
         options: [
@@ -45,9 +64,9 @@ const learnGimel = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 3: Click on the item that starts with ג
+      // Question 4: Click on the item that starts with ג
       {
-        id: 'lg-e3',
+        id: 'lg-e4',
         instruction: 'איזו מילה מתחילה באות ג?',
         instructionAudio: '/audio/word-starts-gimel.mp3',
         options: [
@@ -58,9 +77,9 @@ const learnGimel = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 4: Find the letter shape among different letters
+      // Question 5: Find the letter shape among different letters
       {
-        id: 'lg-e4',
+        id: 'lg-e5',
         instruction: 'מצאו את האות ג',
         instructionAudio: '/audio/find-gimel.mp3',
         options: [
@@ -73,9 +92,9 @@ const learnGimel = {
         ],
         correctAnswerId: 'opt-3',
       },
-      // Question 5: Find the letter Bet - reviewing previous letter!
+      // Question 6: Find the letter Bet - reviewing previous letter!
       {
-        id: 'lg-e5',
+        id: 'lg-e6',
         instruction: 'מצאו את האות ב',
         instructionAudio: '/audio/find-bet.mp3',
         options: [
@@ -86,9 +105,9 @@ const learnGimel = {
         ],
         correctAnswerId: 'opt-2',
       },
-      // Question 6: Multi-select - mark ALL א, ב and ג
+      // Question 7: Multi-select - mark ALL א, ב and ג
       {
-        id: 'lg-e6',
+        id: 'lg-e7',
         instruction: 'סמנו את כל האותיות א, ב, ג',
         instructionAudio: '/audio/mark-all-alef-bet-gimel.mp3',
         multiSelect: true,

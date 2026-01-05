@@ -185,6 +185,7 @@
 
   .questionArea {
     gap: var(--space-xl);
+    /* max-width: 80%; */
   }
 
   .feedbackText {
