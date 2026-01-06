@@ -5,7 +5,7 @@
 
 const learnGimel = {
   id: 'learn-gimel',
-  categoryId: 'letters',
+  categoryId: 'letters-alef-he',
   name: 'ג',
   description: 'למדו את האות ג',
   icon: 'ג',

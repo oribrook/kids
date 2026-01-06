@@ -19,13 +19,15 @@ TECH STACK
 FEATURES
 --------
 - 3-step onboarding flow (welcome, name, age selection)
-- 4 game categories: Counting (ספירה), Colors (צבעים), Logic (חשיבה), Letters (אותיות)
+- Letter learning categories organized by groups of 5 letters:
+  - אבגדה (א-ה) + quiz
+  - וזחטי (ו-י) + quiz (in progress)
+  - More categories to be added as letters are created
 - Scoring system: 16/8/4/2/1 points based on attempts
 - Cute mascot character with mood states
 - Mobile-first responsive design
 - Audio infrastructure for voice instructions
 - Background music with mute/unmute toggle
-- Difficulty levels: Easy, Medium, Hard (with age-appropriate games)
 
 ================================================================================
                               FILE STRUCTURE
@@ -66,31 +68,19 @@ ROOT FILES
     voice feedback. Includes TTS generation instructions.
 
 ./public/audio/*.mp3
-    Game instruction audio files (Hebrew TTS):
-    - count-*.mp3 - Counting game instructions
-    - find-*.mp3 - Color finding game instructions
-    - shadow-*.mp3 - Shadow match game instructions
-    - whats-different-*.mp3 - What's different game instructions
-    - pattern-*.mp3 - Pattern completion game instructions
-    - match-*.mp3 - Match pairs game instructions
-    - hineh-alef.mp3 - "הינה האות א" (Learn Alef intro)
-    - find-alef.mp3 - "מצאו את האות א" (Find the letter Alef)
-    - word-starts-alef.mp3 - "איזו מילה מתחילה באות א?" (Which word starts with Alef)
-    - intro-bet.mp3 - "זאת האות ב. המילה בית מתחילה באות ב" (Learn Bet intro)
-    - find-bet.mp3 - "מצאו את האות ב" (Find the letter Bet)
-    - word-starts-bet.mp3 - "איזו מילה מתחילה באות ב?" (Which word starts with Bet)
-    - mark-all-alef-bet.mp3 - "סמנו את כל האותיות א ו-ב" (Multi-select: mark all Alef and Bet)
-    - quiz-find-alef.mp3 - "מצאו את האות א" (Quiz: find Alef)
-    - quiz-find-bet.mp3 - "מצאו את האות ב" (Quiz: find Bet)
-    - quiz-find-gimel.mp3 - "מצאו את האות ג" (Quiz: find Gimel)
-    - quiz-find-dalet.mp3 - "מצאו את האות ד" (Quiz: find Dalet)
-    - quiz-find-he.mp3 - "מצאו את האות ה" (Quiz: find He)
-    - quiz-what-letter-word.mp3 - "באיזו אות מתחילה המילה?" (Quiz: what letter does word start with)
-    - quiz-word-starts-alef.mp3 - "איזו מילה מתחילה באות א?" (Quiz: which word starts with Alef)
-    - quiz-word-starts-bet.mp3 - "איזו מילה מתחילה באות ב?" (Quiz: which word starts with Bet)
-    - quiz-word-starts-gimel.mp3 - "איזו מילה מתחילה באות ג?" (Quiz: which word starts with Gimel)
-    - quiz-word-starts-dalet.mp3 - "איזו מילה מתחילה באות ד?" (Quiz: which word starts with Dalet)
-    - quiz-word-starts-he.mp3 - "איזו מילה מתחילה באות ה?" (Quiz: which word starts with He)
+    Letter game instruction audio files (Hebrew TTS):
+    Per-letter audio pattern:
+    - intro-X.mp3 - Letter introduction ("זוהי האות X...")
+    - select-all-X.mp3 - Multi-select instruction ("בחרו את כל האותיות X")
+    - find-X.mp3 - Find letter instruction ("מצאו את האות X")
+    - word-starts-X.mp3 - Word starts with ("איזו מילה מתחילה באות X?")
+    - mark-all-Y-to-X.mp3 - Mark last 4 letters learned
+    - word-*.mp3 - Individual word audio files
+
+    Quiz audio:
+    - quiz-find-X.mp3 - Quiz find letter instructions
+    - quiz-what-letter-word.mp3 - "באיזו אות מתחילה המילה?"
+    - quiz-word-starts-X.mp3 - Quiz word starts with letter
 
 ./public/sounds/*.mp3
     Voice feedback audio files (Hebrew TTS, he-IL-HilaNeural):
@@ -192,101 +182,18 @@ ENTRY POINTS
 --------------------------------------------------------------------------------
 
 ./src/data/categories.js
-    Category definitions array:
-    - counting: "ספירה" - Learn counting 1-10
-    - colors: "צבעים" - Identify and match colors
-    - logic: "חשיבה" - Logic and matching games
-    - letters: "אותיות" - Learn Hebrew letters (new!)
-    Each has: id, name, description, icon, color
+    Letter category definitions organized by letter groups:
+    - letters-alef-he: "אבגדה" - Letters א through ה + quiz
+    - letters-vav-yod: "וזחטי" - Letters ו through י + quiz (in progress)
+    Each has: id, name, description, icon, color, games array
 
 ./src/data/games/index.js
     Games registry and helper functions:
-    - games object with all game definitions
+    - games object with all letter game definitions
     - getGameById(id) - Get single game
     - getGamesByCategory(categoryId) - Filter games by category
 
-./src/data/games/countAnimals.js
-    "Count the Animals" game data:
-    - 5 questions with different animals (fish, butterflies, birds, dogs, cats)
-    - Each question has: instruction text, correct answer, options,
-      animal type, count, positions, and audio URL placeholder
-
-./src/data/games/findColor.js
-    "Find the Color" game data:
-    - 5 questions about finding colored items
-    - Items: red apple, yellow banana, blue ball, pink flower, green frog
-    - Each has: instruction, correct answer, item options with colors
-
-./src/data/games/shadowMatch.js
-    "Shadow Match" game data:
-    - 5 questions matching items to shadows
-    - Items: cat, elephant, star, car, flower
-    - Each has: main item, shadow options, correct shadow ID
-
-./src/data/games/countShapes.js
-    "Count the Shapes" game data (סופרים צורות):
-    - 5 questions counting geometric shapes
-    - Shapes: circles, squares, triangles, stars, hearts
-    - Uses CountingQuestion component with shape SVGs
-
-./src/data/games/whatsDifferent.js
-    "What's Different?" game data (מה שונה?):
-    - 5 questions finding the odd one out
-    - 4 items shown, 3 alike, find the different one
-    - Uses SelectionQuestion component
-
-./src/data/games/completePattern.js
-    "Complete the Pattern" game data (השלימו את הדפוס):
-    - 5 questions with visual patterns using emoji in instruction
-    - Child picks what comes next in the sequence
-    - Uses SelectionQuestion component with shape/color SVGs
-
-./src/data/games/matchPairs.js
-    "Match the Pairs" game data (התאימו זוגות):
-    - 15 questions (5 per difficulty: easy/medium/hard)
-    - Easy: Dog→bone, Bird→nest, Fish→water, Rabbit→carrot, Mouse→cheese
-    - Medium: Bee→honey, Lion→savanna, Elephant→river, Butterfly→flower, Turtle→shell
-    - Hard: Chef→knife, Painter→brush, Sunflower→sun, Owl→mouse, Rain→rainbow
-    - Uses SelectionQuestion component with animal/item/tool SVGs
-
-./src/data/games/speedCount.js
-    "Speed Count" timed game data (ספירה מהירה):
-    - 5 questions with 8-second time limit each
-    - Count emojis quickly: stars, hearts, flowers, apples, balls
-    - Hard difficulty only (7-12 items to count)
-    - Uses TimedQuestion component with countdown timer
-
-./src/data/games/memoryColors.js
-    "Memory Colors" game data (זכרו את הצבעים):
-    - 5 questions with 4-second memorization phase
-    - Memorize color sequence, then answer questions about it
-    - Questions: "What was in the middle?", "What was first?", "What was last?",
-      "What was NOT shown?", "How many colors were there?"
-    - Hard difficulty only
-    - Uses MemoryQuestion component with color SVGs
-
-./src/data/games/selectLetter.js
-    "Select the Letter" game data (בחרו את האות):
-    - 5 questions - listen to letter name (audio only), select the visual letter
-    - Letters: א, מ, ש, ל, ה
-    - Easy difficulty only
-    - Uses SelectionQuestion component with Hebrew letter SVG icons
-
-./src/data/games/firstLetter.js
-    "First Letter" game data (האות הראשונה):
-    - 5 questions - identify which letter a word starts with
-    - Shows word image (shoes, house, sun, dog, apple)
-    - Words: נעליים→נ, בית→ב, שמש→ש, כלב→כ, תפוח→ת
-    - Medium difficulty only
-    - Uses SelectionQuestion with questionImage feature for word display
-
-./src/data/games/doubleLetter.js
-    "Double Letter" game data (אות כפולה):
-    - 5 questions - find which letter appears twice in a word
-    - Shows word image, child identifies the repeating letter
-    - Words: בננה→נ, אבא→א, אמא→א, ממתק→מ, סבבה→ב
-    - Hard difficulty only
-    - Uses SelectionQuestion with questionImage feature
+LETTER GAMES - CATEGORY אבגדה (letters-alef-he):
 
 ./src/data/games/learnAlef.js
     "Learn the Letter Alef" game data (למדו את האות א):
@@ -359,6 +266,19 @@ ENTRY POINTS
     - Word images needed: word-hayeled.png, word-hatzipor.png, word-habayit.png,
       word-habanana.png, word-har.png, word-havdala.png
 
+./src/data/games/quizAlefHe.js
+    "Quiz Alef to He" game data (אבגדה - בוחן אותיות א-ה):
+    - 15 questions testing knowledge of letters א, ב, ג, ד, ה
+    - 3 question types per letter (pre-shuffled order):
+      Type 1: Find letter X among 9 letters (3x3 grid)
+      Type 2: What letter does word start with (9 letter options, shows word image)
+      Type 3: Which word starts with letter X (4 word options)
+    - Uses 9-option grid layout (optionsGrid9 CSS class)
+    - Easy difficulty only
+    - Audio files: quiz-find-*.mp3, quiz-what-letter-word.mp3, quiz-word-starts-*.mp3
+
+LETTER GAMES - CATEGORY וזחטי (letters-vav-yod):
+
 ./src/data/games/learnVav.js
     "Learn the Letter Vav" game data (למדו את האות ו):
     - 8 questions teaching children the Hebrew letter ו
@@ -383,17 +303,6 @@ LETTER GAMES - LAST QUESTION LOGIC:
     the child to select only the LAST 4 LETTERS learned (not all letters).
     This keeps the game focused and avoids overwhelming children as more
     letters are added. Example: For letter ו, ask for ג,ד,ה,ו (not א-ו).
-
-./src/data/games/quizAlefHe.js
-    "Quiz Alef to He" game data (אבגדה - בוחן אותיות א-ה):
-    - 15 questions testing knowledge of letters א, ב, ג, ד, ה
-    - 3 question types per letter (pre-shuffled order):
-      Type 1: Find letter X among 9 letters (3x3 grid)
-      Type 2: What letter does word start with (9 letter options, shows word image)
-      Type 3: Which word starts with letter X (4 word options)
-    - Uses 9-option grid layout (optionsGrid9 CSS class)
-    - Easy difficulty only
-    - Audio files: quiz-find-*.mp3, quiz-what-letter-word.mp3, quiz-word-starts-*.mp3
 
 --------------------------------------------------------------------------------
                               HOOKS (src/hooks/)
@@ -429,7 +338,7 @@ LETTER GAMES - LAST QUESTION LOGIC:
 ./src/pages/Home.jsx
     Main dashboard after onboarding:
     - Header with user greeting and score
-    - Category cards grid (ספירה, צבעים, חשיבה)
+    - Category cards grid (letter groups: אבגדה, וזחטי, etc.)
     - Floating decorations
 
 ./src/pages/Category.jsx
@@ -735,38 +644,6 @@ kids-game/
                               NOTES FOR DEVELOPERS
 ================================================================================
 
-ADDING NEW GAMES
-----------------
-1. Create game data file in src/data/games/
-2. Export from src/data/games/index.js
-3. If new question type needed, create component in src/components/game/
-4. Add handling in src/pages/Game.jsx
-
-ADDING AUDIO
-------------
-1. Place audio files in public/sounds/ (effects) or public/audio/ (instructions)
-2. Reference in game data files with URLs like "/audio/filename.mp3"
-3. Audio will auto-play on question load via useAudio hook (1 second delay)
-
-GENERATING TTS AUDIO (Hebrew)
------------------------------
-Uses edge-tts library (Microsoft Edge's free neural TTS):
-
-Installation: pip install edge-tts
-
-Generate single file:
-  edge-tts --voice "he-IL-HilaNeural" --text "הטקסט בעברית" --write-media "public/audio/filename.mp3"
-
-Available Hebrew voices:
-  - he-IL-HilaNeural (female, recommended for kids)
-  - he-IL-AvriNeural (male)
-
-Optional modifiers for more expressive speech:
-  --rate "+10%"    (faster)
-  --rate "-10%"    (slower)
-  --pitch "+5Hz"   (higher pitch)
-  --pitch "-5Hz"   (lower pitch)
-
 STYLING
 -------
 - Use CSS variables from src/styles/variables.css
@@ -779,5 +656,146 @@ RTL SUPPORT
 - HTML dir="rtl" set in index.html
 - CSS handles RTL automatically
 - Text alignment defaults to right
+
+================================================================================
+                    HOW TO ADD A NEW LETTER GAME
+================================================================================
+
+CATEGORY STRUCTURE
+------------------
+Letters are organized into groups of 5 (+ quiz):
+- אבגדה (letters-alef-he): א, ב, ג, ד, ה + quiz-alef-he
+- וזחטי (letters-vav-yod): ו, ז, ח, ט, י + quiz-vav-yod
+- כלמנס (letters-kaf-samech): כ, ל, מ, נ, ס + quiz
+- עפצקר (letters-ayin-resh): ע, פ, צ, ק, ר + quiz
+- שת (letters-shin-tav): ש, ת + final quiz
+
+--------------------------------------------------------------------------------
+
+STEP 1: ASK FOR EXAMPLE WORDS (DO THIS FIRST!)
+----------------------------------------------
+Before creating a new letter game, ask which 4-5 words to use.
+Words should be:
+- Simple, common words kids ages 3-5 know
+- Easy to visualize with images
+- Clearly start with the target letter
+
+Example for letter ח (Chet):
+- חתול (cat)
+- חלב (milk)
+- חמור (donkey)
+- חלון (window)
+- חגורה (belt)
+
+--------------------------------------------------------------------------------
+
+STEP 2: CREATE THE GAME FILE
+----------------------------
+Create: src/data/games/learnX.js (X = letter name in English, e.g., learnChet.js)
+
+Use learnZayin.js as template. Structure:
+
+const learnX = {
+  id: 'learn-x',
+  categoryId: 'letters-xxx-xxx',  // e.g., 'letters-vav-yod'
+  name: 'X',                      // Hebrew letter: ח
+  description: 'למדו את האות X',
+  icon: 'X',
+  type: 'selection',
+  gameType: 'standard',
+  availableIn: ['easy'],
+
+  questions: {
+    easy: [
+      // Q1: Introduction - show letter + example words (isIntroMultiSelect: true)
+      // Q2: Optional - show different writing styles (if letter has variants)
+      // Q3: Multi-select - find all instances of letter in 3x3 grid
+      // Q4: Find letter among 6 random letters
+      // Q5: Which word starts with this letter? (4 word options)
+      // Q6: Find letter among different 6 letters
+      // Q7: Another "which word starts with..." question
+      // Q8: Multi-select - mark LAST 4 LETTERS learned (e.g., for ט: ו,ז,ח,ט)
+    ],
+  },
+};
+
+IMPORTANT: The final question (Q8) should ask to select the LAST 4 LETTERS
+learned (not all letters from א). This keeps the game focused.
+
+--------------------------------------------------------------------------------
+
+STEP 3: GENERATE AUDIO FILES
+----------------------------
+Required audio files per letter (use edge-tts):
+
+pip install edge-tts  # if not installed
+
+1. Introduction audio:
+   edge-tts --voice "he-IL-HilaNeural" --text "זוהי האות X. המילים הבאות מתחילות באות X" --write-media "public/audio/intro-X.mp3"
+
+2. Select all audio:
+   edge-tts --voice "he-IL-HilaNeural" --text "בחרו את כל האותיות X" --write-media "public/audio/select-all-X.mp3"
+
+3. Find letter audio:
+   edge-tts --voice "he-IL-HilaNeural" --text "מצאו את האות X" --write-media "public/audio/find-X.mp3"
+
+4. Word starts with audio:
+   edge-tts --voice "he-IL-HilaNeural" --text "איזו מילה מתחילה באות X?" --write-media "public/audio/word-starts-X.mp3"
+
+5. Mark all (last 4 letters) audio:
+   edge-tts --voice "he-IL-HilaNeural" --text "סמנו את כל האותיות Y, Z, W, X" --write-media "public/audio/mark-all-Y-to-X.mp3"
+
+6. Word audio for each example word:
+   edge-tts --voice "he-IL-HilaNeural" --text "WORD" --write-media "public/audio/word-WORD.mp3"
+
+--------------------------------------------------------------------------------
+
+STEP 4: REGISTER THE GAME
+-------------------------
+1. Add import in src/data/games/index.js:
+   import learnX from './learnX';
+
+2. Add to games registry object:
+   'learn-x': learnX,
+
+3. Add game ID to category in src/data/categories.js:
+   games: ['learn-vav', 'learn-zayin', 'learn-chet', ...]
+
+--------------------------------------------------------------------------------
+
+STEP 5: REQUEST IMAGES (DO THIS LAST!)
+--------------------------------------
+After the game is built and working, request images for the example words.
+Images go in: public/images/
+
+Image requirements:
+- Simple, clear illustrations (child-friendly style)
+- Transparent or white background
+- ~200x200 px recommended
+- Filename format: word-WORDNAME.png (e.g., word-chatul.png)
+
+Example request format:
+"Need images for letter ח game:
+- word-chatul.png (cat/חתול)
+- word-chalav.png (milk/חלב)
+- word-chamor.png (donkey/חמור)
+- word-chalon.png (window/חלון)
+- word-chagora.png (belt/חגורה)"
+
+--------------------------------------------------------------------------------
+
+STEP 6: CREATE QUIZ WHEN CATEGORY COMPLETE
+------------------------------------------
+When all 5 letters of a category are done, create a quiz game.
+Use quizAlefHe.js as template.
+
+Quiz structure:
+- 15 questions (3 per letter)
+- 3 question types per letter:
+  1. Find letter X among 9 letters (3x3 grid)
+  2. What letter does word start with? (shows word image, 9 letter options)
+  3. Which word starts with letter X? (4 word options)
+
+Quiz naming: quiz-X-Y.js (e.g., quiz-vav-yod.js)
 
 ================================================================================

@@ -5,7 +5,7 @@
 
 const learnDalet = {
   id: 'learn-dalet',
-  categoryId: 'letters',
+  categoryId: 'letters-alef-he',
   name: 'ד',
   description: 'למדו את האות ד',
   icon: 'ד',

@@ -5,7 +5,7 @@
 
 const learnVav = {
   id: 'learn-vav',
-  categoryId: 'letters',
+  categoryId: 'letters-vav-yod',
   name: 'ו',
   description: 'למדו את האות ו',
   icon: 'ו',

@@ -5,7 +5,7 @@
 
 const learnHe = {
   id: 'learn-he',
-  categoryId: 'letters',
+  categoryId: 'letters-alef-he',
   name: 'ה',
   description: 'למדו את האות ה',
   icon: 'ה',

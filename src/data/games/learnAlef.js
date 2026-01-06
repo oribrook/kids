@@ -5,7 +5,7 @@
 
 const learnAlef = {
   id: 'learn-alef',
-  categoryId: 'letters',
+  categoryId: 'letters-alef-he',
   name: 'א',
   description: 'למדו את האות א',
   icon: 'א',

@@ -28,12 +28,12 @@ function Home() {
       </header>
 
       {/* Difficulty Selector */}
-      <div className={styles.difficultySection}>
+      {/* <div className={styles.difficultySection}>
         <DifficultySelector />
         <span className={styles.difficultyLabel}>
           רמה: {DIFFICULTY_INFO[currentDifficulty].label} {DIFFICULTY_INFO[currentDifficulty].icon}
         </span>
-      </div>
+      </div> */}
 
       {/* Main content */}
       <main className={styles.main}>
@@ -58,7 +58,7 @@ function Home() {
               whileHover={{ scale: 1.05, y: -5 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span className={styles.categoryIcon}>{category.icon}</span>
+              {/* <span className={styles.categoryIcon}>{category.icon}</span> */}
               <h2 className={styles.categoryName}>{category.name}</h2>
               <p className={styles.categoryDescription}>{category.description}</p>
               <div

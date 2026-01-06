@@ -1,45 +1,32 @@
 // Games index - exports all games with difficulty-aware helpers
-import countAnimals from './countAnimals';
-import countShapes from './countShapes';
-import findColor from './findColor';
-import shadowMatch from './shadowMatch';
-import whatsDifferent from './whatsDifferent';
-import completePattern from './completePattern';
-import matchPairs from './matchPairs';
-import speedCount from './speedCount';
-import memoryColors from './memoryColors';
-import firstLetter from './firstLetter';
-import doubleLetter from './doubleLetter';
+// Letter games only - organized by letter groups
+
+// Category: אבגדה (letters-alef-he)
 import learnAlef from './learnAlef';
 import learnBet from './learnBet';
 import learnGimel from './learnGimel';
 import learnDalet from './learnDalet';
 import learnHe from './learnHe';
+import quizAlefHe from './quizAlefHe';
+
+// Category: וזחטי (letters-vav-yod)
 import learnVav from './learnVav';
 import learnZayin from './learnZayin';
-import quizAlefHe from './quizAlefHe';
+import learnChet from './learnChet';
 
 // All games registry
 export const games = {
-  'count-animals': countAnimals,
-  'count-shapes': countShapes,
-  'find-color': findColor,
-  'shadow-match': shadowMatch,
-  'whats-different': whatsDifferent,
-  'complete-pattern': completePattern,
-  'match-pairs': matchPairs,
-  'speed-count': speedCount,
-  'memory-colors': memoryColors,
-  'first-letter': firstLetter,
-  'double-letter': doubleLetter,
+  // Category: אבגדה
   'learn-alef': learnAlef,
   'learn-bet': learnBet,
   'learn-gimel': learnGimel,
   'learn-dalet': learnDalet,
   'learn-he': learnHe,
+  'quiz-alef-he': quizAlefHe,
+  // Category: וזחטי
   'learn-vav': learnVav,
   'learn-zayin': learnZayin,
-  'quiz-alef-he': quizAlefHe,
+  'learn-chet': learnChet,
 };
 
 // Game type constants

@@ -5,7 +5,7 @@
 
 const learnZayin = {
   id: 'learn-zayin',
-  categoryId: 'letters',
+  categoryId: 'letters-vav-yod',
   name: 'ז',
   description: 'למדו את האות ז',
   icon: 'ז',
@@ -40,11 +40,31 @@ const learnZayin = {
           { id: 'opt-2', image: 'zayin-option-2', label: 'ז', isCorrect: true },
           { id: 'opt-3', image: 'zayin-option-3', label: 'ז', isCorrect: true },
           { id: 'opt-4', image: 'zayin-option-4', label: 'ז', isCorrect: true },
+          { id: 'opt-5', image: 'zayin-option-5', label: 'ז', isCorrect: true },
         ],
       },
-      // Question 3: Select all ז letters from 3x3 grid
+      // Question 3: Select all ז letters from mix of ד and ז
       {
         id: 'lz-e3',
+        instruction: 'בחרו את כל האותיות ז',
+        instructionAudio: '/audio/select-all-zayin.mp3',
+        multiSelect: true,
+        options: [
+          { id: 'opt-1', image: 'letter-dalet', label: 'ד' },
+          { id: 'opt-2', image: 'letter-zayin', label: 'ז', isCorrect: true },
+          { id: 'opt-3', image: 'letter-dalet', label: 'ד' },
+          { id: 'opt-4', image: 'letter-zayin', label: 'ז', isCorrect: true },
+          { id: 'opt-5', image: 'letter-dalet', label: 'ד' },
+          { id: 'opt-6', image: 'letter-zayin', label: 'ז', isCorrect: true },
+          { id: 'opt-7', image: 'letter-dalet', label: 'ד' },
+          { id: 'opt-8', image: 'letter-zayin', label: 'ז', isCorrect: true },
+          { id: 'opt-9', image: 'letter-dalet', label: 'ד' },
+        ],
+        correctCount: 4,
+      },
+      // Question 4: Select all ז letters from 3x3 grid (various letters)
+      {
+        id: 'lz-e4',
         instruction: 'בחרו את כל האותיות ז',
         instructionAudio: '/audio/select-all-zayin.mp3',
         multiSelect: true,
@@ -61,9 +81,9 @@ const learnZayin = {
         ],
         correctCount: 3,
       },
-      // Question 4: Find the letter shape among 6 random letters
+      // Question 5: Find the letter shape among 6 random letters
       {
-        id: 'lz-e4',
+        id: 'lz-e5',
         instruction: 'מצאו את האות ז',
         instructionAudio: '/audio/find-zayin.mp3',
         options: [
@@ -76,9 +96,9 @@ const learnZayin = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 5: Click on the item that starts with ז
+      // Question 6: Click on the item that starts with ז
       {
-        id: 'lz-e5',
+        id: 'lz-e6',
         instruction: 'איזו מילה מתחילה באות ז?',
         instructionAudio: '/audio/word-starts-zayin.mp3',
         options: [
@@ -89,9 +109,9 @@ const learnZayin = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 6: Find the letter shape among different letters
+      // Question 7: Find the letter shape among different letters
       {
-        id: 'lz-e6',
+        id: 'lz-e7',
         instruction: 'מצאו את האות ז',
         instructionAudio: '/audio/find-zayin.mp3',
         options: [
@@ -104,9 +124,9 @@ const learnZayin = {
         ],
         correctAnswerId: 'opt-6',
       },
-      // Question 7: Find another word starting with ז
+      // Question 8: Find another word starting with ז
       {
-        id: 'lz-e7',
+        id: 'lz-e8',
         instruction: 'איזו מילה מתחילה באות ז?',
         instructionAudio: '/audio/word-starts-zayin.mp3',
         options: [
@@ -117,9 +137,9 @@ const learnZayin = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 8: Multi-select - mark last 4 letters ד, ה, ו, ז
+      // Question 9: Multi-select - mark last 4 letters ד, ה, ו, ז
       {
-        id: 'lz-e8',
+        id: 'lz-e9',
         instruction: 'סמנו את כל האותיות ד, ה, ו, ז',
         instructionAudio: '/audio/mark-all-dalet-to-zayin.mp3',
         multiSelect: true,

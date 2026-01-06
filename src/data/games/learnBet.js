@@ -5,7 +5,7 @@
 
 const learnBet = {
   id: 'learn-bet',
-  categoryId: 'letters',
+  categoryId: 'letters-alef-he',
   name: 'ב',
   description: 'למדו את האות ב',
   icon: 'ב',

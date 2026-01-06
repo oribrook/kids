@@ -1,41 +1,24 @@
 // Categories configuration for the kids game platform
+// Organized by letter groups (5 letters per category + quiz)
 
 export const categories = [
   {
-    id: 'counting',
-    name: 'ספירה',
-    description: 'לומדים לספור מ-1 עד 10',
-    icon: '🔢',
-    color: '#74B9FF',
-    backgroundColor: '#E3F2FD',
-    games: ['count-animals'],
-  },
-  {
-    id: 'colors',
-    name: 'צבעים',
-    description: 'מזהים ומתאימים צבעים',
-    icon: '🎨',
-    color: '#FD79A8',
-    backgroundColor: '#FCE4EC',
-    games: ['find-color'],
-  },
-  {
-    id: 'logic',
-    name: 'חשיבה',
-    description: 'משחקי היגיון והתאמה',
-    icon: '🧩',
-    color: '#FDCB6E',
-    backgroundColor: '#FFF8E1',
-    games: ['shadow-match'],
-  },
-  {
-    id: 'letters',
-    name: 'אותיות',
-    description: 'לומדים להכיר אותיות',
-    icon: '🔤',
+    id: 'letters-alef-he',
+    name: 'אבגדה',
+    description: 'אותיות א עד ה',
+    icon: 'א',
     color: '#00CEC9',
     backgroundColor: '#E0F7FA',
-    games: ['select-letter', 'first-letter', 'double-letter'],
+    games: ['learn-alef', 'learn-bet', 'learn-gimel', 'learn-dalet', 'learn-he', 'quiz-alef-he'],
+  },
+  {
+    id: 'letters-vav-yod',
+    name: 'וזחטי',
+    description: 'אותיות ו עד י',
+    icon: 'ו',
+    color: '#6C5CE7',
+    backgroundColor: '#EDE7F6',
+    games: ['learn-vav', 'learn-zayin', 'learn-chet'],
   },
 ];
 

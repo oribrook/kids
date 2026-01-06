@@ -6,7 +6,7 @@
 
 const quizAlefHe = {
   id: 'quiz-alef-he',
-  categoryId: 'letters',
+  categoryId: 'letters-alef-he',
   name: 'אבגדה',
   description: 'בוחן אותיות א-ה',
   icon: '📝',

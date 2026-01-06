@@ -1171,6 +1171,54 @@ const ItemIcons = {
   'vav-two-ways': () => (
     <img src="/images/vav-two-ways.png" alt="ו" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),
+  // Letter ז (Zayin) words
+  'word-zanav': () => (
+    <img src="/images/word-zanav.png" alt="זנב" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-zchuchit': () => (
+    <img src="/images/word-zchuchit.png" alt="זכוכית" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-zeev': () => (
+    <img src="/images/word-zeev.png" alt="זאב" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-zebra': () => (
+    <img src="/images/word-zebra.png" alt="זברה" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  // Zayin permutations (different writing styles)
+  'zayin-option-1': () => (
+    <img src="/images/zayin-option-1.png" alt="ז" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'zayin-option-2': () => (
+    <img src="/images/zayin-option-2.png" alt="ז" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'zayin-option-3': () => (
+    <img src="/images/zayin-option-3.png" alt="ז" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'zayin-option-4': () => (
+    <img src="/images/zayin-option-4.png" alt="ז" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'zayin-option-5': () => (
+    <img src="/images/zayin-option-5.png" alt="ז" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  // Letter ח (Chet) words
+  'word-chatul': () => (
+    <img src="/images/word-chatul.png" alt="חתול" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-chamesh': () => (
+    <img src="/images/word-chamesh.png" alt="חמש" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-chevel': () => (
+    <img src="/images/word-chevel.png" alt="חבל" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-chagav': () => (
+    <img src="/images/word-chagav.png" alt="חגב" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-chavita': () => (
+    <img src="/images/word-chavita.png" alt="חביתה" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-chipooshit': () => (
+    <img src="/images/word-chipooshit.png" alt="חיפושית" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
 };
 
 function SelectionQuestion({

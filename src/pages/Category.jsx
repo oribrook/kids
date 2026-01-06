@@ -84,7 +84,7 @@ function Category() {
                 whileTap={{ scale: 0.97 }}
               >
                 <div className={styles.gameIcon}>{game.icon}</div>
-                <div className={styles.gameInfo}>
+                {/* <div className={styles.gameInfo}>
                   <h2 className={styles.gameName}>{game.name}</h2>
                   <p className={styles.gameDescription}>{game.description}</p>
                   <div className={styles.gameStats}>
@@ -109,7 +109,7 @@ function Category() {
                       </span>
                     )}
                   </div>
-                </div>
+                </div> */}
                 <div
                   className={styles.playButton}
                   style={{ backgroundColor: category.color }}
