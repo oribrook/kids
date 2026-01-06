@@ -18,7 +18,7 @@ export const categories = [
     icon: 'ו',
     color: '#6C5CE7',
     backgroundColor: '#EDE7F6',
-    games: ['learn-vav', 'learn-zayin', 'learn-chet'],
+    games: ['learn-vav', 'learn-zayin', 'learn-chet', 'learn-tet'],
   },
 ];
 

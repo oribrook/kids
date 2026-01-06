@@ -13,6 +13,7 @@ import quizAlefHe from './quizAlefHe';
 import learnVav from './learnVav';
 import learnZayin from './learnZayin';
 import learnChet from './learnChet';
+import learnTet from './learnTet';
 
 // All games registry
 export const games = {
@@ -27,6 +28,7 @@ export const games = {
   'learn-vav': learnVav,
   'learn-zayin': learnZayin,
   'learn-chet': learnChet,
+  'learn-tet': learnTet,
 };
 
 // Game type constants
