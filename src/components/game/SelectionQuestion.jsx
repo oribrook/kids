@@ -1219,6 +1219,28 @@ const ItemIcons = {
   'word-chipooshit': () => (
     <img src="/images/word-chipooshit.png" alt="חיפושית" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),
+  // Tet (ט) words
+  'word-telephone': () => (
+    <img src="/images/word-telephone.png" alt="טלפון" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-tabaat': () => (
+    <img src="/images/word-tabaat.png" alt="טבעת" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-televizia': () => (
+    <img src="/images/word-televizia.png" alt="טלוויזיה" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-tayas': () => (
+    <img src="/images/word-tayas.png" alt="טייס" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-tavos': () => (
+    <img src="/images/word-tavos.png" alt="טווס" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-tigris': () => (
+    <img src="/images/word-tigris.png" alt="טיגריס" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-traktor': () => (
+    <img src="/images/word-traktor.png" alt="טרקטור" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
 };
 
 function SelectionQuestion({
