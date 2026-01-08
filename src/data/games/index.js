@@ -22,6 +22,7 @@ import learnLamed from './learnLamed';
 import learnMem from './learnMem';
 import learnNun from './learnNun';
 import learnSamech from './learnSamech';
+import quizKafSamech from './quizKafSamech';
 
 // Category: עפצקר (letters-ayin-resh)
 import learnAyin from './learnAyin';
@@ -29,10 +30,12 @@ import learnPeh from './learnPeh';
 import learnTsade from './learnTsade';
 import learnKof from './learnKof';
 import learnResh from './learnResh';
+import quizAyinResh from './quizAyinResh';
 
 // Category: שת (letters-shin-tav) - final letters
 import learnShin from './learnShin';
 import learnTav from './learnTav';
+import quizShinTav from './quizShinTav';
 
 // All games registry
 export const games = {
@@ -56,15 +59,18 @@ export const games = {
   'learn-mem': learnMem,
   'learn-nun': learnNun,
   'learn-samech': learnSamech,
+  'quiz-kaf-samech': quizKafSamech,
   // Category: עפצקר
   'learn-ayin': learnAyin,
   'learn-peh': learnPeh,
   'learn-tsade': learnTsade,
   'learn-kof': learnKof,
   'learn-resh': learnResh,
+  'quiz-ayin-resh': quizAyinResh,
   // Category: שת
   'learn-shin': learnShin,
   'learn-tav': learnTav,
+  'quiz-shin-tav': quizShinTav,
 };
 
 /**

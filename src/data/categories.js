@@ -27,7 +27,7 @@ export const categories = [
     icon: 'כ',
     color: '#E17055',
     backgroundColor: '#FFEAA7',
-    games: ['learn-kaf', 'learn-lamed', 'learn-mem', 'learn-nun', 'learn-samech'],
+    games: ['learn-kaf', 'learn-lamed', 'learn-mem', 'learn-nun', 'learn-samech', 'quiz-kaf-samech'],
   },
   {
     id: 'letters-ayin-resh',
@@ -36,7 +36,7 @@ export const categories = [
     icon: 'ע',
     color: '#00B894',
     backgroundColor: '#D5F5E3',
-    games: ['learn-ayin', 'learn-peh', 'learn-tsade', 'learn-kof', 'learn-resh'],
+    games: ['learn-ayin', 'learn-peh', 'learn-tsade', 'learn-kof', 'learn-resh', 'quiz-ayin-resh'],
   },
   {
     id: 'letters-shin-tav',
@@ -45,7 +45,7 @@ export const categories = [
     icon: 'ש',
     color: '#E84393',
     backgroundColor: '#FADBD8',
-    games: ['learn-shin', 'learn-tav'],
+    games: ['learn-shin', 'learn-tav', 'quiz-shin-tav'],
   },
 ];
 

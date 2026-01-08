@@ -736,16 +736,41 @@ pip install edge-tts  # if not installed
 6. Word audio for each example word:
    edge-tts --voice "he-IL-HilaNeural" --text "WORD" --write-media "public/audio/word-WORD.mp3"
 
-IMPORTANT - LETTER NAME PRONUNCIATION:
-When generating audio for Hebrew letter names, use nikud (vowel marks) to ensure
-correct pronunciation by the TTS engine. Without nikud, letter names like מ may
-be mispronounced. Examples of correct letter names with nikud:
-- מֵם (mem)
-- לָמֶד (lamed)
-- כַּף (kaf)
+IMPORTANT - ALWAYS USE NIKUD FOR TTS:
+When generating ANY Hebrew audio with edge-tts, ALWAYS add nikud (vowel marks)
+to the text. Without nikud, Hebrew words may be mispronounced by the TTS engine.
+
+Examples of common words that MUST have nikud:
+- כֹּל (kol, meaning "all") - without nikud sounds like "kal"
+- כֹּל הַכָּבוֹד (kol hakavod)
+- בַּחֲרוּ אֶת כֹּל הָאוֹתִיּוֹת (bacharu et kol ha'otiyot)
+
+Letter names with nikud:
+- אָלֶף (alef)
+- בֵּית (bet)
+- גִּימֶל (gimel)
+- דָּלֶת (dalet)
+- הֵא (he)
+- וָו (vav)
+- זַיִן (zayin)
+- חֵית (chet)
+- טֵית (tet)
 - יוֹד (yod)
+- כַּף (kaf)
+- לָמֶד (lamed)
+- מֵם (mem)
 - נוּן (nun)
 - סָמֶך (samech)
+- עַיִן (ayin)
+- פֵּא (peh)
+- צַדִּי (tsade)
+- קוֹף (kof)
+- רֵישׁ (resh)
+- שִׁין (shin)
+- תָּו (tav)
+
+TIP: Use an online nikud tool or ask AI to add nikud to Hebrew text before
+generating audio files.
 
 --------------------------------------------------------------------------------
 
