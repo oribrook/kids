@@ -15,7 +15,7 @@ const learnTet = {
 
   questions: {
     easy: [
-      // Question 1: Introduction - click all words that start with ט (5 words for intro)
+      // Question 1: Introduction - click all words that start with ט (4 words for intro)
       {
         id: 'lt-e1',
         instruction: 'זוהי האות ט. המילים הבאות מתחילות באות ט',
@@ -25,9 +25,8 @@ const learnTet = {
         options: [
           { id: 'opt-1', image: 'word-telephone', label: 'טלפון', isCorrect: true, optionAudio: '/audio/word-telephone.mp3' },
           { id: 'opt-2', image: 'word-tabaat', label: 'טבעת', isCorrect: true, optionAudio: '/audio/word-tabaat.mp3' },
-          { id: 'opt-3', image: 'word-televizia', label: 'טלוויזיה', isCorrect: true, optionAudio: '/audio/word-televizia.mp3' },
-          { id: 'opt-4', image: 'word-tayas', label: 'טייס', isCorrect: true, optionAudio: '/audio/word-tayas.mp3' },
-          { id: 'opt-5', image: 'word-tavos', label: 'טווס', isCorrect: true, optionAudio: '/audio/word-tavos.mp3' },
+          { id: 'opt-3', image: 'word-tayas', label: 'טייס', isCorrect: true, optionAudio: '/audio/word-tayas.mp3' },
+          { id: 'opt-4', image: 'word-tavos', label: 'טווס', isCorrect: true, optionAudio: '/audio/word-tavos.mp3' },
         ],
       },
       // Question 2: Select all ט letters from mix of ח and ט

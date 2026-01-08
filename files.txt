@@ -18,7 +18,7 @@ TECH STACK
 
 FEATURES
 --------
-- 3-step onboarding flow (welcome, name, age selection)
+- 2-step onboarding flow (welcome, name input)
 - Letter learning categories organized by groups of 5 letters:
   - אבגדה (א-ה) + quiz
   - וזחטי (ו-י) + quiz (in progress)
@@ -62,6 +62,9 @@ ROOT FILES
 ================================================================================
                               PUBLIC FOLDER
 ================================================================================
+
+./public/_redirects
+    Netlify SPA routing config. Prevents 404 on page refresh.
 
 ./public/audio/README.md
     Documentation listing all audio files for game instructions and
@@ -158,9 +161,9 @@ ENTRY POINTS
 ./src/context/UserContext.jsx
     User state management:
     - name: User's name from onboarding
-    - age: Selected age (3, 4, or 5)
     - totalScore: Accumulated score across all games
     - hasCompletedOnboarding: Flag for redirect logic
+    - gamesPlayed: Array of game play records
     - Persists to localStorage
 
 ./src/context/GameContext.jsx
@@ -192,6 +195,8 @@ ENTRY POINTS
     - games object with all letter game definitions
     - getGameById(id) - Get single game
     - getGamesByCategory(categoryId) - Filter games by category
+    - getQuestionsForDifficulty(game) - Get easy questions for a game
+    - getGameDisplayInfo(gameId) - Get game metadata for display
 
 LETTER GAMES - CATEGORY אבגדה (letters-alef-he):
 
@@ -329,11 +334,9 @@ LETTER GAMES - LAST QUESTION LOGIC:
     Page exports barrel file.
 
 ./src/pages/Onboarding.jsx
-    3-step onboarding flow controller:
+    2-step onboarding flow controller:
     - Step 0: WelcomeScreen
-    - Step 1: NameInput
-    - Step 2: AgeSelector
-    - Redirects to /home when complete
+    - Step 1: NameInput -> completes onboarding and redirects to /home
 
 ./src/pages/Home.jsx
     Main dashboard after onboarding:
@@ -544,18 +547,9 @@ LETTER GAMES - LAST QUESTION LOGIC:
     - "מה השם שלך?" title
     - Text input field
     - Continue/Skip buttons
-    - Progress dots
-
-./src/components/onboarding/AgeSelector.jsx
-    Age selection step:
-    - "בני כמה אתם?" title
-    - Three age buttons (3, 4, 5) with emojis
-    - Visual selection feedback
-    - Progress dots
 
 ./src/components/onboarding/WelcomeScreen.module.css
 ./src/components/onboarding/NameInput.module.css
-./src/components/onboarding/AgeSelector.module.css
     CSS Modules for each onboarding component with responsive styles.
 
 ================================================================================
@@ -590,22 +584,19 @@ kids-game/
     │   ├── GameContext.jsx # Game state management
     │   └── BackgroundMusicContext.jsx # Background music state
     ├── data/
-    │   ├── categories.js   # Category definitions (4 categories)
+    │   ├── categories.js   # Category definitions (2 categories)
     │   └── games/
     │       ├── index.js    # Games registry
-    │       ├── countAnimals.js
-    │       ├── countShapes.js
-    │       ├── findColor.js
-    │       ├── shadowMatch.js
-    │       ├── whatsDifferent.js
-    │       ├── completePattern.js
-    │       ├── matchPairs.js
-    │       ├── speedCount.js
-    │       ├── memoryColors.js
-    │       ├── selectLetter.js   # Letters category (Easy)
-    │       ├── firstLetter.js    # Letters category (Medium)
-    │       ├── doubleLetter.js   # Letters category (Hard)
-    │       └── learnAlef.js      # Learn letter Alef (Easy)
+    │       ├── learnAlef.js    # Learn letter א
+    │       ├── learnBet.js     # Learn letter ב
+    │       ├── learnGimel.js   # Learn letter ג
+    │       ├── learnDalet.js   # Learn letter ד
+    │       ├── learnHe.js      # Learn letter ה
+    │       ├── quizAlefHe.js   # Quiz for א-ה
+    │       ├── learnVav.js     # Learn letter ו
+    │       ├── learnZayin.js   # Learn letter ז
+    │       ├── learnChet.js    # Learn letter ח
+    │       └── learnTet.js     # Learn letter ט
     ├── hooks/
     │   └── useAudio.js     # Audio playback hook
     ├── pages/
@@ -637,7 +628,6 @@ kids-game/
             ├── index.js
             ├── WelcomeScreen.jsx
             ├── NameInput.jsx
-            ├── AgeSelector.jsx
             └── *.module.css
 
 ================================================================================
@@ -702,8 +692,6 @@ const learnX = {
   description: 'למדו את האות X',
   icon: 'X',
   type: 'selection',
-  gameType: 'standard',
-  availableIn: ['easy'],
 
   questions: {
     easy: [
@@ -747,6 +735,17 @@ pip install edge-tts  # if not installed
 
 6. Word audio for each example word:
    edge-tts --voice "he-IL-HilaNeural" --text "WORD" --write-media "public/audio/word-WORD.mp3"
+
+IMPORTANT - LETTER NAME PRONUNCIATION:
+When generating audio for Hebrew letter names, use nikud (vowel marks) to ensure
+correct pronunciation by the TTS engine. Without nikud, letter names like מ may
+be mispronounced. Examples of correct letter names with nikud:
+- מֵם (mem)
+- לָמֶד (lamed)
+- כַּף (kaf)
+- יוֹד (yod)
+- נוּן (nun)
+- סָמֶך (samech)
 
 --------------------------------------------------------------------------------
 

@@ -6,7 +6,7 @@ import { useUser } from '../context/UserContext';
 import { useAudio } from '../hooks/useAudio';
 import { getGameById, getQuestionsForDifficulty } from '../data/games';
 import { getCategoryById } from '../data/categories';
-import { ProgressBar, ScoreDisplay, AudioButton, Card, Button, Mascot } from '../components/common';
+import { ProgressBar, ScoreDisplay, AudioButton, Button, Mascot } from '../components/common';
 import GameComplete from '../components/game/GameComplete';
 import CountingQuestion from '../components/game/CountingQuestion';
 import SelectionQuestion from '../components/game/SelectionQuestion';
@@ -22,14 +22,14 @@ function Game() {
   const category = game ? getCategoryById(game.categoryId) : null;
 
   const { gameState, startGame, submitAnswer, getCurrentQuestion, getProgress, getStars } = useGame();
-  const { addScore, recordGamePlayed, currentDifficulty } = useUser();
+  const { addScore, recordGamePlayed } = useUser();
   const { playCorrect, playWrong, playInstruction, playComplete } = useAudio();
 
-  // Get questions for current difficulty
+  // Get questions (always easy)
   const questions = useMemo(() => {
     if (!game) return [];
-    return getQuestionsForDifficulty(game, currentDifficulty);
-  }, [game, currentDifficulty]);
+    return getQuestionsForDifficulty(game);
+  }, [game]);
 
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);

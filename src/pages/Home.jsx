@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useUser, DIFFICULTY_INFO } from '../context/UserContext';
-import { Mascot, ScoreDisplay, DifficultySelector } from '../components/common';
+import { useUser } from '../context/UserContext';
+import { Mascot, ScoreDisplay } from '../components/common';
 import { categories } from '../data/categories';
 import styles from './Home.module.css';
 
 function Home() {
   const navigate = useNavigate();
-  const { user, currentDifficulty } = useUser();
+  const { user } = useUser();
 
   const handleCategoryClick = (categoryId) => {
     navigate(`/category/${categoryId}`);

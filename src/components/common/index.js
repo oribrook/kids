@@ -5,4 +5,3 @@ export { default as AudioButton } from './AudioButton';
 export { default as ScoreDisplay } from './ScoreDisplay';
 export { default as Mascot } from './Mascot';
 export { default as MusicToggle } from './MusicToggle';
-export { default as DifficultySelector } from './DifficultySelector';

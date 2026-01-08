@@ -1,53 +1,15 @@
-import { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const UserContext = createContext(null);
 
 const STORAGE_KEY = 'kidsGameUser';
 
-// Difficulty levels
-export const DIFFICULTIES = {
-  EASY: 'easy',
-  MEDIUM: 'medium',
-  HARD: 'hard',
-};
-
-// Get default difficulty based on age
-export const getDefaultDifficulty = (age) => {
-  if (!age || age <= 4) return DIFFICULTIES.EASY;
-  if (age <= 6) return DIFFICULTIES.MEDIUM;
-  return DIFFICULTIES.HARD;
-};
-
-// Difficulty metadata for UI
-export const DIFFICULTY_INFO = {
-  [DIFFICULTIES.EASY]: {
-    label: 'קל',
-    icon: '🐣',
-    color: '#4CAF50',
-    description: 'למתחילים',
-  },
-  [DIFFICULTIES.MEDIUM]: {
-    label: 'בינוני',
-    icon: '🐥',
-    color: '#FF9800',
-    description: 'אתגר קטן',
-  },
-  [DIFFICULTIES.HARD]: {
-    label: 'קשה',
-    icon: '🦅',
-    color: '#F44336',
-    description: 'למומחים',
-  },
-};
-
 const defaultUser = {
   name: '',
-  age: null,
   hasCompletedOnboarding: false,
   totalScore: 0,
   gamesPlayed: [],
   achievements: [],
-  difficultyOverride: null, // null = use age-based default, or 'easy'/'medium'/'hard'
 };
 
 export function UserProvider({ children }) {
@@ -66,10 +28,6 @@ export function UserProvider({ children }) {
 
   const setName = (name) => {
     updateUser({ name });
-  };
-
-  const setAge = (age) => {
-    updateUser({ age });
   };
 
   const completeOnboarding = () => {
@@ -97,32 +55,13 @@ export function UserProvider({ children }) {
     localStorage.removeItem(STORAGE_KEY);
   };
 
-  const setDifficulty = (difficulty) => {
-    updateUser({ difficultyOverride: difficulty });
-  };
-
-  // Computed current difficulty (override or age-based)
-  const currentDifficulty = useMemo(() => {
-    if (user.difficultyOverride) return user.difficultyOverride;
-    return getDefaultDifficulty(user.age);
-  }, [user.difficultyOverride, user.age]);
-
-  // All difficulties are available to everyone (age only affects default)
-  const availableDifficulties = useMemo(() => {
-    return [DIFFICULTIES.EASY, DIFFICULTIES.MEDIUM, DIFFICULTIES.HARD];
-  }, []);
-
   const value = {
     user,
     setName,
-    setAge,
     completeOnboarding,
     addScore,
     recordGamePlayed,
     resetUser,
-    setDifficulty,
-    currentDifficulty,
-    availableDifficulties,
   };
 
   return (

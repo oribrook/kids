@@ -1,5 +1,4 @@
-// Games index - exports all games with difficulty-aware helpers
-// Letter games only - organized by letter groups
+// Games index - Letter games only, organized by letter groups
 
 // Category: אבגדה (letters-alef-he)
 import learnAlef from './learnAlef';
@@ -14,6 +13,26 @@ import learnVav from './learnVav';
 import learnZayin from './learnZayin';
 import learnChet from './learnChet';
 import learnTet from './learnTet';
+import learnYod from './learnYod';
+import quizVavYod from './quizVavYod';
+
+// Category: כלמנס (letters-kaf-samech)
+import learnKaf from './learnKaf';
+import learnLamed from './learnLamed';
+import learnMem from './learnMem';
+import learnNun from './learnNun';
+import learnSamech from './learnSamech';
+
+// Category: עפצקר (letters-ayin-resh)
+import learnAyin from './learnAyin';
+import learnPeh from './learnPeh';
+import learnTsade from './learnTsade';
+import learnKof from './learnKof';
+import learnResh from './learnResh';
+
+// Category: שת (letters-shin-tav) - final letters
+import learnShin from './learnShin';
+import learnTav from './learnTav';
 
 // All games registry
 export const games = {
@@ -29,13 +48,23 @@ export const games = {
   'learn-zayin': learnZayin,
   'learn-chet': learnChet,
   'learn-tet': learnTet,
-};
-
-// Game type constants
-export const GAME_TYPES = {
-  STANDARD: 'standard',
-  TIMED: 'timed',
-  MEMORY: 'memory',
+  'learn-yod': learnYod,
+  'quiz-vav-yod': quizVavYod,
+  // Category: כלמנס
+  'learn-kaf': learnKaf,
+  'learn-lamed': learnLamed,
+  'learn-mem': learnMem,
+  'learn-nun': learnNun,
+  'learn-samech': learnSamech,
+  // Category: עפצקר
+  'learn-ayin': learnAyin,
+  'learn-peh': learnPeh,
+  'learn-tsade': learnTsade,
+  'learn-kof': learnKof,
+  'learn-resh': learnResh,
+  // Category: שת
+  'learn-shin': learnShin,
+  'learn-tav': learnTav,
 };
 
 /**
@@ -46,28 +75,20 @@ export const getGameById = (id) => {
 };
 
 /**
- * Get games filtered by category and difficulty
+ * Get games filtered by category
  * @param {string} categoryId - Category to filter by
- * @param {string} difficulty - Current difficulty level ('easy', 'medium', 'hard')
- * @returns {Array} Games available for this category and difficulty
+ * @returns {Array} Games available for this category
  */
-export const getGamesByCategory = (categoryId, difficulty = 'easy') => {
-  return Object.values(games).filter(game => {
-    // Must match category
-    if (game.categoryId !== categoryId) return false;
-    // Must be available in current difficulty
-    if (!game.availableIn.includes(difficulty)) return false;
-    return true;
-  });
+export const getGamesByCategory = (categoryId) => {
+  return Object.values(games).filter(game => game.categoryId === categoryId);
 };
 
 /**
- * Get questions for a game based on difficulty
+ * Get questions for a game (easy difficulty)
  * @param {object} game - The game object
- * @param {string} difficulty - Current difficulty level
- * @returns {Array} Questions for this difficulty
+ * @returns {Array} Questions for the game
  */
-export const getQuestionsForDifficulty = (game, difficulty = 'easy') => {
+export const getQuestionsForDifficulty = (game) => {
   if (!game || !game.questions) return [];
 
   // If questions is already an array (legacy format), return it
@@ -75,56 +96,20 @@ export const getQuestionsForDifficulty = (game, difficulty = 'easy') => {
     return game.questions;
   }
 
-  // New format: questions organized by difficulty
-  return game.questions[difficulty] || game.questions.easy || [];
+  // New format: questions organized by difficulty - always use easy
+  return game.questions.easy || [];
 };
 
 /**
- * Get all games available for a specific difficulty
- * @param {string} difficulty - Current difficulty level
- * @returns {Array} All games available for this difficulty
- */
-export const getGamesForDifficulty = (difficulty = 'easy') => {
-  return Object.values(games).filter(game =>
-    game.availableIn.includes(difficulty)
-  );
-};
-
-/**
- * Get games by game type (standard, timed, memory)
- * @param {string} gameType - Type of game
- * @param {string} difficulty - Current difficulty level
- * @returns {Array} Games of this type available for this difficulty
- */
-export const getGamesByType = (gameType, difficulty = 'easy') => {
-  return Object.values(games).filter(game =>
-    game.gameType === gameType && game.availableIn.includes(difficulty)
-  );
-};
-
-/**
- * Check if a game is available for a specific difficulty
+ * Get game metadata for display
  * @param {string} gameId - Game ID
- * @param {string} difficulty - Difficulty level
- * @returns {boolean}
- */
-export const isGameAvailableForDifficulty = (gameId, difficulty) => {
-  const game = games[gameId];
-  if (!game) return false;
-  return game.availableIn.includes(difficulty);
-};
-
-/**
- * Get game metadata for display (name, icon, question count for difficulty)
- * @param {string} gameId - Game ID
- * @param {string} difficulty - Current difficulty level
  * @returns {object} Game display info
  */
-export const getGameDisplayInfo = (gameId, difficulty = 'easy') => {
+export const getGameDisplayInfo = (gameId) => {
   const game = games[gameId];
   if (!game) return null;
 
-  const questions = getQuestionsForDifficulty(game, difficulty);
+  const questions = getQuestionsForDifficulty(game);
 
   return {
     id: game.id,
@@ -132,9 +117,8 @@ export const getGameDisplayInfo = (gameId, difficulty = 'easy') => {
     description: game.description,
     icon: game.icon,
     categoryId: game.categoryId,
-    gameType: game.gameType,
     questionCount: questions.length,
-    maxScore: questions.length * 16, // Max score if all first-try correct
+    maxScore: questions.length * 16,
   };
 };
 

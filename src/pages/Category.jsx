@@ -2,16 +2,16 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getCategoryById } from '../data/categories';
 import { getGamesByCategory, getQuestionsForDifficulty } from '../data/games';
-import { useUser, DIFFICULTY_INFO } from '../context/UserContext';
+import { useUser } from '../context/UserContext';
 import { Button } from '../components/common';
 import styles from './Category.module.css';
 
 function Category() {
   const { categoryId } = useParams();
   const navigate = useNavigate();
-  const { user, currentDifficulty } = useUser();
+  const { user } = useUser();
   const category = getCategoryById(categoryId);
-  const games = getGamesByCategory(categoryId, currentDifficulty);
+  const games = getGamesByCategory(categoryId);
 
   // Get best score for a game from play history
   const getBestScore = (gameId) => {
@@ -69,7 +69,7 @@ function Category() {
         <div className={styles.games}>
           {games.map((game, index) => {
             const bestPlay = getBestScore(game.id);
-            const questions = getQuestionsForDifficulty(game, currentDifficulty);
+            const questions = getQuestionsForDifficulty(game);
             const maxScore = questions.length * 16;
 
             return (
