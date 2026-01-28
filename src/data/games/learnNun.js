@@ -123,9 +123,39 @@ const learnNun = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 8: Multi-select - mark last 4 letters כ, ל, מ, נ
+      // Question 8: Review - find previous letter מ
       {
         id: 'ln-e8',
+        instruction: 'מצאו את האות מ',
+        instructionAudio: '/audio/find-mem.mp3',
+        options: [
+          { id: 'opt-1', image: 'letter-mem', label: 'מ', isCorrect: true },
+          { id: 'opt-2', image: 'letter-nun', label: 'נ' },
+          { id: 'opt-3', image: 'letter-lamed', label: 'ל' },
+          { id: 'opt-4', image: 'letter-samech', label: 'ס' },
+          { id: 'opt-5', image: 'letter-kaf', label: 'כ' },
+          { id: 'opt-6', image: 'letter-bet', label: 'ב' },
+        ],
+        correctAnswerId: 'opt-1',
+      },
+      // Question 9: Review - find letter ל (two before)
+      {
+        id: 'ln-e9',
+        instruction: 'מצאו את האות ל',
+        instructionAudio: '/audio/find-lamed.mp3',
+        options: [
+          { id: 'opt-1', image: 'letter-lamed', label: 'ל', isCorrect: true },
+          { id: 'opt-2', image: 'letter-mem', label: 'מ' },
+          { id: 'opt-3', image: 'letter-nun', label: 'נ' },
+          { id: 'opt-4', image: 'letter-kaf', label: 'כ' },
+          { id: 'opt-5', image: 'letter-gimel', label: 'ג' },
+          { id: 'opt-6', image: 'letter-resh', label: 'ר' },
+        ],
+        correctAnswerId: 'opt-1',
+      },
+      // Question 10: Multi-select - mark last 4 letters כ, ל, מ, נ
+      {
+        id: 'ln-e10',
         instruction: 'סמנו את כל האותיות כ, ל, מ, נ',
         instructionAudio: '/audio/mark-all-kaf-to-nun.mp3',
         multiSelect: true,

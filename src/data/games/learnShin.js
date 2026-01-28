@@ -123,9 +123,39 @@ const learnShin = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 8: Multi-select - mark last 4 letters פ, צ, ק, ר, ש
+      // Question 8: Review - find previous letter ר
       {
         id: 'ls-e8',
+        instruction: 'מצאו את האות ר',
+        instructionAudio: '/audio/find-resh.mp3',
+        options: [
+          { id: 'opt-1', image: 'letter-resh', label: 'ר', isCorrect: true },
+          { id: 'opt-2', image: 'letter-shin', label: 'ש' },
+          { id: 'opt-3', image: 'letter-kof', label: 'ק' },
+          { id: 'opt-4', image: 'letter-tav', label: 'ת' },
+          { id: 'opt-5', image: 'letter-tsade', label: 'צ' },
+          { id: 'opt-6', image: 'letter-dalet', label: 'ד' },
+        ],
+        correctAnswerId: 'opt-1',
+      },
+      // Question 9: Review - find letter ק (two before)
+      {
+        id: 'ls-e9',
+        instruction: 'מצאו את האות ק',
+        instructionAudio: '/audio/find-kof.mp3',
+        options: [
+          { id: 'opt-1', image: 'letter-kof', label: 'ק', isCorrect: true },
+          { id: 'opt-2', image: 'letter-resh', label: 'ר' },
+          { id: 'opt-3', image: 'letter-shin', label: 'ש' },
+          { id: 'opt-4', image: 'letter-tsade', label: 'צ' },
+          { id: 'opt-5', image: 'letter-peh', label: 'פ' },
+          { id: 'opt-6', image: 'letter-bet', label: 'ב' },
+        ],
+        correctAnswerId: 'opt-1',
+      },
+      // Question 10: Multi-select - mark last 4 letters פ, צ, ק, ר, ש
+      {
+        id: 'ls-e10',
         instruction: 'סמנו את כל האותיות פ, צ, ק, ר, ש',
         instructionAudio: '/audio/mark-all-peh-to-shin.mp3',
         multiSelect: true,

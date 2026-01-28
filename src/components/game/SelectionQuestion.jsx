@@ -5,12 +5,7 @@ import styles from './SelectionQuestion.module.css';
 // Color item icons
 const ItemIcons = {
   'apple-red': () => (
-    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
-      <ellipse cx="50" cy="55" rx="35" ry="38" fill="#FF4757" />
-      <ellipse cx="50" cy="50" rx="30" ry="32" fill="#FF6B6B" />
-      <path d="M 50 18 Q 55 10 65 15" stroke="#7ED321" strokeWidth="4" fill="none" />
-      <ellipse cx="60" cy="12" rx="10" ry="6" fill="#7ED321" />
-    </svg>
+    <img src="/images/apple.png" alt="apple" className={styles.itemSvg} />
   ),
   'apple-green': () => (
     <svg viewBox="0 0 100 100" className={styles.itemSvg}>
@@ -886,6 +881,12 @@ const ItemIcons = {
       <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">ק</text>
     </svg>
   ),
+  'letter-kof': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#00CEC9" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">ק</text>
+    </svg>
+  ),
   'letter-resh': () => (
     <svg viewBox="0 0 100 100" className={styles.itemSvg}>
       <rect x="10" y="10" width="80" height="80" rx="12" fill="#00CEC9" />
@@ -902,6 +903,431 @@ const ItemIcons = {
     <svg viewBox="0 0 100 100" className={styles.itemSvg}>
     <rect x="10" y="10" width="80" height="80" rx="12" fill="#00CEC9" />
       <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">ת</text>
+    </svg>
+  ),
+
+  // ===== Hebrew Letters with Tzeirei Nikud =====
+  'letter-gimel-tzeirei': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#E17055" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">גֵ</text>
+    </svg>
+  ),
+  'letter-chet-tzeirei': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#E17055" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">חֵ</text>
+    </svg>
+  ),
+  'letter-lamed-tzeirei': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#E17055" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">לֵ</text>
+    </svg>
+  ),
+  'letter-kof-tzeirei': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#E17055" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">קֵ</text>
+    </svg>
+  ),
+  'letter-mem-tzeirei': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#E17055" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">מֵ</text>
+    </svg>
+  ),
+  'letter-samech-tzeirei': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#E17055" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">סֵ</text>
+    </svg>
+  ),
+  'letter-resh-tzeirei': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#E17055" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">רֵ</text>
+    </svg>
+  ),
+
+  // ===== Hebrew Letters with Chirik Nikud =====
+  'letter-gimel-chirik': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#27AE60" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">גִ</text>
+    </svg>
+  ),
+  'letter-chet-chirik': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#27AE60" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">חִ</text>
+    </svg>
+  ),
+  'letter-lamed-chirik': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#27AE60" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">לִ</text>
+    </svg>
+  ),
+  'letter-kof-chirik': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#27AE60" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">קִ</text>
+    </svg>
+  ),
+  'letter-mem-chirik': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#27AE60" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">מִ</text>
+    </svg>
+  ),
+  'letter-samech-chirik': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#27AE60" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">סִ</text>
+    </svg>
+  ),
+  'letter-resh-chirik': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#27AE60" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">רִ</text>
+    </svg>
+  ),
+
+  // ===== Letters with Patach Nikud (for Q1 intro) =====
+  'letter-gimel-patach': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#3498DB" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">גַ</text>
+    </svg>
+  ),
+  'letter-chet-patach': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#3498DB" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">חַ</text>
+    </svg>
+  ),
+  'letter-lamed-patach': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#3498DB" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">לַ</text>
+    </svg>
+  ),
+  'letter-kof-patach': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#3498DB" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">קַ</text>
+    </svg>
+  ),
+  'letter-mem-patach': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#3498DB" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">מַ</text>
+    </svg>
+  ),
+  'letter-samech-patach': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#3498DB" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">סַ</text>
+    </svg>
+  ),
+  'letter-resh-patach': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#3498DB" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">רַ</text>
+    </svg>
+  ),
+
+  // ===== Letters with Cholam Nikud (for Q1 intro) =====
+  'letter-gimel-cholam': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#F39C12" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">גֹּ</text>
+    </svg>
+  ),
+  'letter-chet-cholam': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#F39C12" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">חֹ</text>
+    </svg>
+  ),
+  'letter-lamed-cholam': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#F39C12" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">לֹ</text>
+    </svg>
+  ),
+  'letter-kof-cholam': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#F39C12" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">קֹ</text>
+    </svg>
+  ),
+  'letter-mem-cholam': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#F39C12" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">מֹ</text>
+    </svg>
+  ),
+  'letter-samech-cholam': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#F39C12" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">סֹ</text>
+    </svg>
+  ),
+  'letter-resh-cholam': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#F39C12" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">רֹ</text>
+    </svg>
+  ),
+
+  // ===== Letters with Shuruk nikud (purple #8E44AD) =====
+  'letter-gimel-shuruk': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#8E44AD" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">גֻ</text>
+    </svg>
+  ),
+  'letter-chet-shuruk': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#8E44AD" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">חֻ</text>
+    </svg>
+  ),
+  'letter-lamed-shuruk': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#8E44AD" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">לֻ</text>
+    </svg>
+  ),
+  'letter-kof-shuruk': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#8E44AD" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">קֻ</text>
+    </svg>
+  ),
+  'letter-mem-shuruk': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#8E44AD" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">מֻ</text>
+    </svg>
+  ),
+  'letter-resh-shuruk': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#8E44AD" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">רֻ</text>
+    </svg>
+  ),
+
+  // ===== Letters with Different Nikud (for Q3 - nikud selection) =====
+  'letter-alef-kamatz': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#9B59B6" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">אָ</text>
+    </svg>
+  ),
+  'letter-alef-patach': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#3498DB" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">אַ</text>
+    </svg>
+  ),
+  'letter-alef-chirik': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#27AE60" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">אִ</text>
+    </svg>
+  ),
+  'letter-alef-tzeirei': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#E17055" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">אֵ</text>
+    </svg>
+  ),
+  'letter-alef-cholam': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#F39C12" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">אֹ</text>
+    </svg>
+  ),
+  'letter-alef-shuruk': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#8E44AD" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">אֻ</text>
+    </svg>
+  ),
+
+  // ===== English Letter Icons =====
+  'letter-A': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">A</text>
+    </svg>
+  ),
+  'letter-B': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">B</text>
+    </svg>
+  ),
+  'letter-C': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">C</text>
+    </svg>
+  ),
+  'letter-D': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">D</text>
+    </svg>
+  ),
+  'letter-E': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">E</text>
+    </svg>
+  ),
+  'letter-F': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">F</text>
+    </svg>
+  ),
+  'letter-G': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">G</text>
+    </svg>
+  ),
+  'letter-H': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">H</text>
+    </svg>
+  ),
+  'letter-I': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">I</text>
+    </svg>
+  ),
+  'letter-J': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">J</text>
+    </svg>
+  ),
+  'letter-K': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">K</text>
+    </svg>
+  ),
+  'letter-L': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">L</text>
+    </svg>
+  ),
+  'letter-M': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">M</text>
+    </svg>
+  ),
+  'letter-N': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">N</text>
+    </svg>
+  ),
+  'letter-O': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">O</text>
+    </svg>
+  ),
+  'letter-P': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">P</text>
+    </svg>
+  ),
+  'letter-Q': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">Q</text>
+    </svg>
+  ),
+  'letter-R': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">R</text>
+    </svg>
+  ),
+  'letter-S': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">S</text>
+    </svg>
+  ),
+  'letter-T': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">T</text>
+    </svg>
+  ),
+  'letter-U': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">U</text>
+    </svg>
+  ),
+  'letter-V': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">V</text>
+    </svg>
+  ),
+  'letter-W': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">W</text>
+    </svg>
+  ),
+  'letter-X': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">X</text>
+    </svg>
+  ),
+  'letter-Y': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">Y</text>
+    </svg>
+  ),
+  'letter-Z': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#6C5CE7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">Z</text>
+    </svg>
+  ),
+
+  // ===== English Word Icons (only those without PNG equivalents) =====
+  'word-airplane': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      {/* Airplane */}
+      <ellipse cx="50" cy="50" rx="35" ry="8" fill="#3498DB" />
+      <polygon points="15,50 25,35 35,50" fill="#2980B9" />
+      <polygon points="40,50 50,25 60,50" fill="#3498DB" />
+      <polygon points="75,50 85,45 85,55" fill="#2980B9" />
+      <rect x="70" y="47" width="15" height="6" fill="#3498DB" />
+      <circle cx="25" cy="50" r="3" fill="#ECF0F1" />
+      <circle cx="35" cy="50" r="3" fill="#ECF0F1" />
+      <circle cx="45" cy="50" r="3" fill="#ECF0F1" />
     </svg>
   ),
 
@@ -1380,6 +1806,28 @@ const ItemIcons = {
   'word-kanguru': () => (
     <img src="/images/word-kanguru.png" alt="קנגרו" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),
+  // HIJK English words
+  'word-ice-cream': () => (
+    <img src="/images/word-ice-cream.png" alt="Ice cream" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-igloo': () => (
+    <img src="/images/word-igloo.png" alt="Igloo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-insect': () => (
+    <img src="/images/word-insect.png" alt="Insect" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-juice': () => (
+    <img src="/images/word-juice.png" alt="Juice" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-jelly': () => (
+    <img src="/images/word-jelly.png" alt="Jelly" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-kite': () => (
+    <img src="/images/word-kite.png" alt="Kite" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-key': () => (
+    <img src="/images/word-key.png" alt="Key" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
   'word-kafe': () => (
     <img src="/images/word-kafe.png" alt="קפה" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),
@@ -1446,6 +1894,225 @@ const ItemIcons = {
   'word-tesha': () => (
     <img src="/images/word-tesha.png" alt="תשע" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),
+  // ===== English LMNOP Words =====
+  'word-leaf': () => (
+    <img src="/images/word-leaf.png" alt="Leaf" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-nest': () => (
+    <img src="/images/word-nest.png" alt="Nest" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-nose': () => (
+    <img src="/images/word-nose.png" alt="Nose" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-nut': () => (
+    <img src="/images/word-nut.png" alt="Nut" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-orange': () => (
+    <img src="/images/word-orange.png" alt="Orange" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-owl': () => (
+    <img src="/images/word-owl.png" alt="Owl" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-octopus': () => (
+    <img src="/images/word-octopus.png" alt="Octopus" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-pig': () => (
+    <img src="/images/word-pig.png" alt="Pig" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-pizza': () => (
+    <img src="/images/word-pizza.png" alt="Pizza" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-pineapple': () => (
+    <img src="/images/word-pineapple.png" alt="Pineapple" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  // ===== English QRST Words =====
+  'word-queen': () => (
+    <img src="/images/word-queen.png" alt="Queen" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-question': () => (
+    <img src="/images/word-question.png" alt="Question" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-quilt': () => (
+    <img src="/images/word-quilt.png" alt="Quilt" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-rabbit': () => (
+    <img src="/images/word-rabbit.png" alt="Rabbit" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-rainbow': () => (
+    <img src="/images/word-rainbow.png" alt="Rainbow" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-rocket': () => (
+    <img src="/images/word-rocket.png" alt="Rocket" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-sun': () => (
+    <img src="/images/word-sun.png" alt="Sun" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  // ===== English UV Words =====
+  'word-umbrella': () => (
+    <img src="/images/word-umbrella.png" alt="Umbrella" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-unicorn': () => (
+    <img src="/images/word-unicorn.png" alt="Unicorn" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-uniform': () => (
+    <img src="/images/word-uniform.png" alt="Uniform" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-violin': () => (
+    <img src="/images/word-violin.png" alt="Violin" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-volcano': () => (
+    <img src="/images/word-volcano.png" alt="Volcano" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-van': () => (
+    <img src="/images/word-van.png" alt="Van" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  // WXYZ words
+  'word-watermelon': () => (
+    <img src="/images/word-watermelon.png" alt="Watermelon" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-whale': () => (
+    <img src="/images/word-whale.png" alt="Whale" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-window': () => (
+    <img src="/images/word-window.png" alt="Window" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-xylophone': () => (
+    <img src="/images/word-xylophone.png" alt="Xylophone" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-xray': () => (
+    <img src="/images/word-xray.png" alt="X-ray" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-fox': () => (
+    <img src="/images/word-fox.png" alt="Fox" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-yellow': () => (
+    <img src="/images/word-yellow.png" alt="Yellow" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-yogurt': () => (
+    <img src="/images/word-yogurt.png" alt="Yogurt" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-yarn': () => (
+    <img src="/images/word-yarn.png" alt="Yarn" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-zoo': () => (
+    <img src="/images/word-zoo.png" alt="Zoo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-zero': () => (
+    <img src="/images/word-zero.png" alt="Zero" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+
+  // ===== Number icons (1-10) =====
+  'number-1': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#F39C12" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">1</text>
+    </svg>
+  ),
+  'number-2': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#E74C3C" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">2</text>
+    </svg>
+  ),
+  'number-3': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#9B59B6" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">3</text>
+    </svg>
+  ),
+  'number-4': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#3498DB" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">4</text>
+    </svg>
+  ),
+  'number-5': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#27AE60" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">5</text>
+    </svg>
+  ),
+  'number-6': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#E91E63" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">6</text>
+    </svg>
+  ),
+  'number-7': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#00BCD4" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">7</text>
+    </svg>
+  ),
+  'number-8': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#FF5722" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">8</text>
+    </svg>
+  ),
+  'number-9': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#673AB7" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">9</text>
+    </svg>
+  ),
+  'number-10': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#795548" />
+      <text x="50" y="72" textAnchor="middle" fontSize="45" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">10</text>
+    </svg>
+  ),
+
+};
+
+// Helper component to render multiple icons with random offsets
+const MultiIconRenderer = ({ IconComponent, count, containerClass }) => {
+  if (!IconComponent || count <= 1) {
+    return IconComponent ? <IconComponent /> : null;
+  }
+
+  // Generate random offsets for each icon (small variations for natural look)
+  const getRandomOffset = () => ({
+    x: (Math.random() - 0.5) * 8,
+    y: (Math.random() - 0.5) * 8,
+    rotate: (Math.random() - 0.5) * 10,
+  });
+
+  // Calculate icon size based on count
+  const getIconSize = (count) => {
+    if (count <= 2) return '45%';
+    if (count <= 4) return '42%';
+    if (count <= 6) return '30%';
+    return '25%';
+  };
+
+  const iconSize = getIconSize(count);
+  const offsets = Array.from({ length: count }, () => getRandomOffset());
+
+  return (
+    <div className={containerClass} style={{
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '4px',
+      width: '100%',
+      height: '100%',
+    }}>
+      {offsets.map((offset, i) => (
+        <div
+          key={i}
+          style={{
+            width: iconSize,
+            height: iconSize,
+            transform: `translate(${offset.x}px, ${offset.y}px) rotate(${offset.rotate}deg)`,
+          }}
+        >
+          <IconComponent />
+        </div>
+      ))}
+    </div>
+  );
 };
 
 function SelectionQuestion({
@@ -1462,6 +2129,7 @@ function SelectionQuestion({
 }) {
   // Support for question image (used in letters games to show word image)
   const QuestionImage = question.questionImage ? ItemIcons[question.questionImage] : null;
+  const questionImageCount = question.questionImageCount || 1;
 
   // Check if this is a multi-select question
   const isMultiSelect = question.multiSelect === true;
@@ -1490,7 +2158,10 @@ function SelectionQuestion({
           transition={{ duration: 0.3 }}
         >
           <div className={styles.questionImage}>
-            <QuestionImage />
+            <MultiIconRenderer
+              IconComponent={QuestionImage}
+              count={questionImageCount}
+            />
           </div>
         </motion.div>
       )}
@@ -1520,7 +2191,10 @@ function SelectionQuestion({
                   disabled={false}
                 >
                   {ItemIcon ? (
-                    <ItemIcon />
+                    <MultiIconRenderer
+                      IconComponent={ItemIcon}
+                      count={option.imageCount || 1}
+                    />
                   ) : (
                     <span className={styles.placeholder}>{option.label}</span>
                   )}
@@ -1560,7 +2234,10 @@ function SelectionQuestion({
                   disabled={isDisabled}
                 >
                   {ItemIcon ? (
-                    <ItemIcon />
+                    <MultiIconRenderer
+                      IconComponent={ItemIcon}
+                      count={option.imageCount || 1}
+                    />
                   ) : (
                     <span className={styles.placeholder}>{option.label}</span>
                   )}
@@ -1598,7 +2275,10 @@ function SelectionQuestion({
                 disabled={showFeedback}
               >
                 {ItemIcon ? (
-                  <ItemIcon />
+                  <MultiIconRenderer
+                    IconComponent={ItemIcon}
+                    count={option.imageCount || 1}
+                  />
                 ) : (
                   <span className={styles.placeholder}>{option.label}</span>
                 )}

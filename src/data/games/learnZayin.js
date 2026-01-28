@@ -43,24 +43,20 @@ const learnZayin = {
           { id: 'opt-5', image: 'zayin-option-5', label: 'ז', isCorrect: true },
         ],
       },
-      // Question 3: Select all ז letters from mix of ד and ז
+      // Question 3: Reminder - find letter ו among random letters
       {
         id: 'lz-e3',
-        instruction: 'בחרו את כל האותיות ז',
-        instructionAudio: '/audio/select-all-zayin.mp3',
-        multiSelect: true,
+        instruction: 'מצאו את האות ו',
+        instructionAudio: '/audio/find-vav.mp3',
         options: [
-          { id: 'opt-1', image: 'letter-dalet', label: 'ד' },
-          { id: 'opt-2', image: 'letter-zayin', label: 'ז', isCorrect: true },
-          { id: 'opt-3', image: 'letter-dalet', label: 'ד' },
-          { id: 'opt-4', image: 'letter-zayin', label: 'ז', isCorrect: true },
+          { id: 'opt-1', image: 'letter-alef', label: 'א' },
+          { id: 'opt-2', image: 'letter-bet', label: 'ב' },
+          { id: 'opt-3', image: 'letter-vav', label: 'ו', isCorrect: true },
+          { id: 'opt-4', image: 'letter-gimel', label: 'ג' },
           { id: 'opt-5', image: 'letter-dalet', label: 'ד' },
-          { id: 'opt-6', image: 'letter-zayin', label: 'ז', isCorrect: true },
-          { id: 'opt-7', image: 'letter-dalet', label: 'ד' },
-          { id: 'opt-8', image: 'letter-zayin', label: 'ז', isCorrect: true },
-          { id: 'opt-9', image: 'letter-dalet', label: 'ד' },
+          { id: 'opt-6', image: 'letter-he', label: 'ה' },
         ],
-        correctCount: 4,
+        correctAnswerId: 'opt-3',
       },
       // Question 4: Select all ז letters from 3x3 grid (various letters)
       {

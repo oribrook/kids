@@ -6,6 +6,7 @@ import { useUser } from '../context/UserContext';
 import { useAudio } from '../hooks/useAudio';
 import { getGameById, getQuestionsForDifficulty } from '../data/games';
 import { getCategoryById } from '../data/categories';
+import { shuffleArray } from '../utils/shuffle';
 import { ProgressBar, ScoreDisplay, AudioButton, Button, Mascot } from '../components/common';
 import GameComplete from '../components/game/GameComplete';
 import CountingQuestion from '../components/game/CountingQuestion';
@@ -45,6 +46,21 @@ function Game() {
 
   const currentQuestion = getCurrentQuestion();
   const progress = getProgress();
+
+  // Shuffle options for current question (memoized per question id)
+  const shuffledQuestion = useMemo(() => {
+    if (!currentQuestion || !currentQuestion.options) return currentQuestion;
+
+    // Skip shuffle for intro screens (all options correct, order can stay)
+    if (currentQuestion.isIntroMultiSelect || currentQuestion.noShuffle) {
+      return currentQuestion;
+    }
+
+    return {
+      ...currentQuestion,
+      options: shuffleArray(currentQuestion.options),
+    };
+  }, [currentQuestion?.id]); // Re-shuffle only when question changes
 
   useEffect(() => {
     if (game && questions.length > 0) {
@@ -259,10 +275,10 @@ function Game() {
 
   // Render appropriate question component based on game type
   const renderQuestion = () => {
-    if (!currentQuestion) return null;
+    if (!shuffledQuestion) return null;
 
     const commonProps = {
-      question: currentQuestion,
+      question: shuffledQuestion,
       selectedAnswer,
       showFeedback,
       isCorrect,

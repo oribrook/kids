@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { getCategoryById } from '../data/categories';
+import { getCategoryById, getTopicForCategory } from '../data/categories';
 import { getGamesByCategory, getQuestionsForDifficulty } from '../data/games';
 import { useUser } from '../context/UserContext';
 import { Button } from '../components/common';
@@ -12,6 +12,7 @@ function Category() {
   const { user } = useUser();
   const category = getCategoryById(categoryId);
   const games = getGamesByCategory(categoryId);
+  const parentTopic = category ? getTopicForCategory(categoryId) : null;
 
   // Get best score for a game from play history
   const getBestScore = (gameId) => {
@@ -36,7 +37,11 @@ function Category() {
   };
 
   const handleBack = () => {
-    navigate('/home');
+    if (parentTopic) {
+      navigate(`/topic/${parentTopic.id}`);
+    } else {
+      navigate('/home');
+    }
   };
 
   return (
@@ -84,32 +89,6 @@ function Category() {
                 whileTap={{ scale: 0.97 }}
               >
                 <div className={styles.gameIcon}>{game.icon}</div>
-                {/* <div className={styles.gameInfo}>
-                  <h2 className={styles.gameName}>{game.name}</h2>
-                  <p className={styles.gameDescription}>{game.description}</p>
-                  <div className={styles.gameStats}>
-                    <span className={styles.questionCount}>
-                      {questions.length} שאלות
-                    </span>
-                    {bestPlay && (
-                      <span className={styles.playedBadge}>
-                        <span className={styles.starsDisplay}>
-                          {[1, 2, 3].map((star) => (
-                            <span
-                              key={star}
-                              className={star <= bestPlay.stars ? styles.starFilled : styles.starEmpty}
-                            >
-                              ⭐
-                            </span>
-                          ))}
-                        </span>
-                        <span className={styles.scoreText}>
-                          {bestPlay.score}/{maxScore}
-                        </span>
-                      </span>
-                    )}
-                  </div>
-                </div> */}
                 <div
                   className={styles.playButton}
                   style={{ backgroundColor: category.color }}

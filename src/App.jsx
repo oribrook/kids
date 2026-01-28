@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { UserProvider, useUser } from './context/UserContext';
 import { GameProvider } from './context/GameContext';
 import { BackgroundMusicProvider } from './context/BackgroundMusicContext';
-import { Onboarding, Home, Category, Game } from './pages';
+import { Onboarding, Home, Language, Topic, Category, Game } from './pages';
 import { MusicToggle } from './components/common';
 import './index.css';
 
@@ -37,6 +37,22 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <Home />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/language/:languageId"
+        element={
+          <ProtectedRoute>
+            <Language />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/topic/:topicId"
+        element={
+          <ProtectedRoute>
+            <Topic />
           </ProtectedRoute>
         }
       />

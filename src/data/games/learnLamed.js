@@ -123,9 +123,39 @@ const learnLamed = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 8: Multi-select - mark last 4 letters ט, י, כ, ל
+      // Question 8: Review - find previous letter כ
       {
         id: 'll-e8',
+        instruction: 'מצאו את האות כ',
+        instructionAudio: '/audio/find-kaf.mp3',
+        options: [
+          { id: 'opt-1', image: 'letter-kaf', label: 'כ', isCorrect: true },
+          { id: 'opt-2', image: 'letter-lamed', label: 'ל' },
+          { id: 'opt-3', image: 'letter-bet', label: 'ב' },
+          { id: 'opt-4', image: 'letter-mem', label: 'מ' },
+          { id: 'opt-5', image: 'letter-resh', label: 'ר' },
+          { id: 'opt-6', image: 'letter-nun', label: 'נ' },
+        ],
+        correctAnswerId: 'opt-1',
+      },
+      // Question 9: Review - find letter י (two before)
+      {
+        id: 'll-e9',
+        instruction: 'מצאו את האות י',
+        instructionAudio: '/audio/find-yod.mp3',
+        options: [
+          { id: 'opt-1', image: 'letter-yod', label: 'י', isCorrect: true },
+          { id: 'opt-2', image: 'letter-vav', label: 'ו' },
+          { id: 'opt-3', image: 'letter-kaf', label: 'כ' },
+          { id: 'opt-4', image: 'letter-lamed', label: 'ל' },
+          { id: 'opt-5', image: 'letter-gimel', label: 'ג' },
+          { id: 'opt-6', image: 'letter-zayin', label: 'ז' },
+        ],
+        correctAnswerId: 'opt-1',
+      },
+      // Question 10: Multi-select - mark last 4 letters ט, י, כ, ל
+      {
+        id: 'll-e10',
         instruction: 'סמנו את כל האותיות ט, י, כ, ל',
         instructionAudio: '/audio/mark-all-tet-to-lamed.mp3',
         multiSelect: true,

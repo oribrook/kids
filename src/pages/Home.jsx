@@ -2,15 +2,15 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useUser } from '../context/UserContext';
 import { Mascot, ScoreDisplay } from '../components/common';
-import { categories } from '../data/categories';
+import { languages } from '../data/categories';
 import styles from './Home.module.css';
 
 function Home() {
   const navigate = useNavigate();
   const { user } = useUser();
 
-  const handleCategoryClick = (categoryId) => {
-    navigate(`/category/${categoryId}`);
+  const handleLanguageClick = (languageId) => {
+    navigate(`/language/${languageId}`);
   };
 
   return (
@@ -27,14 +27,6 @@ function Home() {
         <ScoreDisplay score={user.totalScore} showMultiplier={false} />
       </header>
 
-      {/* Difficulty Selector */}
-      {/* <div className={styles.difficultySection}>
-        <DifficultySelector />
-        <span className={styles.difficultyLabel}>
-          רמה: {DIFFICULTY_INFO[currentDifficulty].label} {DIFFICULTY_INFO[currentDifficulty].icon}
-        </span>
-      </div> */}
-
       {/* Main content */}
       <main className={styles.main}>
         <motion.h1
@@ -42,28 +34,27 @@ function Home() {
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
         >
-          בחרו קטגוריה 🎮
+          בחרו שפה 🌍
         </motion.h1>
 
         <div className={styles.categories}>
-          {categories.map((category, index) => (
+          {languages.map((language, index) => (
             <motion.div
-              key={category.id}
+              key={language.id}
               className={styles.categoryCard}
-              style={{ backgroundColor: category.backgroundColor }}
-              onClick={() => handleCategoryClick(category.id)}
+              style={{ backgroundColor: language.backgroundColor }}
+              onClick={() => handleLanguageClick(language.id)}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ scale: 1.05, y: -5 }}
               whileTap={{ scale: 0.95 }}
             >
-              {/* <span className={styles.categoryIcon}>{category.icon}</span> */}
-              <h2 className={styles.categoryName}>{category.name}</h2>
-              <p className={styles.categoryDescription}>{category.description}</p>
+              <h2 className={styles.categoryName}>{language.name}</h2>
+              <p className={styles.categoryDescription}>{language.description}</p>
               <div
                 className={styles.categoryBar}
-                style={{ backgroundColor: category.color }}
+                style={{ backgroundColor: language.color }}
               />
             </motion.div>
           ))}

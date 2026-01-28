@@ -123,9 +123,39 @@ const learnPeh = {
         ],
         correctAnswerId: 'opt-1',
       },
-      // Question 8: Multi-select - mark last 4 letters נ, ס, ע, פ
+      // Question 8: Review - find previous letter ע
       {
         id: 'lp-e8',
+        instruction: 'מצאו את האות ע',
+        instructionAudio: '/audio/find-ayin.mp3',
+        options: [
+          { id: 'opt-1', image: 'letter-ayin', label: 'ע', isCorrect: true },
+          { id: 'opt-2', image: 'letter-peh', label: 'פ' },
+          { id: 'opt-3', image: 'letter-samech', label: 'ס' },
+          { id: 'opt-4', image: 'letter-tsade', label: 'צ' },
+          { id: 'opt-5', image: 'letter-nun', label: 'נ' },
+          { id: 'opt-6', image: 'letter-alef', label: 'א' },
+        ],
+        correctAnswerId: 'opt-1',
+      },
+      // Question 9: Review - find letter ס (two before)
+      {
+        id: 'lp-e9',
+        instruction: 'מצאו את האות ס',
+        instructionAudio: '/audio/find-samech.mp3',
+        options: [
+          { id: 'opt-1', image: 'letter-samech', label: 'ס', isCorrect: true },
+          { id: 'opt-2', image: 'letter-ayin', label: 'ע' },
+          { id: 'opt-3', image: 'letter-peh', label: 'פ' },
+          { id: 'opt-4', image: 'letter-nun', label: 'נ' },
+          { id: 'opt-5', image: 'letter-mem', label: 'מ' },
+          { id: 'opt-6', image: 'letter-shin', label: 'ש' },
+        ],
+        correctAnswerId: 'opt-1',
+      },
+      // Question 10: Multi-select - mark last 4 letters נ, ס, ע, פ
+      {
+        id: 'lp-e10',
         instruction: 'סמנו את כל האותיות נ, ס, ע, פ',
         instructionAudio: '/audio/mark-all-nun-to-peh.mp3',
         multiSelect: true,
