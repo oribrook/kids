@@ -1834,6 +1834,9 @@ const ItemIcons = {
   'word-kaki': () => (
     <img src="/images/word-kaki.png" alt="קקי" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),
+  'word-kedem': () => (
+    <img src="/images/word-kedem.png" alt="קֶדֶם" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
   'word-ketssef': () => (
     <img src="/images/word-ketssef.png" alt="קצף" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),

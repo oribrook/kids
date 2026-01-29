@@ -112,7 +112,9 @@ ENTRY POINTS
 ./src/App.jsx
     Main App component with route definitions:
     - "/" -> Onboarding (redirects to /home if completed)
-    - "/home" -> Home page with category selection
+    - "/home" -> Home page with language selection
+    - "/language/:languageId" -> Topic selection per language
+    - "/topic/:topicId" -> Category selection per topic
     - "/category/:categoryId" -> Game list per category
     - "/game/:gameId" -> Game player
 
@@ -185,10 +187,51 @@ ENTRY POINTS
 --------------------------------------------------------------------------------
 
 ./src/data/categories.js
-    Letter category definitions organized by letter groups:
+    3-level hierarchical category system: Language → Topic → Category → Games
+
+    LEVEL 1 - Languages:
+    - hebrew: עברית (Hebrew learning)
+    - english: English (for future)
+    - numbers: מספרים (Number learning)
+
+    LEVEL 2 - Topics (per language):
+    - hebrew-letters: אותיות (Hebrew alphabet)
+    - hebrew-nikud: ניקוד (Hebrew vowel marks)
+    - english-letters: Letters (English alphabet)
+    - numbers-intro: הכרת המספרים (Number recognition)
+    - numbers-counting: משחקי ספירה (Counting games)
+    - numbers-math: משחקי חשבון (Math games - addition/subtraction)
+
+    LEVEL 3 - Categories (letter groups):
+    Hebrew Letters:
     - letters-alef-he: "אבגדה" - Letters א through ה + quiz
-    - letters-vav-yod: "וזחטי" - Letters ו through י + quiz (in progress)
-    Each has: id, name, description, icon, color, games array
+    - letters-vav-yod: "וזחטי" - Letters ו through י + quiz
+    - letters-kaf-samech: "כלמנס" - Letters כ through ס + quiz
+    - letters-ayin-resh: "עפצקר" - Letters ע through ר + quiz
+    - letters-shin-tav: "שת" - Letters ש and ת + quiz
+    Hebrew Nikud:
+    - nikud-start: "בואו נתחיל" - Introduction to nikud marks
+      Contains individual nikud games (צֵירֵי, חִירִיק, etc.)
+    English:
+    - letters-abcd: "ABCD" - Letters A through D
+    Numbers - הכרת המספרים:
+    - numbers-12345: "12345" - Numbers 1 to 5
+    - numbers-67890: "67890" - Numbers 6 to 10
+    - numbers-10-20: "10-20" - Numbers 10 to 20
+    - numbers-20-100: "20-100" - Numbers 20 to 100
+
+    ENGLISH GAMES GUIDELINES:
+    - Instructions: Hebrew text & Hebrew TTS audio (e.g., "מצאו את האות A")
+    - Word audio: English pronunciation (e.g., "Apple", "Ant")
+    - Images: Reuse existing Hebrew PNG images when possible (word-tapuach for Apple,
+      word-nemala for Ant, word-chatul for Cat, etc.) - images are language-neutral
+    - Only create new SVG/PNG when no equivalent exists (e.g., word-airplane)
+    - Audio files stored in: /public/audio/en/
+
+    Helper functions:
+    - getLanguageById(id), getTopicById(id), getCategoryById(id)
+    - getTopicsByLanguage(langId), getCategoriesByTopic(topicId)
+    - getTopicForCategory(catId), getLanguageForTopic(topicId) - parent navigation
 
 ./src/data/games/index.js
     Games registry and helper functions:
@@ -310,6 +353,77 @@ LETTER GAMES - LAST QUESTION LOGIC:
     letters are added. Example: For letter ו, ask for ג,ד,ה,ו (not א-ו).
 
 --------------------------------------------------------------------------------
+                    NIKUD GAMES - CATEGORY בואו נתחיל (nikud-start)
+--------------------------------------------------------------------------------
+
+./src/data/games/learnTzeirei.js
+    "Learn Tzeirei Nikud" game data (למדו את הניקוד צֵירֵי):
+    - 3 questions teaching children the Tzeirei (צֵירֵי) vowel mark
+    - Q1: Introduction - "הניקוד שנכיר עכשיו נקרא צֵירֵי"
+      Shows 7 letters with Tzeirei: גֵ, חֵ, לֵ, קֵ, מֵ, סֵ, רֵ (ALL correct)
+      Each letter plays its sound when clicked (e.g., "ge", "che", "le")
+    - Q2: Select word that starts with Tzeirei sound (בֵּייגֶלֶה vs banana, apple, dog)
+    - Q3: Select the letter with Tzeirei nikud from 4 options (אָ, אַ, אִ, אֵ)
+    - Easy difficulty only
+    - Uses SelectionQuestion with isIntroMultiSelect for Q1
+    - New icon types: letter-X-tzeirei (orange background #E17055)
+    - Nikud comparison icons: letter-alef-kamatz, letter-alef-patach,
+      letter-alef-chirik, letter-alef-tzeirei (each with distinct color)
+    - Audio files: intro-tzeirei.mp3, ge-tzeirei.mp3, che-tzeirei.mp3,
+      le-tzeirei.mp3, ke-tzeirei.mp3, me-tzeirei.mp3, se-tzeirei.mp3,
+      re-tzeirei.mp3, word-starts-tzeirei.mp3, select-tzeirei.mp3
+
+./src/data/games/learnChirik.js
+    "Learn Chirik Nikud" game data (למדו את הניקוד חִירִיק):
+    - 3 questions teaching children the Chirik (חִירִיק) vowel mark
+    - Q1: Introduction - "הניקוד שנכיר עכשיו נקרא חִירִיק"
+      Shows 7 letters with Chirik: גִ, חִ, לִ, קִ, מִ, סִ, רִ (ALL correct)
+      Each letter plays its sound when clicked (e.g., "gi", "chi", "li")
+    - Q2: Select word that starts with Chirik sound (מִיטָה vs banana, apple, dog)
+    - Q3: Select the letter with Chirik nikud from 4 options (אָ, אַ, אִ, אֵ)
+    - Easy difficulty only
+    - Uses SelectionQuestion with isIntroMultiSelect for Q1
+    - New icon types: letter-X-chirik (green background #27AE60)
+    - Audio files: intro-chirik.mp3, gi-chirik.mp3, chi-chirik.mp3,
+      li-chirik.mp3, ki-chirik.mp3, mi-chirik.mp3, si-chirik.mp3,
+      ri-chirik.mp3, word-starts-chirik.mp3, select-chirik.mp3
+
+./src/data/games/learnPatach.js
+    "Learn Patach Nikud" game data (למדו את הניקוד פַּתָּח):
+    - 3 questions teaching children the Patach (פַּתָּח) vowel mark
+    - Q1: Introduction - "הניקוד שנכיר עכשיו נקרא פַּתָּח"
+      Shows 7 letters with Patach: גַ, חַ, לַ, קַ, מַ, סַ, רַ (ALL correct)
+      Each letter plays its sound when clicked (e.g., "ga", "cha", "la")
+    - Q2: Select word that starts with Patach sound (אַרְיֵה vs banana, apple, dog)
+    - Q3: Select the letter with Patach nikud from 4 options (אָ, אַ, אִ, אֵ)
+    - Easy difficulty only
+    - Uses SelectionQuestion with isIntroMultiSelect for Q1
+    - New icon types: letter-X-patach (blue background #3498DB)
+    - Audio files: intro-patach.mp3, ga-patach.mp3, cha-patach.mp3,
+      la-patach.mp3, ka-patach.mp3, ma-patach.mp3, sa-patach.mp3,
+      ra-patach.mp3, word-starts-patach.mp3, select-patach.mp3
+
+./src/data/games/learnCholam.js
+    "Learn Cholam Nikud" game data (למדו את הניקוד חוֹלָם):
+    - 3 questions teaching children the Cholam (חוֹלָם) vowel mark
+    - Q1: Introduction - "הניקוד שנכיר עכשיו נקרא חוֹלָם"
+      Shows 7 letters with Cholam: גֹּ, חֹ, לֹ, קֹ, מֹ, סֹ, רֹ (ALL correct)
+      Each letter plays its sound when clicked (e.g., "go", "cho", "lo")
+    - Q2: Select word that starts with Cholam sound (אֹכֶל vs banana, apple, dog)
+    - Q3: Select the letter with Cholam nikud from 4 options (אָ, אַ, אֹ, אֵ)
+    - Easy difficulty only
+    - Uses SelectionQuestion with isIntroMultiSelect for Q1
+    - New icon types: letter-X-cholam (orange background #F39C12)
+    - Audio files: intro-cholam.mp3, go-cholam.mp3, cho-cholam.mp3,
+      lo-cholam.mp3, ko-cholam.mp3, mo-cholam.mp3, so-cholam.mp3,
+      ro-cholam.mp3, word-starts-cholam.mp3, select-cholam.mp3
+
+NIKUD GAMES STRUCTURE:
+    All nikud games are under the "בואו נתחיל" (nikud-start) category.
+    Future nikud games (קָמָץ, שׁוּרוּק, קוּבּוּץ, etc.) will be added to the
+    same category, following the existing patterns.
+
+--------------------------------------------------------------------------------
                               HOOKS (src/hooks/)
 --------------------------------------------------------------------------------
 
@@ -330,8 +444,10 @@ LETTER GAMES - LAST QUESTION LOGIC:
                               PAGES (src/pages/)
 --------------------------------------------------------------------------------
 
+Navigation hierarchy: Home → Language → Topic → Category → Game
+
 ./src/pages/index.js
-    Page exports barrel file.
+    Page exports barrel file (Onboarding, Home, Language, Topic, Category, Game).
 
 ./src/pages/Onboarding.jsx
     2-step onboarding flow controller:
@@ -339,19 +455,40 @@ LETTER GAMES - LAST QUESTION LOGIC:
     - Step 1: NameInput -> completes onboarding and redirects to /home
 
 ./src/pages/Home.jsx
-    Main dashboard after onboarding:
+    Main dashboard after onboarding - Language selection:
+    - Route: /home
     - Header with user greeting and score
-    - Category cards grid (letter groups: אבגדה, וזחטי, etc.)
+    - Language cards grid (עברית, English)
+    - Clicking language navigates to /language/:languageId
     - Floating decorations
+
+./src/pages/Language.jsx
+    Topic selection for a language:
+    - Route: /language/:languageId
+    - Header with back button (→ /home) and language info
+    - Topic cards grid (אותיות, ניקוד for Hebrew)
+    - Clicking topic navigates to /topic/:topicId
+    - Reuses Home.module.css styles
+
+./src/pages/Topic.jsx
+    Category selection for a topic:
+    - Route: /topic/:topicId
+    - Header with back button (→ parent language) and topic info
+    - Category cards grid (אבגדה, וזחטי, etc.)
+    - Clicking category navigates to /category/:categoryId
+    - Reuses Home.module.css styles
 
 ./src/pages/Category.jsx
     Game list for selected category:
-    - Header with back button and category info
-    - List of games with icons, descriptions, question counts
+    - Route: /category/:categoryId
+    - Header with back button (→ parent topic) and category info
+    - List of games with icons
     - Play buttons for each game
+    - Clicking game navigates to /game/:gameId
 
 ./src/pages/Game.jsx
     Main game player:
+    - Route: /game/:gameId
     - Progress bar with step indicators
     - Score display with multiplier
     - Renders appropriate question component based on game type
@@ -368,6 +505,7 @@ LETTER GAMES - LAST QUESTION LOGIC:
 ./src/pages/Category.module.css
 ./src/pages/Game.module.css
     CSS Modules for each page with mobile-responsive styles.
+    Note: Language.jsx and Topic.jsx reuse Home.module.css
 
 --------------------------------------------------------------------------------
                     COMPONENTS - COMMON (src/components/common/)
@@ -584,7 +722,7 @@ kids-game/
     │   ├── GameContext.jsx # Game state management
     │   └── BackgroundMusicContext.jsx # Background music state
     ├── data/
-    │   ├── categories.js   # Category definitions (2 categories)
+    │   ├── categories.js   # 3-level hierarchy (Language→Topic→Category)
     │   └── games/
     │       ├── index.js    # Games registry
     │       ├── learnAlef.js    # Learn letter א
@@ -596,13 +734,16 @@ kids-game/
     │       ├── learnVav.js     # Learn letter ו
     │       ├── learnZayin.js   # Learn letter ז
     │       ├── learnChet.js    # Learn letter ח
-    │       └── learnTet.js     # Learn letter ט
+    │       ├── learnTet.js     # Learn letter ט
+    │       └── learnTzeirei.js # Learn Tzeirei nikud (צֵירֵי)
     ├── hooks/
     │   └── useAudio.js     # Audio playback hook
     ├── pages/
     │   ├── index.js
     │   ├── Onboarding.jsx
-    │   ├── Home.jsx
+    │   ├── Home.jsx        # Language selection
+    │   ├── Language.jsx    # Topic selection
+    │   ├── Topic.jsx       # Category selection
     │   ├── Category.jsx
     │   ├── Game.jsx
     │   └── *.module.css
@@ -629,6 +770,87 @@ kids-game/
             ├── WelcomeScreen.jsx
             ├── NameInput.jsx
             └── *.module.css
+
+================================================================================
+                    HOW TO ACQUIRE IMAGES VIA CHROME DEVTOOLS
+================================================================================
+
+OVERVIEW
+--------
+When adding new word images for games, use Google Images search with Chrome
+DevTools MCP to find and download low-resolution cartoon/animated images.
+This ensures consistent, child-friendly visuals with small file sizes (~5-15KB).
+
+STEP-BY-STEP PROCESS
+--------------------
+
+1. NAVIGATE TO GOOGLE IMAGES
+   Use chrome-devtools navigate_page tool:
+   - URL: https://www.google.com/search?q=<WORD>+animated&tbm=isch
+   - Example: https://www.google.com/search?q=leaf+animated&tbm=isch
+   - The "animated" keyword helps find cartoon-style images
+
+2. TAKE A SNAPSHOT TO SEE RESULTS
+   Use chrome-devtools take_snapshot tool to get the page structure.
+   Look for button elements with image titles (uid like "1_82", "1_86", etc.)
+
+3. CLICK ON A SUITABLE IMAGE
+   Use chrome-devtools click tool with the uid of a good cartoon image.
+   Look for images from: Vecteezy, Freepik, Clipart Library, PNGTree
+   These sites typically have child-friendly cartoon illustrations.
+
+4. FIND THE PREVIEW IMAGE URL
+   After clicking, use chrome-devtools evaluate_script to find the largest
+   preview image (this is the low-res thumbnail, not the full-size image):
+
+   () => {
+     const imgs = document.querySelectorAll('img');
+     let largestImg = null;
+     let largestArea = 0;
+     imgs.forEach(img => {
+       const area = img.width * img.height;
+       if (area > largestArea && img.src && !img.src.includes('favicon')) {
+         largestArea = area;
+         largestImg = { src: img.src, width: img.width, height: img.height, alt: img.alt };
+       }
+     });
+     return largestImg;
+   }
+
+5. DOWNLOAD THE IMAGE
+   Use PowerShell Invoke-WebRequest to download to public/images/:
+
+   powershell -Command "Invoke-WebRequest -Uri '<IMAGE_URL>' -OutFile 'C:\Users\Ori\Desktop\ttd\kids-game\public\images\word-<name>.png'"
+
+6. VERIFY THE DOWNLOAD
+   Check file exists and has reasonable size (~5-20KB for low-res):
+
+   powershell -Command "Get-Item 'C:\...\word-<name>.png' | Select-Object Name, Length"
+
+IMAGE NAMING CONVENTION
+-----------------------
+- Format: word-<english-name>.png
+- Examples: word-leaf.png, word-nest.png, word-owl.png
+- Use lowercase, hyphenated names
+- Keep names simple and descriptive
+
+IMPORTANT NOTES
+---------------
+- ALWAYS use the Google Images thumbnail preview (encrypted-tbn*.gstatic.com)
+  NOT the full-resolution image from the source website
+- Thumbnails are typically 200-400px and 5-20KB - perfect for the game
+- The preview panel image is already optimized/compressed
+- If an image looks wrong (favicon, too small), try another search result
+
+EXAMPLE FULL WORKFLOW
+---------------------
+For "nest animated":
+1. Navigate: https://www.google.com/search?q=nest+animated&tbm=isch
+2. Take snapshot, find good cartoon nest image
+3. Click on it (e.g., uid="1_82")
+4. Run evaluate_script to get largest image src
+5. Download: Invoke-WebRequest -Uri 'https://encrypted-tbn0.gstatic.com/...' -OutFile 'word-nest.png'
+6. Verify: ~10KB, 300x300px
 
 ================================================================================
                               NOTES FOR DEVELOPERS

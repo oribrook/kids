@@ -27,6 +27,7 @@ const learnKof = {
           { id: 'opt-2', image: 'word-kanguru', label: 'קנגרו', isCorrect: true, optionAudio: '/audio/word-kanguru.mp3' },
           { id: 'opt-3', image: 'word-kafe', label: 'קפה', isCorrect: true, optionAudio: '/audio/word-kafe.mp3' },
           { id: 'opt-4', image: 'word-kaki', label: 'קקי', isCorrect: true, optionAudio: '/audio/word-kaki.mp3' },
+          { id: 'opt-5', image: 'word-kedem', label: 'קֶדֶם', isCorrect: true, optionAudio: '/audio/word-kedem.mp3' },
         ],
       },
       // Question 2: Select all ק letters from mix of ק and ר
