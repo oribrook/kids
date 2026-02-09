@@ -291,7 +291,7 @@ export const categories = [
     icon: '6',
     color: '#E74C3C',
     backgroundColor: '#FDEDEC',
-    games: ['learn-six', 'learn-seven', 'learn-eight', 'learn-nine'],
+    games: ['learn-six', 'learn-seven', 'learn-eight', 'learn-nine', 'learn-ten'],
   },
   {
     id: 'numbers-10-20',
@@ -301,7 +301,7 @@ export const categories = [
     icon: '10',
     color: '#9B59B6',
     backgroundColor: '#F5EEF8',
-    games: [],
+    games: ['learn-eleven-twelve', 'learn-thirteen-fifteen', 'learn-sixteen-eighteen', 'learn-nineteen-twenty', 'quiz-ten-twenty'],
   },
   {
     id: 'numbers-20-100',
@@ -311,7 +311,7 @@ export const categories = [
     icon: '20',
     color: '#1ABC9C',
     backgroundColor: '#E8F8F5',
-    games: [],
+    games: ['learn-twenty-thirty', 'learn-forty-fifty', 'learn-sixty-seventy', 'learn-eighty-ninety', 'learn-hundred', 'quiz-twenty-hundred'],
   },
 ];
 

@@ -102,6 +102,22 @@ import learnSix from './learnSix';
 import learnSeven from './learnSeven';
 import learnEight from './learnEight';
 import learnNine from './learnNine';
+import learnTenNum from './learnTen';
+
+// Numbers - Category: 10-20 (numbers-10-20)
+import learnElevenTwelve from './learnElevenTwelve';
+import learnThirteenFifteen from './learnThirteenFifteen';
+import learnSixteenEighteen from './learnSixteenEighteen';
+import learnNineteenTwenty from './learnNineteenTwenty';
+import quizTenTwenty from './quizTenTwenty';
+
+// Numbers - Category: 20-100 (numbers-20-100)
+import learnTwentyThirty from './learnTwentyThirty';
+import learnFortyFifty from './learnFortyFifty';
+import learnSixtySeventy from './learnSixtySeventy';
+import learnEightyNinety from './learnEightyNinety';
+import learnHundred from './learnHundred';
+import quizTwentyHundred from './quizTwentyHundred';
 
 // All games registry
 export const games = {
@@ -191,6 +207,20 @@ export const games = {
   'learn-seven': learnSeven,
   'learn-eight': learnEight,
   'learn-nine': learnNine,
+  'learn-ten': learnTenNum,
+  // Numbers - Category: 10-20
+  'learn-eleven-twelve': learnElevenTwelve,
+  'learn-thirteen-fifteen': learnThirteenFifteen,
+  'learn-sixteen-eighteen': learnSixteenEighteen,
+  'learn-nineteen-twenty': learnNineteenTwenty,
+  'quiz-ten-twenty': quizTenTwenty,
+  // Numbers - Category: 20-100
+  'learn-twenty-thirty': learnTwentyThirty,
+  'learn-forty-fifty': learnFortyFifty,
+  'learn-sixty-seventy': learnSixtySeventy,
+  'learn-eighty-ninety': learnEightyNinety,
+  'learn-hundred': learnHundred,
+  'quiz-twenty-hundred': quizTwentyHundred,
 };
 
 /**
