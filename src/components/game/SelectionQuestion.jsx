@@ -1316,6 +1316,55 @@ const ItemIcons = {
     </svg>
   ),
 
+  // ===== Arabic Letter Icons =====
+  'letter-alef-ar': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#2ECC71" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">أ</text>
+    </svg>
+  ),
+  'letter-ba-ar': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#2ECC71" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">ب</text>
+    </svg>
+  ),
+  'letter-ta-ar': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#2ECC71" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">ت</text>
+    </svg>
+  ),
+  'letter-tha-ar': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#2ECC71" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">ث</text>
+    </svg>
+  ),
+  'letter-jim-ar': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#2ECC71" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">ج</text>
+    </svg>
+  ),
+
+  // ===== Arabic Word Icons (PNG images) =====
+  'word-bandora': () => (
+    <img src="/images/word-bandora.png" alt="بندورة" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-taj': () => (
+    <img src="/images/word-taj.png" alt="تاج" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-thoom': () => (
+    <img src="/images/word-thoom.png" alt="ثوم" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-snow': () => (
+    <img src="/images/word-snow.png" alt="ثلج" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-jibne': () => (
+    <img src="/images/word-jibne.png" alt="جبنة" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+
   // ===== English Word Icons (only those without PNG equivalents) =====
   'word-airplane': () => (
     <svg viewBox="0 0 100 100" className={styles.itemSvg}>

@@ -22,6 +22,14 @@ export const languages = [
     backgroundColor: '#EDE7F6',
   },
   {
+    id: 'arabic',
+    name: 'عربية',
+    description: 'לימוד ערבית',
+    icon: 'أ',
+    color: '#2ECC71',
+    backgroundColor: '#E8F8F5',
+  },
+  {
     id: 'numbers',
     name: 'מספרים',
     description: 'לימוד מספרים',
@@ -62,6 +70,16 @@ export const topics = [
     icon: '🎒',
     color: '#FF6B9D',
     backgroundColor: '#FFE4EC',
+  },
+  // Arabic topics
+  {
+    id: 'arabic-letters',
+    languageId: 'arabic',
+    name: 'אותיות',
+    description: 'לימוד אותיות בערבית',
+    icon: 'أب',
+    color: '#2ECC71',
+    backgroundColor: '#E8F8F5',
   },
   // English topics (for future)
   {
@@ -190,6 +208,17 @@ export const categories = [
     games: ['audio-objects'],
   },
 
+  // Arabic Letters categories
+  {
+    id: 'arabic-alef-jim',
+    topicId: 'arabic-letters',
+    name: 'أبتثج',
+    description: 'אותיות أ עד ج',
+    icon: 'أ',
+    color: '#2ECC71',
+    backgroundColor: '#E8F8F5',
+    games: ['learn-alef-ar', 'learn-ba-ar', 'learn-ta-ar', 'learn-tha-ar', 'learn-jim-ar'],
+  },
   // English Letters categories
   {
     id: 'letters-abcd',

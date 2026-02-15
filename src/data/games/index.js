@@ -77,6 +77,13 @@ import learnX from './learnX';
 import learnY from './learnY';
 import learnZ from './learnZ';
 
+// Arabic - Category: أبتثج (arabic-alef-jim)
+import learnAlefAr from './learnAlef-ar';
+import learnBaAr from './learnBa-ar';
+import learnTaAr from './learnTa-ar';
+import learnThaAr from './learnTha-ar';
+import learnJimAr from './learnJim-ar';
+
 // Hebrew Nikud - Category: בואו נתחיל (nikud-start)
 import learnTzeirei from './learnTzeirei';
 import learnChirik from './learnChirik';
@@ -186,6 +193,12 @@ export const games = {
   'learn-x': learnX,
   'learn-y': learnY,
   'learn-z': learnZ,
+  // Arabic - Category: أبتثج
+  'learn-alef-ar': learnAlefAr,
+  'learn-ba-ar': learnBaAr,
+  'learn-ta-ar': learnTaAr,
+  'learn-tha-ar': learnThaAr,
+  'learn-jim-ar': learnJimAr,
   // Hebrew Nikud - Category: בואו נתחיל
   'learn-tzeirei': learnTzeirei,
   'learn-chirik': learnChirik,

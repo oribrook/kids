@@ -192,11 +192,13 @@ ENTRY POINTS
     LEVEL 1 - Languages:
     - hebrew: עברית (Hebrew learning)
     - english: English (for future)
+    - arabic: عربية (Arabic learning - spoken/colloquial عامية)
     - numbers: מספרים (Number learning)
 
     LEVEL 2 - Topics (per language):
     - hebrew-letters: אותיות (Hebrew alphabet)
     - hebrew-nikud: ניקוד (Hebrew vowel marks)
+    - arabic-letters: حروف (Arabic alphabet)
     - english-letters: Letters (English alphabet)
     - numbers-intro: הכרת המספרים (Number recognition)
     - numbers-counting: משחקי ספירה (Counting games)
@@ -219,6 +221,22 @@ ENTRY POINTS
     - numbers-67890: "67890" - Numbers 6 to 10
     - numbers-10-20: "10-20" - Numbers 10 to 20
     - numbers-20-100: "20-100" - Numbers 20 to 100
+
+    Arabic:
+    - arabic-alef-jim: "أبتثج" - Letters أ through ج
+
+    ARABIC GAMES GUIDELINES:
+    - Instructions: Hebrew text & Hebrew TTS audio (e.g., "מצאו את האות ج")
+      Same pattern as English games - instructions in Hebrew, content in Arabic
+    - Word labels: Arabic (the letter names and word names stay Arabic)
+    - Word audio: Arabic pronunciation (spoken/colloquial dialect عامية)
+    - Words: Use everyday colloquial Arabic words kids 3-5 know
+      (e.g., بندورة not طماطم for tomato)
+    - Images: Reuse existing PNG images when possible
+    - Audio files stored in: /public/audio/ar/
+    - Letter icons: Green (#2ECC71) background, white letter
+    - Instruction TTS voice: he-IL-HilaNeural (edge-tts, Hebrew)
+    - Word TTS voice: ar-SA-ZariyahNeural (edge-tts, Arabic)
 
     ENGLISH GAMES GUIDELINES:
     - Instructions: Hebrew text & Hebrew TTS audio (e.g., "מצאו את האות A")
@@ -422,6 +440,96 @@ NIKUD GAMES STRUCTURE:
     All nikud games are under the "בואו נתחיל" (nikud-start) category.
     Future nikud games (קָמָץ, שׁוּרוּק, קוּבּוּץ, etc.) will be added to the
     same category, following the existing patterns.
+
+--------------------------------------------------------------------------------
+                    ARABIC LETTER GAMES - CATEGORY أبتثج (arabic-alef-jim)
+--------------------------------------------------------------------------------
+
+OVERVIEW:
+    Arabic language support added as a new top-level language alongside Hebrew,
+    English, and Numbers. Uses spoken/colloquial Arabic (عامية) rather than
+    literary Arabic (فصحى) — appropriate for ages 3-5.
+
+    Hierarchy: arabic → arabic-letters → arabic-alef-jim → 5 letter games
+    Color scheme: Green (#2ECC71) for Arabic letter icons
+    Audio: Instruction audio in Hebrew TTS (he-IL-HilaNeural voice),
+           word audio in Arabic TTS (ar-SA-ZariyahNeural voice) via edge-tts
+    Instructions: In Hebrew (matching English games pattern), e.g., "מצאו את האות ج"
+    Word labels: In Arabic (the letter names and word names stay Arabic)
+    Audio files stored in: /public/audio/ar/
+
+./src/data/games/learnAlef-ar.js
+    "Learn the Letter Alef" game data (למדו את האות أ):
+    - 6 questions teaching children the Arabic letter أ
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with words: أرنب (rabbit), أسد (lion), إجاص (pear)
+    - Q2-Q6: Find letter, word association, multi-select
+    - Images reused: word-rabbit.png, word-arye.png, word-ozen.png
+
+./src/data/games/learnBa-ar.js
+    "Learn the Letter Ba" game data (למדו את האות ب):
+    - 6 questions teaching children the Arabic letter ب
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with words: بطة (duck), بندورة (tomato), بيت (house)
+    - Q5: Reviews previous letter أ
+    - Q6: Multi-select marking أ and ب
+    - Images: word-barvaz.png, word-bandora.png (new), word-bayit (SVG)
+
+./src/data/games/learnTa-ar.js
+    "Learn the Letter Ta" game data (למדו את האות ت):
+    - 6 questions teaching children the Arabic letter ت
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with words: تفاح (apple), توت (berries), تاج (crown)
+    - Q5: Reviews previous letter ب
+    - Q6: Multi-select marking أ, ب, ت
+    - Images: word-tapuach.png, word-tut.png, word-taj.png (new)
+
+./src/data/games/learnTha-ar.js
+    "Learn the Letter Tha" game data (למדו את האות ث):
+    - 6 questions teaching children the Arabic letter ث
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with words: ثلج (snow), ثعلب (fox), ثوم (garlic)
+    - Q5: Reviews previous letter ت
+    - Q6: Multi-select marking أ, ب, ت, ث
+    - Images: word-snow.png (new), word-fox.png, word-thoom.png (new)
+
+./src/data/games/learnJim-ar.js
+    "Learn the Letter Jim" game data (למדו את האות ج):
+    - 7 questions teaching children the Arabic letter ج
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with words: جمل (camel), جبنة (cheese), جزر (carrots)
+    - Q5: Find letter ج among different letters
+    - Q6: Word starts with ج (different word)
+    - Q7: Multi-select marking ب, ت, ث, ج (last 4 letters)
+    - Images: word-gamal.png, word-jibne.png (new), word-gezer.png
+
+NEW IMAGES ADDED:
+    - word-bandora.png (tomato/بندورة)
+    - word-taj.png (crown/تاج)
+    - word-thoom.png (garlic/ثوم)
+    - word-snow.png (snow/ثلج)
+    - word-jibne.png (cheese/جبنة)
+
+ARABIC AUDIO FILES (/public/audio/ar/):
+    39 audio files total:
+
+    Hebrew TTS instruction audio (he-IL-HilaNeural, 24 files):
+    - intro-alef/ba/ta/tha/jim.mp3 - Letter introductions (Hebrew)
+    - select-all-alef/ba/ta/tha/jim.mp3 - Multi-select instructions (Hebrew)
+    - find-alef/ba/ta/tha/jim.mp3 - Find letter instructions (Hebrew)
+    - word-starts-alef/ba/ta/tha/jim.mp3 - Word starts with instructions (Hebrew)
+    - mark-all-alef-ba/alef-ta/alef-tha/ba-jim.mp3 - Mark all letters (Hebrew)
+
+    Arabic TTS word audio (ar-SA-ZariyahNeural, 15 files):
+    - word-arnab/asad/ijas/batta/bandora/beit/tuffah/toot/taj/
+      thalj/thalab/thoom/jamal/jibne/jazar.mp3 - Individual word audio (Arabic)
+
+FUTURE ARABIC CATEGORIES (planned):
+    - حخدذر (arabic-ha-ra): ح, خ, د, ذ, ر
+    - زسشصض (arabic-zay-dad): ز, س, ش, ص, ض
+    - طظعغف (arabic-ta-fa): ط, ظ, ع, غ, ف
+    - قكلمن (arabic-qaf-nun): ق, ك, ل, م, ن
+    - هوي (arabic-ha-ya): ه, و, ي
 
 --------------------------------------------------------------------------------
                               HOOKS (src/hooks/)
