@@ -224,6 +224,8 @@ ENTRY POINTS
 
     Arabic:
     - arabic-alef-jim: "أبتثج" - Letters أ through ج
+    - arabic-ha-ra: "حخدذر" - Letters ح through ر
+    - arabic-zay-dad: "زسشصض" - Letters ز through ض
 
     ARABIC GAMES GUIDELINES:
     - Instructions: Hebrew text & Hebrew TTS audio (e.g., "מצאו את האות ج")
@@ -524,9 +526,212 @@ ARABIC AUDIO FILES (/public/audio/ar/):
     - word-arnab/asad/ijas/batta/bandora/beit/tuffah/toot/taj/
       thalj/thalab/thoom/jamal/jibne/jazar.mp3 - Individual word audio (Arabic)
 
+--------------------------------------------------------------------------------
+                    ARABIC LETTER GAMES - CATEGORY حخدذر (arabic-ha-ra)
+--------------------------------------------------------------------------------
+
+OVERVIEW:
+    Second Arabic letters category. Letters ح, خ, د, ذ, ر.
+    Hierarchy: arabic → arabic-letters → arabic-ha-ra → 5 letter games
+    Color scheme: Green (#27AE60) for category, (#2ECC71) for letter icons
+    Q1 of each letter has 9 word objects (more than first category's ~3-4)
+
+./src/data/games/learnHa-ar.js
+    "Learn the Letter Ha" game data (למדו את האות ح):
+    - 6 questions teaching children the Arabic letter ح
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: حصان (horse), حليب (milk), حمار (donkey),
+      حوت (whale), حمامة (pigeon), حبل (rope), حذاء (shoe), حلزون (snail), حقيبة (bag)
+    - Q2-Q6: Find letter, word association, multi-select
+    - Images reused: word-sus, word-whale, word-chevel, word-naal, word-shablul
+    - New images: word-halib, word-himar, word-hamama, word-hakiba
+
+./src/data/games/learnKha-ar.js
+    "Learn the Letter Kha" game data (למדו את האות خ):
+    - 6 questions teaching children the Arabic letter خ
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: خبز (bread), خيار (cucumber), خروف (sheep),
+      خاتم (ring), خنفساء (beetle), خيمة (tent), خس (lettuce), خوخ (peach), خنزير (pig)
+    - Q5: Reviews previous letter ح
+    - Q6: Multi-select marking أ and ح
+    - Images reused: word-lechem, word-melafafon, word-tabaat, word-chipooshit,
+      word-salat, word-pig
+    - New images: word-kharoof, word-kheima, word-khoukh
+
+./src/data/games/learnDal-ar.js
+    "Learn the Letter Dal" game data (למדו את האות د):
+    - 6 questions teaching children the Arabic letter د
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: دب (bear), دجاجة (chicken), دلفين (dolphin),
+      دراجة (bicycle), دمية (doll), دلو (bucket), دودة (worm), ديك (rooster),
+      ديناصور (dinosaur)
+    - Q5: Reviews previous letter خ
+    - Q6: Multi-select marking ح, خ, د
+    - Images reused: word-tarnegol, word-dinozaur
+    - New images: word-dub, word-dolphin, word-daraja, word-dumya, word-dalw,
+      word-dooda, word-deek
+
+./src/data/games/learnDhal-ar.js
+    "Learn the Letter Dhal" game data (למדו את האות ذ):
+    - 6 questions teaching children the Arabic letter ذ
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: ذرة (corn), ذئب (wolf), ذيل (tail),
+      ذبابة (fly), ذهب (gold), ذراع (arm), ذاكرة (memory), ذقن (chin), ذكي (smart)
+    - Note: ذ has fewer common kids' words in عامية
+    - Q5: Reviews previous letter د
+    - Q6: Multi-select marking ح, خ, د, ذ (last 4 letters)
+    - Images reused: word-zeev, word-zanav, word-insect
+    - New images: word-dhura, word-dhahab, word-dhira, word-dhikra, word-dhaqn, word-dhaki
+
+./src/data/games/learnRa-ar.js
+    "Learn the Letter Ra" game data (למדו את האות ر):
+    - 7 questions teaching children the Arabic letter ر
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: رمان (pomegranate), رجل (foot), رضاعة (bottle),
+      رسالة (letter), رمل (sand), رأس (head), ركبة (knee), قوس قزح (rainbow),
+      صاروخ (rocket)
+    - Q5-Q6: Find letter, word association
+    - Q7: Multi-select marking خ, د, ذ, ر (last 4 letters)
+    - Images reused: word-regel, word-rainbow, word-rocket
+    - New images: word-rumman, word-radaa, word-risala, word-raml, word-ras, word-rukba
+
+NEW IMAGES ADDED (حخدذر category):
+    - word-halib.png (milk/حليب), word-himar.png (donkey/حمار)
+    - word-hamama.png (pigeon/حمامة), word-hakiba.png (bag/حقيبة)
+    - word-kharoof.png (sheep/خروف), word-kheima.png (tent/خيمة)
+    - word-khoukh.png (peach/خوخ)
+    - word-dub.png (bear/دب), word-dolphin.png (dolphin/دلفين)
+    - word-daraja.png (bicycle/دراجة), word-dumya.png (doll/دمية)
+    - word-dalw.png (bucket/دلو), word-dooda.png (worm/دودة)
+    - word-deek.png (rooster/ديك)
+    - word-dhura.png (corn/ذرة), word-dhahab.png (gold/ذهب)
+    - word-dhira.png (arm/ذراع), word-dhikra.png (memory/ذاكرة)
+    - word-dhaqn.png (chin/ذقن), word-dhaki.png (smart/ذكي)
+    - word-rumman.png (pomegranate/رمان), word-radaa.png (bottle/رضاعة)
+    - word-risala.png (letter/رسالة), word-raml.png (sand/رمل)
+    - word-ras.png (head/رأس), word-rukba.png (knee/ركبة)
+
+ARABIC AUDIO FILES - حخدذر category (/public/audio/ar/):
+    69 new audio files (24 Hebrew instruction + 45 Arabic word):
+
+    Hebrew TTS instruction audio (he-IL-HilaNeural, 24 files):
+    - intro-ha/kha/dal/dhal/ra.mp3 - Letter introductions
+    - select-all-ha/kha/dal/dhal/ra.mp3 - Multi-select instructions
+    - find-ha/kha/dal/dhal/ra.mp3 - Find letter instructions
+    - word-starts-ha/kha/dal/dhal/ra.mp3 - Word starts with instructions
+    - mark-all-alef-ha/ha-dal/ha-dhal/kha-ra.mp3 - Mark all letters
+
+    Arabic TTS word audio (ar-SA-ZariyahNeural, 45 files):
+    - word-hisan/halib/himar/hoot/hamama/habl/hitha/halazoon/hakiba.mp3
+    - word-khubz/khiyar/kharoof/khatim/khunfusa/kheima/khas/khoukh/khinzir.mp3
+    - word-dub/djaja/dulfin/daraja/dumya/dalw/dooda/deek/dinasoor.mp3
+    - word-dhura/dhiib/dheil/dhubaba/dhahab/dhira/dhikra/dhaqn/dhaki.mp3
+    - word-rumman/rijl/radaa/risala/raml/ras/rukba/rabi/sarookh.mp3
+
+--------------------------------------------------------------------------------
+                    ARABIC LETTER GAMES - CATEGORY زسشصض (arabic-zay-dad)
+--------------------------------------------------------------------------------
+
+OVERVIEW:
+    Third Arabic letters category. Letters ز, س, ش, ص, ض.
+    Hierarchy: arabic → arabic-letters → arabic-zay-dad → 5 letter games
+    Color scheme: Red (#E74C3C) for category, Green (#2ECC71) for letter icons
+    Q1 of each letter has 9 word objects
+
+./src/data/games/learnZay-ar.js
+    "Learn the Letter Zay" game data (למדו את האות ز):
+    - 6 questions teaching children the Arabic letter ز
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: زرافة (giraffe), زيتون (olive), زهرة (flower),
+      زبدة (butter), زجاجة (bottle), زيبرا (zebra), زر (button), زنبور (wasp), زلاجة (sled)
+    - Q2-Q6: Find letter, word association, multi-select
+    - Images reused: word-zchuchit, word-zebra
+    - New images: word-zarafa, word-zeitoun, word-zahra, word-zubda, word-zirr,
+      word-zunbur, word-zalaja
+
+./src/data/games/learnSin-ar.js
+    "Learn the Letter Sin" game data (למדו את האות س):
+    - 6 questions teaching children the Arabic letter س
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: سمكة (fish), سيارة (car), ساعة (clock),
+      سلحفاة (turtle), سكين (knife), سلم (ladder), سرير (bed), سفينة (ship), سوق (market)
+    - Q5: Reviews previous letter ز
+    - Q6: Multi-select marking ر, ز, س
+    - Images reused: word-dag, word-mita, word-sira
+    - New images: word-sayara, word-saaa, word-sulhafa, word-sikkeen, word-sullam, word-souq
+
+./src/data/games/learnShinAr.js
+    "Learn the Letter Shin" game data (למדו את האות ش):
+    - 6 questions teaching children the Arabic letter ش
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: شمس (sun), شجرة (tree), شوكولاتة (chocolate),
+      شمعة (candle), شنطة (bag), شراب (drink), شاي (tea), شبكة (net), شطيرة (sandwich)
+    - Q5: Reviews previous letter س
+    - Q6: Multi-select marking ز, س, ش
+    - Images reused: word-sun, word-etz, word-ner, word-hakiba, word-reshet
+    - New images: word-shokolata, word-sharab, word-shai, word-shateera
+
+./src/data/games/learnSad-ar.js
+    "Learn the Letter Sad" game data (למדו את האות ص):
+    - 6 questions teaching children the Arabic letter ص
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: صاروخ (rocket), صبار (cactus), صحن (plate),
+      صوف (wool), صندوق (box), صقر (falcon), صابون (soap), صورة (picture), صنبور (faucet)
+    - Q5: Reviews previous letter ش
+    - Q6: Multi-select marking ز, س, ش, ص
+    - Images reused: word-rocket, word-sabon
+    - New images: word-sabbar, word-sahn, word-soof, word-sundooq, word-saqr,
+      word-soora, word-sunboor
+
+./src/data/games/learnDad-ar.js
+    "Learn the Letter Dad" game data (למדו את האות ض):
+    - 7 questions teaching children the Arabic letter ض
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: ضفدع (frog), ضوء (light), ضحك (laugh),
+      ضيف (guest), ضباب (fog), ضمادة (bandage), ضبع (hyena), ضرس (tooth), ضب (lizard)
+    - Q5-Q6: Find letter, word association
+    - Q7: Multi-select marking س, ش, ص, ض (last 4 letters)
+    - Images reused: word-tsfardea
+    - New images: word-daw, word-dahk, word-dayf, word-dabab, word-dimada,
+      word-daba, word-dirs, word-dabb
+
+NEW IMAGES ADDED (زسشصض category):
+    - word-zarafa.png (giraffe/زرافة), word-zeitoun.png (olive/زيتون)
+    - word-zahra.png (flower/زهرة), word-zubda.png (butter/زبدة)
+    - word-zirr.png (button/زر), word-zunbur.png (wasp/زنبور)
+    - word-zalaja.png (sled/زلاجة)
+    - word-sayara.png (car/سيارة), word-saaa.png (clock/ساعة)
+    - word-sulhafa.png (turtle/سلحفاة), word-sikkeen.png (knife/سكين)
+    - word-sullam.png (ladder/سلم), word-souq.png (market/سوق)
+    - word-shokolata.png (chocolate/شوكولاتة), word-sharab.png (drink/شراب)
+    - word-shai.png (tea/شاي), word-shateera.png (sandwich/شطيرة)
+    - word-sabbar.png (cactus/صبار), word-sahn.png (plate/صحن)
+    - word-soof.png (wool/صوف), word-sundooq.png (box/صندوق)
+    - word-saqr.png (falcon/صقر), word-soora.png (picture/صورة)
+    - word-sunboor.png (faucet/صنبور)
+    - word-daw.png (light/ضوء), word-dahk.png (laugh/ضحك)
+    - word-dayf.png (guest/ضيف), word-dabab.png (fog/ضباب)
+    - word-dimada.png (bandage/ضمادة), word-daba.png (hyena/ضبع)
+    - word-dirs.png (tooth/ضرس), word-dabb.png (lizard/ضب)
+
+ARABIC AUDIO FILES - زسشصض category (/public/audio/ar/):
+    69 new audio files (24 Hebrew instruction + 45 Arabic word):
+
+    Hebrew TTS instruction audio (he-IL-HilaNeural, 24 files):
+    - intro-zay/sin/shin-ar/sad/dad.mp3 - Letter introductions
+    - select-all-zay/sin/shin-ar/sad/dad.mp3 - Multi-select instructions
+    - find-zay/sin/shin-ar/sad/dad.mp3 - Find letter instructions
+    - word-starts-zay/sin/shin-ar/sad/dad.mp3 - Word starts with instructions
+    - mark-all-ra-sin/zay-shin/zay-sad/sin-dad.mp3 - Mark all letters
+
+    Arabic TTS word audio (ar-SA-ZariyahNeural, 45 files):
+    - word-zarafa/zeitoun/zahra/zubda/zujaja/zebra-ar/zirr/zunbur/zalaja.mp3
+    - word-samaka/sayara/saaa/sulhafa/sikkeen/sullam/sareer/safeena/souq.mp3
+    - word-shams/shajara/shokolata/shamaa/shanta/sharab/shai/shabaka/shateera.mp3
+    - word-sarookh-sad/sabbar/sahn/soof/sundooq/saqr/saboon/soora/sunboor.mp3
+    - word-difda/daw/dahk/dayf/dabab/dimada/daba/dirs/dabb.mp3
+
 FUTURE ARABIC CATEGORIES (planned):
-    - حخدذر (arabic-ha-ra): ح, خ, د, ذ, ر
-    - زسشصض (arabic-zay-dad): ز, س, ش, ص, ض
     - طظعغف (arabic-ta-fa): ط, ظ, ع, غ, ف
     - قكلمن (arabic-qaf-nun): ق, ك, ل, م, ن
     - هوي (arabic-ha-ya): ه, و, ي
