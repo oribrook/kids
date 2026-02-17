@@ -95,12 +95,24 @@ function GameComplete({ score, maxScore, stars, onPlayAgain }) {
           ))}
         </motion.div>
 
+        {/* Buttons - placed right after stars for easy access */}
+        <motion.div
+          className={styles.buttons}
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.9 }}
+        >
+          <Button onClick={onPlayAgain} variant="primary" size="large" icon="🔄">
+            שחקו שוב
+          </Button>
+        </motion.div>
+
         {/* Score */}
         <motion.div
           className={styles.scoreBox}
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.9 }}
+          transition={{ delay: 1.0 }}
         >
           <span className={styles.scoreLabel}>הניקוד שלכם</span>
           <span className={styles.scoreValue}>{score}</span>
@@ -110,7 +122,7 @@ function GameComplete({ score, maxScore, stars, onPlayAgain }) {
               className={styles.progressFill}
               initial={{ width: 0 }}
               animate={{ width: `${percentage}%` }}
-              transition={{ delay: 1.1, duration: 0.5 }}
+              transition={{ delay: 1.2, duration: 0.5 }}
             />
           </div>
         </motion.div>
@@ -120,22 +132,10 @@ function GameComplete({ score, maxScore, stars, onPlayAgain }) {
           className={styles.message}
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 1.2 }}
+          transition={{ delay: 1.3 }}
         >
           {getMessageByStars()}
         </motion.p>
-
-        {/* Buttons */}
-        <motion.div
-          className={styles.buttons}
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 1.4 }}
-        >
-          <Button onClick={onPlayAgain} variant="primary" size="large" icon="🔄">
-            שחקו שוב
-          </Button>
-        </motion.div>
       </div>
     </motion.div>
   );
