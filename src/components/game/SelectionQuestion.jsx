@@ -1409,6 +1409,36 @@ const ItemIcons = {
       <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">ض</text>
     </svg>
   ),
+  'letter-ta2-ar': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#2ECC71" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">ط</text>
+    </svg>
+  ),
+  'letter-dha2-ar': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#2ECC71" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">ظ</text>
+    </svg>
+  ),
+  'letter-ain-ar': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#2ECC71" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">ع</text>
+    </svg>
+  ),
+  'letter-ghain-ar': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#2ECC71" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">غ</text>
+    </svg>
+  ),
+  'letter-fa-ar': () => (
+    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
+      <rect x="10" y="10" width="80" height="80" rx="12" fill="#2ECC71" />
+      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">ف</text>
+    </svg>
+  ),
 
   // ===== Arabic Word Icons (PNG images) =====
   'word-bandora': () => (
@@ -1603,6 +1633,116 @@ const ItemIcons = {
   ),
   'word-dabb': () => (
     <img src="/images/word-dabb.png" alt="ضب" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+
+  // ===== Arabic Word Icons - طظعغف category =====
+  'word-tabl': () => (
+    <img src="/images/word-tabl.png" alt="طبل" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-tifl': () => (
+    <img src="/images/word-tifl.png" alt="طفل" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-tawla': () => (
+    <img src="/images/word-tawla.png" alt="طاولة" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-tabib': () => (
+    <img src="/images/word-tabib.png" alt="طبيب" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-tawq': () => (
+    <img src="/images/word-tawq.png" alt="طوق" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-tayara': () => (
+    <img src="/images/word-tayara.png" alt="طيارة" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-taheen': () => (
+    <img src="/images/word-taheen.png" alt="طحين" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-dharf': () => (
+    <img src="/images/word-dharf.png" alt="ظرف" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-dhill': () => (
+    <img src="/images/word-dhill.png" alt="ظل" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-dhabi': () => (
+    <img src="/images/word-dhabi.png" alt="ظبي" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-dhufr': () => (
+    <img src="/images/word-dhufr.png" alt="ظفر" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-dhahr': () => (
+    <img src="/images/word-dhahr.png" alt="ظهر" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-dhalam': () => (
+    <img src="/images/word-dhalam.png" alt="ظلام" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-dharif': () => (
+    <img src="/images/word-dharif.png" alt="ظريف" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-dhabya': () => (
+    <img src="/images/word-dhabya.png" alt="ظبية" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-dhama': () => (
+    <img src="/images/word-dhama.png" alt="ظمأ" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-inab': () => (
+    <img src="/images/word-inab.png" alt="عنب" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-asal': () => (
+    <img src="/images/word-asal.png" alt="عسل" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-ajala': () => (
+    <img src="/images/word-ajala.png" alt="عجلة" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-araba': () => (
+    <img src="/images/word-araba.png" alt="عربة" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-adhm': () => (
+    <img src="/images/word-adhm.png" alt="عظم" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-aqrab': () => (
+    <img src="/images/word-aqrab.png" alt="عقرب" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-ghazal': () => (
+    <img src="/images/word-ghazal.png" alt="غزال" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-ghayma': () => (
+    <img src="/images/word-ghayma.png" alt="غيمة" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-ghurab': () => (
+    <img src="/images/word-ghurab.png" alt="غراب" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-ghassala': () => (
+    <img src="/images/word-ghassala.png" alt="غسالة" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-ghaba': () => (
+    <img src="/images/word-ghaba.png" alt="غابة" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-ghitaa': () => (
+    <img src="/images/word-ghitaa.png" alt="غطاء" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-ghanam': () => (
+    <img src="/images/word-ghanam.png" alt="غنم" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-ghusn': () => (
+    <img src="/images/word-ghusn.png" alt="غصن" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-ghar': () => (
+    <img src="/images/word-ghar.png" alt="غار" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-farawla': () => (
+    <img src="/images/word-farawla.png" alt="فراولة" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-fustan': () => (
+    <img src="/images/word-fustan.png" alt="فستان" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-fam': () => (
+    <img src="/images/word-fam.png" alt="فم" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-fanus': () => (
+    <img src="/images/word-fanus.png" alt="فانوس" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
+  'word-finjan': () => (
+    <img src="/images/word-finjan.png" alt="فنجان" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),
 
   // ===== English Word Icons (only those without PNG equivalents) =====

@@ -239,6 +239,12 @@ ENTRY POINTS
     - Letter icons: Green (#2ECC71) background, white letter
     - Instruction TTS voice: he-IL-HilaNeural (edge-tts, Hebrew)
     - Word TTS voice: ar-SA-ZariyahNeural (edge-tts, Arabic)
+    - IMPORTANT: ALL word options must have optionAudio - both correct AND
+      incorrect answers. This is because users don't know Arabic, so they
+      need a speaker icon to preview word pronunciation before choosing.
+      The speaker icon renders automatically when optionAudio exists.
+      Reuse existing audio files from /public/audio/ar/ when the same word
+      appears as a distractor in multiple games (e.g., word-arnab.mp3 for أرنب).
 
     ENGLISH GAMES GUIDELINES:
     - Instructions: Hebrew text & Hebrew TTS audio (e.g., "מצאו את האות A")
@@ -931,6 +937,12 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
       word-mita.png (bed/מיטה)
     - Supports multi-select mode via multiSelectState and onMultiSelectAnswer props
       Shows checkmark overlay on correct selections in multi-select mode
+    - Speaker audio icon (🔊) below each card that has optionAudio prop
+      Lets users preview word pronunciation before selecting an answer
+      Applies to intro Q1 cards (isIntroMultiSelect) and standard word-choice cards
+      Works across all languages (Hebrew, English, Arabic)
+      Requires onPlayOptionAudio prop passed from Game.jsx
+      Green circular button with SVG speaker icon, responsive on mobile
 
 ./src/components/game/ShadowQuestion.jsx
     Shadow matching game question renderer:

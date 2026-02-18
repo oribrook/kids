@@ -98,6 +98,13 @@ import learnShinAr from './learnShinAr';
 import learnSadAr from './learnSad-ar';
 import learnDadAr from './learnDad-ar';
 
+// Arabic - Category: طظعغف (arabic-ta-fa)
+import learnTa2Ar from './learnTa2-ar';
+import learnDha2Ar from './learnDha2-ar';
+import learnAinAr from './learnAin-ar';
+import learnGhainAr from './learnGhain-ar';
+import learnFaAr from './learnFa-ar';
+
 // Hebrew Nikud - Category: בואו נתחיל (nikud-start)
 import learnTzeirei from './learnTzeirei';
 import learnChirik from './learnChirik';
@@ -225,6 +232,12 @@ export const games = {
   'learn-shin-ar': learnShinAr,
   'learn-sad-ar': learnSadAr,
   'learn-dad-ar': learnDadAr,
+  // Arabic - Category: طظعغف
+  'learn-ta2-ar': learnTa2Ar,
+  'learn-dha2-ar': learnDha2Ar,
+  'learn-ain-ar': learnAinAr,
+  'learn-ghain-ar': learnGhainAr,
+  'learn-fa-ar': learnFaAr,
   // Hebrew Nikud - Category: בואו נתחיל
   'learn-tzeirei': learnTzeirei,
   'learn-chirik': learnChirik,

@@ -239,6 +239,16 @@ export const categories = [
     backgroundColor: '#FADBD8',
     games: ['learn-zay-ar', 'learn-sin-ar', 'learn-shin-ar', 'learn-sad-ar', 'learn-dad-ar'],
   },
+  {
+    id: 'arabic-ta-fa',
+    topicId: 'arabic-letters',
+    name: 'طظعغف',
+    description: 'אותיות ط עד ف',
+    icon: 'ط',
+    color: '#9B59B6',
+    backgroundColor: '#F5EEF8',
+    games: ['learn-ta2-ar', 'learn-dha2-ar', 'learn-ain-ar', 'learn-ghain-ar', 'learn-fa-ar'],
+  },
   // English Letters categories
   {
     id: 'letters-abcd',
