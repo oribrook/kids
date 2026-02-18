@@ -69,9 +69,9 @@ const learnTaAr = {
         instructionAudio: '/audio/ar/word-starts-ta.mp3',
         options: [
           { id: 'opt-1', image: 'word-tapuach', label: 'تفاح', isCorrect: true, optionAudio: '/audio/ar/word-tuffah.mp3' },
-          { id: 'opt-2', image: 'word-rabbit', label: 'أرنب' },
-          { id: 'opt-3', image: 'word-barvaz', label: 'بطة' },
-          { id: 'opt-4', image: 'word-gamal', label: 'جمل' },
+          { id: 'opt-2', image: 'word-rabbit', label: 'أرنب', optionAudio: '/audio/ar/word-arnab.mp3' },
+          { id: 'opt-3', image: 'word-barvaz', label: 'بطة', optionAudio: '/audio/ar/word-batta.mp3' },
+          { id: 'opt-4', image: 'word-gamal', label: 'جمل', optionAudio: '/audio/ar/word-jamal.mp3' },
         ],
       },
       // Question 5: Review previous letter - Find ب

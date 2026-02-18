@@ -78,9 +78,9 @@ const learnDhalAr = {
         instructionAudio: '/audio/ar/word-starts-dhal.mp3',
         options: [
           { id: 'opt-1', image: 'word-dhura', label: 'ذرة', isCorrect: true, optionAudio: '/audio/ar/word-dhura.mp3' },
-          { id: 'opt-2', image: 'word-dub', label: 'دب' },
-          { id: 'opt-3', image: 'word-lechem', label: 'خبز' },
-          { id: 'opt-4', image: 'word-sus', label: 'حصان' },
+          { id: 'opt-2', image: 'word-dub', label: 'دب', optionAudio: '/audio/ar/word-dub.mp3' },
+          { id: 'opt-3', image: 'word-lechem', label: 'خبز', optionAudio: '/audio/ar/word-khubz.mp3' },
+          { id: 'opt-4', image: 'word-sus', label: 'حصان', optionAudio: '/audio/ar/word-hisan.mp3' },
         ],
       },
       // Question 5: Review previous letter - Find letter د

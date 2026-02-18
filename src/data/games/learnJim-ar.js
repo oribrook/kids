@@ -69,9 +69,9 @@ const learnJimAr = {
         instructionAudio: '/audio/ar/word-starts-jim.mp3',
         options: [
           { id: 'opt-1', image: 'word-gamal', label: 'جمل', isCorrect: true, optionAudio: '/audio/ar/word-jamal.mp3' },
-          { id: 'opt-2', image: 'word-rabbit', label: 'أرنب' },
-          { id: 'opt-3', image: 'word-barvaz', label: 'بطة' },
-          { id: 'opt-4', image: 'word-tapuach', label: 'تفاح' },
+          { id: 'opt-2', image: 'word-rabbit', label: 'أرنب', optionAudio: '/audio/ar/word-arnab.mp3' },
+          { id: 'opt-3', image: 'word-barvaz', label: 'بطة', optionAudio: '/audio/ar/word-batta.mp3' },
+          { id: 'opt-4', image: 'word-tapuach', label: 'تفاح', optionAudio: '/audio/ar/word-tuffah.mp3' },
         ],
       },
       // Question 5: Find letter ج among different letters
@@ -94,10 +94,10 @@ const learnJimAr = {
         instruction: 'איזו מילה מתחילה באות ج?',
         instructionAudio: '/audio/ar/word-starts-jim.mp3',
         options: [
-          { id: 'opt-1', image: 'word-arye', label: 'أسد' },
+          { id: 'opt-1', image: 'word-arye', label: 'أسد', optionAudio: '/audio/ar/word-asad.mp3' },
           { id: 'opt-2', image: 'word-gezer', label: 'جزر', isCorrect: true, optionAudio: '/audio/ar/word-jazar.mp3' },
-          { id: 'opt-3', image: 'word-barvaz', label: 'بطة' },
-          { id: 'opt-4', image: 'word-fox', label: 'ثعلب' },
+          { id: 'opt-3', image: 'word-barvaz', label: 'بطة', optionAudio: '/audio/ar/word-batta.mp3' },
+          { id: 'opt-4', image: 'word-fox', label: 'ثعلب', optionAudio: '/audio/ar/word-thalab.mp3' },
         ],
       },
       // Question 7: MULTI-SELECT - Mark last 4 letters ب, ت, ث, ج

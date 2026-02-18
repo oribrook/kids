@@ -76,9 +76,9 @@ const learnSinAr = {
         instructionAudio: '/audio/ar/word-starts-sin.mp3',
         options: [
           { id: 'opt-1', image: 'word-dag', label: 'سمكة', isCorrect: true, optionAudio: '/audio/ar/word-samaka.mp3' },
-          { id: 'opt-2', image: 'word-zarafa', label: 'زرافة' },
-          { id: 'opt-3', image: 'word-rumman', label: 'رمان' },
-          { id: 'opt-4', image: 'word-dub', label: 'دب' },
+          { id: 'opt-2', image: 'word-zarafa', label: 'زرافة', optionAudio: '/audio/ar/word-zarafa.mp3' },
+          { id: 'opt-3', image: 'word-rumman', label: 'رمان', optionAudio: '/audio/ar/word-rumman.mp3' },
+          { id: 'opt-4', image: 'word-dub', label: 'دب', optionAudio: '/audio/ar/word-dub.mp3' },
         ],
       },
       // Question 5: Reviews previous letter ز

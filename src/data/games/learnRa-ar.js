@@ -76,9 +76,9 @@ const learnRaAr = {
         instructionAudio: '/audio/ar/word-starts-ra.mp3',
         options: [
           { id: 'opt-1', image: 'word-rumman', label: 'رمان', isCorrect: true, optionAudio: '/audio/ar/word-rumman.mp3' },
-          { id: 'opt-2', image: 'word-dhura', label: 'ذرة' },
-          { id: 'opt-3', image: 'word-dub', label: 'دب' },
-          { id: 'opt-4', image: 'word-lechem', label: 'خبز' },
+          { id: 'opt-2', image: 'word-dhura', label: 'ذرة', optionAudio: '/audio/ar/word-dhura.mp3' },
+          { id: 'opt-3', image: 'word-dub', label: 'دب', optionAudio: '/audio/ar/word-dub.mp3' },
+          { id: 'opt-4', image: 'word-lechem', label: 'خبز', optionAudio: '/audio/ar/word-khubz.mp3' },
         ],
       },
       // Question 5: Find letter ر among different letters
@@ -101,10 +101,10 @@ const learnRaAr = {
         instruction: 'איזו מילה מתחילה באות ر?',
         instructionAudio: '/audio/ar/word-starts-ra.mp3',
         options: [
-          { id: 'opt-1', image: 'word-sus', label: 'حصان' },
+          { id: 'opt-1', image: 'word-sus', label: 'حصان', optionAudio: '/audio/ar/word-hisan.mp3' },
           { id: 'opt-2', image: 'word-regel', label: 'رجل', isCorrect: true, optionAudio: '/audio/ar/word-rijl.mp3' },
-          { id: 'opt-3', image: 'word-melafafon', label: 'خيار' },
-          { id: 'opt-4', image: 'word-zeev', label: 'ذئب' },
+          { id: 'opt-3', image: 'word-melafafon', label: 'خيار', optionAudio: '/audio/ar/word-khiyar.mp3' },
+          { id: 'opt-4', image: 'word-zeev', label: 'ذئب', optionAudio: '/audio/ar/word-dhiib.mp3' },
         ],
       },
       // Question 7: MULTI-SELECT - Mark last 4 letters خ, د, ذ, ر

@@ -76,9 +76,9 @@ const learnDalAr = {
         instructionAudio: '/audio/ar/word-starts-dal.mp3',
         options: [
           { id: 'opt-1', image: 'word-dub', label: 'دب', isCorrect: true, optionAudio: '/audio/ar/word-dub.mp3' },
-          { id: 'opt-2', image: 'word-lechem', label: 'خبز' },
-          { id: 'opt-3', image: 'word-sus', label: 'حصان' },
-          { id: 'opt-4', image: 'word-rabbit', label: 'أرنب' },
+          { id: 'opt-2', image: 'word-lechem', label: 'خبز', optionAudio: '/audio/ar/word-khubz.mp3' },
+          { id: 'opt-3', image: 'word-sus', label: 'حصان', optionAudio: '/audio/ar/word-hisan.mp3' },
+          { id: 'opt-4', image: 'word-rabbit', label: 'أرنب', optionAudio: '/audio/ar/word-arnab.mp3' },
         ],
       },
       // Question 5: Review previous letter - Find letter خ

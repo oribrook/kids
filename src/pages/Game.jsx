@@ -318,6 +318,7 @@ function Game() {
           multiSelectState={multiSelectState}
           onMultiSelectAnswer={handleMultiSelectAnswer}
           onIntroMultiSelectAnswer={handleIntroMultiSelectAnswer}
+          onPlayOptionAudio={playInstruction}
         />
       );
     }

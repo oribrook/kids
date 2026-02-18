@@ -70,9 +70,9 @@ const learnAlefAr = {
         instructionAudio: '/audio/ar/word-starts-alef.mp3',
         options: [
           { id: 'opt-1', image: 'word-rabbit', label: 'أرنب', isCorrect: true, optionAudio: '/audio/ar/word-arnab.mp3' },
-          { id: 'opt-2', image: 'word-banana', label: 'موز' },
-          { id: 'opt-3', image: 'word-gamal', label: 'جمل' },
-          { id: 'opt-4', image: 'word-tapuach', label: 'تفاح' },
+          { id: 'opt-2', image: 'word-banana', label: 'موز', optionAudio: '/audio/ar/word-mawz.mp3' },
+          { id: 'opt-3', image: 'word-gamal', label: 'جمل', optionAudio: '/audio/ar/word-jamal.mp3' },
+          { id: 'opt-4', image: 'word-tapuach', label: 'تفاح', optionAudio: '/audio/ar/word-tuffah.mp3' },
         ],
       },
       // Question 5: Find letter أ among different letters
@@ -95,10 +95,10 @@ const learnAlefAr = {
         instruction: 'איזו מילה מתחילה באות أ?',
         instructionAudio: '/audio/ar/word-starts-alef.mp3',
         options: [
-          { id: 'opt-1', image: 'word-kelev', label: 'كلب' },
+          { id: 'opt-1', image: 'word-kelev', label: 'كلب', optionAudio: '/audio/ar/word-kalb.mp3' },
           { id: 'opt-2', image: 'word-arye', label: 'أسد', isCorrect: true, optionAudio: '/audio/ar/word-asad.mp3' },
-          { id: 'opt-3', image: 'word-barvaz', label: 'بطة' },
-          { id: 'opt-4', image: 'word-tapuach', label: 'تفاح' },
+          { id: 'opt-3', image: 'word-barvaz', label: 'بطة', optionAudio: '/audio/ar/word-batta.mp3' },
+          { id: 'opt-4', image: 'word-tapuach', label: 'تفاح', optionAudio: '/audio/ar/word-tuffah.mp3' },
         ],
       },
     ],

@@ -76,9 +76,9 @@ const learnSadAr = {
         instructionAudio: '/audio/ar/word-starts-sad.mp3',
         options: [
           { id: 'opt-1', image: 'word-rocket', label: 'صاروخ', isCorrect: true, optionAudio: '/audio/ar/word-sarookh-sad.mp3' },
-          { id: 'opt-2', image: 'word-dag', label: 'سمكة' },
-          { id: 'opt-3', image: 'word-sun', label: 'شمس' },
-          { id: 'opt-4', image: 'word-zarafa', label: 'زرافة' },
+          { id: 'opt-2', image: 'word-dag', label: 'سمكة', optionAudio: '/audio/ar/word-samaka.mp3' },
+          { id: 'opt-3', image: 'word-sun', label: 'شمس', optionAudio: '/audio/ar/word-shams.mp3' },
+          { id: 'opt-4', image: 'word-zarafa', label: 'زرافة', optionAudio: '/audio/ar/word-zarafa.mp3' },
         ],
       },
       // Question 5: Reviews previous letter ش

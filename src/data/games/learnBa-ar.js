@@ -69,9 +69,9 @@ const learnBaAr = {
         instructionAudio: '/audio/ar/word-starts-ba.mp3',
         options: [
           { id: 'opt-1', image: 'word-barvaz', label: 'بطة', isCorrect: true, optionAudio: '/audio/ar/word-batta.mp3' },
-          { id: 'opt-2', image: 'word-rabbit', label: 'أرنب' },
-          { id: 'opt-3', image: 'word-gamal', label: 'جمل' },
-          { id: 'opt-4', image: 'word-tapuach', label: 'تفاح' },
+          { id: 'opt-2', image: 'word-rabbit', label: 'أرنب', optionAudio: '/audio/ar/word-arnab.mp3' },
+          { id: 'opt-3', image: 'word-gamal', label: 'جمل', optionAudio: '/audio/ar/word-jamal.mp3' },
+          { id: 'opt-4', image: 'word-tapuach', label: 'تفاح', optionAudio: '/audio/ar/word-tuffah.mp3' },
         ],
       },
       // Question 5: Review previous letter - Find أ

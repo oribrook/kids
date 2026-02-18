@@ -76,9 +76,9 @@ const learnShinAr = {
         instructionAudio: '/audio/ar/word-starts-shin-ar.mp3',
         options: [
           { id: 'opt-1', image: 'word-sun', label: 'شمس', isCorrect: true, optionAudio: '/audio/ar/word-shams.mp3' },
-          { id: 'opt-2', image: 'word-dag', label: 'سمكة' },
-          { id: 'opt-3', image: 'word-zarafa', label: 'زرافة' },
-          { id: 'opt-4', image: 'word-rumman', label: 'رمان' },
+          { id: 'opt-2', image: 'word-dag', label: 'سمكة', optionAudio: '/audio/ar/word-samaka.mp3' },
+          { id: 'opt-3', image: 'word-zarafa', label: 'زرافة', optionAudio: '/audio/ar/word-zarafa.mp3' },
+          { id: 'opt-4', image: 'word-rumman', label: 'رمان', optionAudio: '/audio/ar/word-rumman.mp3' },
         ],
       },
       // Question 5: Reviews previous letter س

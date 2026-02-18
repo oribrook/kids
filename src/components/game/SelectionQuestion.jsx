@@ -2526,6 +2526,8 @@ function SelectionQuestion({
   onMultiSelectAnswer,
   // Intro multi-select props
   onIntroMultiSelectAnswer,
+  // Audio preview prop
+  onPlayOptionAudio,
 }) {
   // Support for question image (used in letters games to show word image)
   const QuestionImage = question.questionImage ? ItemIcons[question.questionImage] : null;
@@ -2579,6 +2581,7 @@ function SelectionQuestion({
             return (
               <motion.div
                 key={option.id}
+                className={styles.introCardWrapper}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
@@ -2603,6 +2606,23 @@ function SelectionQuestion({
                     <div className={styles.checkmark}>✓</div>
                   )}
                 </Card>
+                {/* Speaker icon to preview word audio */}
+                {option.optionAudio && onPlayOptionAudio && (
+                  <button
+                    className={styles.speakerButton}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onPlayOptionAudio(option.optionAudio);
+                    }}
+                    aria-label={`השמע ${option.label}`}
+                  >
+                    <svg viewBox="0 0 24 24" className={styles.speakerIcon} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                    </svg>
+                  </button>
+                )}
               </motion.div>
             );
           }
@@ -2660,9 +2680,12 @@ function SelectionQuestion({
           // Use smaller cards for 9-option grids
           const cardSize = hasNineOptions ? 'large' : 'xlarge';
 
+          const hasOptionAudio = option.optionAudio && onPlayOptionAudio;
+
           return (
             <motion.div
               key={option.id}
+              className={hasOptionAudio ? styles.introCardWrapper : undefined}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
@@ -2683,6 +2706,23 @@ function SelectionQuestion({
                   <span className={styles.placeholder}>{option.label}</span>
                 )}
               </Card>
+              {/* Speaker icon to preview word audio */}
+              {hasOptionAudio && (
+                <button
+                  className={styles.speakerButton}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onPlayOptionAudio(option.optionAudio);
+                  }}
+                  aria-label={`השמע ${option.label}`}
+                >
+                  <svg viewBox="0 0 24 24" className={styles.speakerIcon} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                  </svg>
+                </button>
+              )}
             </motion.div>
           );
         })}

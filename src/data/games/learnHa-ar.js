@@ -76,9 +76,9 @@ const learnHaAr = {
         instructionAudio: '/audio/ar/word-starts-ha.mp3',
         options: [
           { id: 'opt-1', image: 'word-sus', label: 'حصان', isCorrect: true, optionAudio: '/audio/ar/word-hisan.mp3' },
-          { id: 'opt-2', image: 'word-rabbit', label: 'أرنب' },
-          { id: 'opt-3', image: 'word-barvaz', label: 'بطة' },
-          { id: 'opt-4', image: 'word-gamal', label: 'جمل' },
+          { id: 'opt-2', image: 'word-rabbit', label: 'أرنب', optionAudio: '/audio/ar/word-arnab.mp3' },
+          { id: 'opt-3', image: 'word-barvaz', label: 'بطة', optionAudio: '/audio/ar/word-batta.mp3' },
+          { id: 'opt-4', image: 'word-gamal', label: 'جمل', optionAudio: '/audio/ar/word-jamal.mp3' },
         ],
       },
       // Question 5: Find letter ح among different letters
@@ -101,10 +101,10 @@ const learnHaAr = {
         instruction: 'איזו מילה מתחילה באות ح?',
         instructionAudio: '/audio/ar/word-starts-ha.mp3',
         options: [
-          { id: 'opt-1', image: 'word-arye', label: 'أسد' },
+          { id: 'opt-1', image: 'word-arye', label: 'أسد', optionAudio: '/audio/ar/word-asad.mp3' },
           { id: 'opt-2', image: 'word-halib', label: 'حليب', isCorrect: true, optionAudio: '/audio/ar/word-halib.mp3' },
-          { id: 'opt-3', image: 'word-tapuach', label: 'تفاح' },
-          { id: 'opt-4', image: 'word-gezer', label: 'جزر' },
+          { id: 'opt-3', image: 'word-tapuach', label: 'تفاح', optionAudio: '/audio/ar/word-tuffah.mp3' },
+          { id: 'opt-4', image: 'word-gezer', label: 'جزر', optionAudio: '/audio/ar/word-jazar.mp3' },
         ],
       },
     ],

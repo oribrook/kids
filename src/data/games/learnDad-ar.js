@@ -76,9 +76,9 @@ const learnDadAr = {
         instructionAudio: '/audio/ar/word-starts-dad.mp3',
         options: [
           { id: 'opt-1', image: 'word-tsfardea', label: 'ضفدع', isCorrect: true, optionAudio: '/audio/ar/word-difda.mp3' },
-          { id: 'opt-2', image: 'word-rocket', label: 'صاروخ' },
-          { id: 'opt-3', image: 'word-sun', label: 'شمس' },
-          { id: 'opt-4', image: 'word-dag', label: 'سمكة' },
+          { id: 'opt-2', image: 'word-rocket', label: 'صاروخ', optionAudio: '/audio/ar/word-sarookh.mp3' },
+          { id: 'opt-3', image: 'word-sun', label: 'شمس', optionAudio: '/audio/ar/word-shams.mp3' },
+          { id: 'opt-4', image: 'word-dag', label: 'سمكة', optionAudio: '/audio/ar/word-samaka.mp3' },
         ],
       },
       // Question 5: Find letter ض among different letters
@@ -101,10 +101,10 @@ const learnDadAr = {
         instruction: 'איזו מילה מתחילה באות ض?',
         instructionAudio: '/audio/ar/word-starts-dad.mp3',
         options: [
-          { id: 'opt-1', image: 'word-sabon', label: 'صابون' },
+          { id: 'opt-1', image: 'word-sabon', label: 'صابون', optionAudio: '/audio/ar/word-saboon.mp3' },
           { id: 'opt-2', image: 'word-daw', label: 'ضوء', isCorrect: true, optionAudio: '/audio/ar/word-daw.mp3' },
-          { id: 'opt-3', image: 'word-zarafa', label: 'زرافة' },
-          { id: 'opt-4', image: 'word-etz', label: 'شجرة' },
+          { id: 'opt-3', image: 'word-zarafa', label: 'زرافة', optionAudio: '/audio/ar/word-zarafa.mp3' },
+          { id: 'opt-4', image: 'word-etz', label: 'شجرة', optionAudio: '/audio/ar/word-shajara.mp3' },
         ],
       },
       // Question 7: MULTI-SELECT - Mark last 4 letters س, ش, ص, ض

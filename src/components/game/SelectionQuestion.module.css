@@ -66,6 +66,45 @@
   max-width: 360px;
 }
 
+/* Wrapper for intro cards with speaker button below */
+.introCardWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Speaker button below intro cards */
+.speakerButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(46, 204, 113, 0.15);
+  color: #2ECC71;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.2s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.speakerButton:hover {
+  background: rgba(46, 204, 113, 0.3);
+}
+
+.speakerButton:active {
+  transform: scale(0.9);
+  background: rgba(46, 204, 113, 0.4);
+}
+
+.speakerIcon {
+  width: 18px;
+  height: 18px;
+}
+
 /* Checkmark overlay for correct multi-select items */
 .checkmark {
   position: absolute;
@@ -117,5 +156,15 @@
     font-size: 12px;
     top: 3px;
     right: 3px;
+  }
+
+  .speakerButton {
+    width: 28px;
+    height: 28px;
+  }
+
+  .speakerIcon {
+    width: 15px;
+    height: 15px;
   }
 }

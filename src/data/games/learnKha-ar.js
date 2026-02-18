@@ -76,9 +76,9 @@ const learnKhaAr = {
         instructionAudio: '/audio/ar/word-starts-kha.mp3',
         options: [
           { id: 'opt-1', image: 'word-lechem', label: 'خبز', isCorrect: true, optionAudio: '/audio/ar/word-khubz.mp3' },
-          { id: 'opt-2', image: 'word-sus', label: 'حصان' },
-          { id: 'opt-3', image: 'word-rabbit', label: 'أرنب' },
-          { id: 'opt-4', image: 'word-gamal', label: 'جمل' },
+          { id: 'opt-2', image: 'word-sus', label: 'حصان', optionAudio: '/audio/ar/word-hisan.mp3' },
+          { id: 'opt-3', image: 'word-rabbit', label: 'أرنب', optionAudio: '/audio/ar/word-arnab.mp3' },
+          { id: 'opt-4', image: 'word-gamal', label: 'جمل', optionAudio: '/audio/ar/word-jamal.mp3' },
         ],
       },
       // Question 5: Review previous letter - Find letter ح
