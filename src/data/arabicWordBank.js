@@ -191,6 +191,94 @@ const arabicWordBank = {
     { image: 'word-fanus', label: 'فانوس', optionAudio: '/audio/ar/word-fanus.mp3' },
     { image: 'word-finjan', label: 'فنجان', optionAudio: '/audio/ar/word-finjan.mp3' },
   ],
+  'ق': [
+    { image: 'word-chatul', label: 'قطة', optionAudio: '/audio/ar/word-qitta.mp3' },
+    { image: 'word-yareach', label: 'قمر', optionAudio: '/audio/ar/word-qamar.mp3' },
+    { image: 'word-kof', label: 'قرد', optionAudio: '/audio/ar/word-qird.mp3' },
+    { image: 'word-et', label: 'قلم', optionAudio: '/audio/ar/word-qalam.mp3' },
+    { image: 'word-lev', label: 'قلب', optionAudio: '/audio/ar/word-qalb.mp3' },
+    { image: 'word-sira', label: 'قارب', optionAudio: '/audio/ar/word-qarib.mp3' },
+    { image: 'word-qufl', label: 'قفل', optionAudio: '/audio/ar/word-qufl.mp3' },
+    { image: 'word-kova', label: 'قبعة', optionAudio: '/audio/ar/word-qubaa.mp3' },
+    { image: 'word-rainbow', label: 'قوس قزح', optionAudio: '/audio/ar/word-qaws-quzah.mp3' },
+  ],
+  'ك': [
+    { image: 'word-kelev', label: 'كلب', optionAudio: '/audio/ar/word-kalb.mp3' },
+    { image: 'word-sefer', label: 'كتاب', optionAudio: '/audio/ar/word-kitab.mp3' },
+    { image: 'word-kursi', label: 'كرسي', optionAudio: '/audio/ar/word-kursi.mp3' },
+    { image: 'word-finjan', label: 'كوب', optionAudio: '/audio/ar/word-kub.mp3' },
+    { image: 'word-kadur', label: 'كرة', optionAudio: '/audio/ar/word-kura.mp3' },
+    { image: 'word-uga', label: 'كعكة', optionAudio: '/audio/ar/word-kaaka.mp3' },
+    { image: 'word-kanguru', label: 'كنغر', optionAudio: '/audio/ar/word-kanghar.mp3' },
+    { image: 'word-violin', label: 'كمان', optionAudio: '/audio/ar/word-kaman.mp3' },
+    { image: 'word-kumthra', label: 'كمثرى', optionAudio: '/audio/ar/word-kumthra.mp3' },
+  ],
+  'ل': [
+    { image: 'word-limon', label: 'ليمون', optionAudio: '/audio/ar/word-leimun.mp3' },
+    { image: 'word-luaba', label: 'لعبة', optionAudio: '/audio/ar/word-luaba.mp3' },
+    { image: 'word-lisan', label: 'لسان', optionAudio: '/audio/ar/word-lisan.mp3' },
+    { image: 'word-yogurt', label: 'لبن', optionAudio: '/audio/ar/word-laban.mp3' },
+    { image: 'word-leil', label: 'ليل', optionAudio: '/audio/ar/word-leil.mp3' },
+    { image: 'word-lawha', label: 'لوحة', optionAudio: '/audio/ar/word-lawha.mp3' },
+    { image: 'word-lahm', label: 'لحم', optionAudio: '/audio/ar/word-lahm.mp3' },
+    { image: 'word-lulu', label: 'لؤلؤة', optionAudio: '/audio/ar/word-lulu.mp3' },
+    { image: 'word-fustan', label: 'لباس', optionAudio: '/audio/ar/word-libas.mp3' },
+  ],
+  'م': [
+    { image: 'word-banana', label: 'موز', optionAudio: '/audio/ar/word-mawz.mp3' },
+    { image: 'word-key', label: 'مفتاح', optionAudio: '/audio/ar/word-miftah.mp3' },
+    { image: 'word-maa', label: 'ماء', optionAudio: '/audio/ar/word-maa.mp3' },
+    { image: 'word-madrasa', label: 'مدرسة', optionAudio: '/audio/ar/word-madrasa.mp3' },
+    { image: 'word-geshem', label: 'مطر', optionAudio: '/audio/ar/word-matar.mp3' },
+    { image: 'word-malik', label: 'ملك', optionAudio: '/audio/ar/word-malik.mp3' },
+    { image: 'word-miknasa', label: 'مكنسة', optionAudio: '/audio/ar/word-miknasa.mp3' },
+    { image: 'word-miraa', label: 'مرآة', optionAudio: '/audio/ar/word-miraa.mp3' },
+    { image: 'word-miqass', label: 'مقص', optionAudio: '/audio/ar/word-miqass.mp3' },
+  ],
+  'ن': [
+    { image: 'word-kochav', label: 'نجمة', optionAudio: '/audio/ar/word-najma.mp3' },
+    { image: 'word-dvora', label: 'نحلة', optionAudio: '/audio/ar/word-nahla.mp3' },
+    { image: 'word-namer', label: 'نمر', optionAudio: '/audio/ar/word-namir.mp3' },
+    { image: 'word-esh', label: 'نار', optionAudio: '/audio/ar/word-nar.mp3' },
+    { image: 'word-nadharat', label: 'نظارات', optionAudio: '/audio/ar/word-nadharat.mp3' },
+    { image: 'word-nemala', label: 'نملة', optionAudio: '/audio/ar/word-namla.mp3' },
+    { image: 'word-nahr', label: 'نهر', optionAudio: '/audio/ar/word-nahr.mp3' },
+    { image: 'word-nakhla', label: 'نخلة', optionAudio: '/audio/ar/word-nakhla.mp3' },
+    { image: 'word-naal', label: 'نعل', optionAudio: '/audio/ar/word-naal.mp3' },
+  ],
+  'ه': [
+    { image: 'word-telephone', label: 'هاتف', optionAudio: '/audio/ar/word-hatif.mp3' },
+    { image: 'word-haram', label: 'هرم', optionAudio: '/audio/ar/word-haram.mp3' },
+    { image: 'word-hadiya', label: 'هدية', optionAudio: '/audio/ar/word-hadiya.mp3' },
+    { image: 'word-hilal', label: 'هلال', optionAudio: '/audio/ar/word-hilal.mp3' },
+    { image: 'word-hawaa', label: 'هواء', optionAudio: '/audio/ar/word-hawaa.mp3' },
+    { image: 'word-helicopter', label: 'هليكوبتر', optionAudio: '/audio/ar/word-helicopter.mp3' },
+    { image: 'word-hudhud', label: 'هدهد', optionAudio: '/audio/ar/word-hudhud.mp3' },
+    { image: 'word-harisa', label: 'هريسة', optionAudio: '/audio/ar/word-harisa.mp3' },
+    { image: 'word-chatul', label: 'هرة', optionAudio: '/audio/ar/word-hirra.mp3' },
+  ],
+  'و': [
+    { image: 'word-vered', label: 'وردة', optionAudio: '/audio/ar/word-warda.mp3' },
+    { image: 'word-walad', label: 'ولد', optionAudio: '/audio/ar/word-walad.mp3' },
+    { image: 'word-wajh', label: 'وجه', optionAudio: '/audio/ar/word-wajh.mp3' },
+    { image: 'word-wisada', label: 'وسادة', optionAudio: '/audio/ar/word-wisada.mp3' },
+    { image: 'word-wazza', label: 'وزة', optionAudio: '/audio/ar/word-wazza.mp3' },
+    { image: 'word-leaf', label: 'ورقة', optionAudio: '/audio/ar/word-waraqa.mp3' },
+    { image: 'word-wiaa', label: 'وعاء', optionAudio: '/audio/ar/word-wiaa.mp3' },
+    { image: 'word-winsh', label: 'ونش', optionAudio: '/audio/ar/word-winsh.mp3' },
+    { image: 'word-waquud', label: 'وقود', optionAudio: '/audio/ar/word-waquud.mp3' },
+  ],
+  'ي': [
+    { image: 'word-yadayim', label: 'يد', optionAudio: '/audio/ar/word-yad.mp3' },
+    { image: 'word-yaqteen', label: 'يقطين', optionAudio: '/audio/ar/word-yaqteen.mp3' },
+    { image: 'word-hamama', label: 'يمامة', optionAudio: '/audio/ar/word-yamama.mp3' },
+    { image: 'word-yakht', label: 'يخت', optionAudio: '/audio/ar/word-yakht.mp3' },
+    { image: 'word-yarqa', label: 'يرقة', optionAudio: '/audio/ar/word-yarqa.mp3' },
+    { image: 'word-yasmeen', label: 'ياسمين', optionAudio: '/audio/ar/word-yasmeen.mp3' },
+    { image: 'word-yasoob', label: 'يعسوب', optionAudio: '/audio/ar/word-yasoob.mp3' },
+    { image: 'word-sun', label: 'يوم', optionAudio: '/audio/ar/word-yawm.mp3' },
+    { image: 'word-yanii', label: 'يانع', optionAudio: '/audio/ar/word-yanii.mp3' },
+  ],
 };
 
 // Ordered list of Arabic letters as they appear in the game categories
@@ -199,6 +287,8 @@ export const arabicLetterOrder = [
   'ح', 'خ', 'د', 'ذ', 'ر',  // Category 2: حخدذر
   'ز', 'س', 'ش', 'ص', 'ض',  // Category 3: زسشصض
   'ط', 'ظ', 'ع', 'غ', 'ف',  // Category 4: طظعغف
+  'ق', 'ك', 'ل', 'م', 'ن',  // Category 5: قكلمن
+  'ه', 'و', 'ي',              // Category 6: هوي
 ];
 
 /**

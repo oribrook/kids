@@ -865,9 +865,184 @@ ARABIC AUDIO FILES - طظعغف category (/public/audio/ar/):
     - word-ghazal/ghayma/ghurab/ghassala/ghaba/ghitaa/ghanam/ghusn/ghar.mp3
     - word-fil/farasha/faar/farawla/fustan/fam/filfil/fanus/finjan.mp3
 
-FUTURE ARABIC CATEGORIES (planned):
-    - قكلمن (arabic-qaf-nun): ق, ك, ل, م, ن
-    - هوي (arabic-ha-ya): ه, و, ي
+--------------------------------------------------------------------------------
+                    ARABIC LETTER GAMES - CATEGORY قكلمن (arabic-qaf-nun)
+--------------------------------------------------------------------------------
+
+OVERVIEW:
+    Fifth Arabic letters category. Letters ق, ك, ل, م, ن.
+    Hierarchy: arabic → arabic-letters → arabic-qaf-nun → 5 letter games
+    Color scheme: Orange (#E67E22) for category, Green (#2ECC71) for letter icons
+    Q1 of each letter has 9 word objects
+
+./src/data/games/learnQaf-ar.js
+    "Learn the Letter Qaf" game data (למדו את האות ق):
+    - 6 questions teaching children the Arabic letter ق
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: قطة (cat), قمر (moon), قرد (monkey),
+      قلم (pen), قلب (heart), قارب (boat), قفل (lock), قبعة (hat), قوس قزح (rainbow)
+    - Q2-Q6: Find letter, word association, multi-select
+    - Q6: Multi-select marking أ and ق
+    - Images reused: word-chatul, word-yareach, word-kof, word-et, word-lev,
+      word-sira, word-kova, word-rainbow
+    - New images: word-qufl
+
+./src/data/games/learnKaf-ar.js
+    "Learn the Letter Kaf" game data (למדו את האות ك):
+    - 6 questions teaching children the Arabic letter ك
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: كلب (dog), كتاب (book), كرسي (chair),
+      كوب (cup), كرة (ball), كعكة (cake), كنغر (kangaroo), كمان (violin), كمثرى (pear)
+    - Q5: Reviews previous letter ق
+    - Q6: Multi-select marking أ, ق, ك
+    - Images reused: word-kelev, word-sefer, word-finjan, word-kadur, word-uga,
+      word-kanguru, word-violin
+    - New images: word-kursi, word-kumthra
+
+./src/data/games/learnLam-ar.js
+    "Learn the Letter Lam" game data (למדו את האות ل):
+    - 6 questions teaching children the Arabic letter ل
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: ليمون (lemon), لعبة (toy), لسان (tongue),
+      لبن (yogurt), ليل (night), لوحة (painting), لحم (meat), لؤلؤة (pearl), لباس (clothes)
+    - Q5: Reviews previous letter ك
+    - Q6: Multi-select marking ق, ك, ل
+    - Images reused: word-limon, word-yogurt, word-fustan
+    - New images: word-luaba, word-lisan, word-leil, word-lawha, word-lahm, word-lulu
+
+./src/data/games/learnMim-ar.js
+    "Learn the Letter Mim" game data (למדו את האות م):
+    - 6 questions teaching children the Arabic letter م
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: موز (banana), مفتاح (key), ماء (water),
+      مدرسة (school), مطر (rain), ملك (king), مكنسة (broom), مرآة (mirror), مقص (scissors)
+    - Q5: Reviews previous letter ل
+    - Q6: Multi-select marking ق, ك, ل, م (last 4 letters)
+    - Images reused: word-banana, word-key, word-geshem
+    - New images: word-maa, word-madrasa, word-malik, word-miknasa, word-miraa, word-miqass
+
+./src/data/games/learnNun-ar.js
+    "Learn the Letter Nun" game data (למדו את האות ن):
+    - 7 questions teaching children the Arabic letter ن (last letter gets extra Q)
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: نجمة (star), نحلة (bee), نمر (tiger),
+      نار (fire), نظارات (glasses), نملة (ant), نهر (river), نخلة (palm tree), نعل (shoe)
+    - Q5-Q6: Extra find letter + word association
+    - Q7: Multi-select marking ك, ل, م, ن (last 4 letters)
+    - Images reused: word-kochav, word-dvora, word-namer, word-esh, word-nemala, word-naal
+    - New images: word-nadharat, word-nahr, word-nakhla
+
+NEW IMAGES ADDED (قكلمن category):
+    - word-qufl.png (lock/قفل)
+    - word-kursi.png (chair/كرسي), word-kumthra.png (pear/كمثرى)
+    - word-luaba.png (toy/لعبة), word-lisan.png (tongue/لسان)
+    - word-leil.png (night/ليل), word-lawha.png (painting/لوحة)
+    - word-lahm.png (meat/لحم), word-lulu.png (pearl/لؤلؤة)
+    - word-maa.png (water/ماء), word-madrasa.png (school/مدرسة)
+    - word-malik.png (king/ملك), word-miknasa.png (broom/مكنسة)
+    - word-miraa.png (mirror/مرآة), word-miqass.png (scissors/مقص)
+    - word-nadharat.png (glasses/نظارات), word-nahr.png (river/نهر)
+    - word-nakhla.png (palm tree/نخلة)
+
+ARABIC AUDIO FILES - قكلمن category (/public/audio/ar/):
+    70 new audio files (25 Hebrew instruction + 45 Arabic word):
+
+    Hebrew TTS instruction audio (he-IL-HilaNeural, 25 files):
+    - intro-qaf/kaf-ar/lam/mim/nun-ar.mp3 - Letter introductions
+    - select-all-qaf/kaf-ar/lam/mim/nun-ar.mp3 - Multi-select instructions
+    - find-qaf/kaf-ar/lam/mim/nun-ar.mp3 - Find letter instructions
+    - word-starts-qaf/kaf-ar/lam/mim/nun-ar.mp3 - Word starts with instructions
+    - mark-all-alef-qaf/alef-kaf/qaf-lam/qaf-mim/kaf-nun.mp3 - Mark all letters
+
+    Arabic TTS word audio (ar-SA-ZariyahNeural, 45 files):
+    - word-qitta/qamar/qird/qalam/qalb/qarib/qufl/qubba/qawsquzah.mp3
+    - word-kalb/kitab/kursi/kub/kura/kaaka/kanghar/kaman/kumthra.mp3
+    - word-leimun/luaba/lisan/laban/leil/lawha/lahm/lulu/libas.mp3
+    - word-mawz/miftah/maa/madrasa/matar/malik/miknasa/miraa/miqass.mp3
+    - word-najma/nahla/namir/nar/nadharat/namla/nahr/nakhla/naal.mp3
+
+--------------------------------------------------------------------------------
+                    ARABIC LETTER GAMES - CATEGORY هوي (arabic-ha-ya)
+--------------------------------------------------------------------------------
+
+OVERVIEW:
+    Sixth and FINAL Arabic letters category. Letters ه, و, ي.
+    Only 3 letters (completing the full 28-letter Arabic alphabet).
+    Hierarchy: arabic → arabic-letters → arabic-ha-ya → 3 letter games
+    Color scheme: Teal (#1ABC9C) for category, Green (#2ECC71) for letter icons
+    Q1 of each letter has 9 word objects
+
+./src/data/games/learnHa2-ar.js
+    "Learn the Letter Ha" game data (למדו את האות ه):
+    - 6 questions teaching children the Arabic letter ه
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: هاتف (phone), هرم (pyramid), هدية (gift),
+      هلال (crescent), هواء (air), هليكوبتر (helicopter), هدهد (hoopoe), هريسة (harissa), هرة (cat)
+    - Q2-Q6: Find letter, word association, multi-select
+    - Q6: Multi-select marking أ and ه
+    - Images reused: word-telephone, word-chatul
+    - New images: word-haram, word-hadiya, word-hilal, word-hawaa, word-helicopter,
+      word-hudhud, word-harisa
+
+./src/data/games/learnWaw-ar.js
+    "Learn the Letter Waw" game data (למדו את האות و):
+    - 6 questions teaching children the Arabic letter و
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: وردة (rose), ولد (boy), وجه (face),
+      وسادة (pillow), وزة (goose), ورقة (leaf), وعاء (bowl), ونش (crane), وقود (fuel)
+    - Q5: Reviews previous letter ه
+    - Q6: Multi-select marking ه, و
+    - Images reused: word-vered, word-leaf
+    - New images: word-walad, word-wajh, word-wisada, word-wazza, word-wiaa,
+      word-winsh, word-waquud
+
+./src/data/games/learnYa-ar.js
+    "Learn the Letter Ya" game data (למדו את האות ي):
+    - 7 questions teaching children the Arabic letter ي (last letter gets extra Q)
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: يد (hand), يقطين (pumpkin), يمامة (dove),
+      يخت (yacht), يرقة (caterpillar), ياسمين (jasmine), يعسوب (dragonfly), يوم (day), يانع (ripe)
+    - Q5-Q6: Extra find letter + word association
+    - Q7: Multi-select marking ه, و, ي (last 3 letters — only 3 in this category)
+    - Images reused: word-yadayim, word-hamama, word-sun
+    - New images: word-yaqteen, word-yakht, word-yarqa, word-yasmeen, word-yasoob, word-yanii
+
+NEW IMAGES ADDED (هوي category):
+    - word-haram.png (pyramid/هرم), word-hadiya.png (gift/هدية)
+    - word-hilal.png (crescent/هلال), word-hawaa.png (air/هواء)
+    - word-helicopter.png (helicopter/هليكوبتر), word-hudhud.png (hoopoe/هدهد)
+    - word-harisa.png (harissa/هريسة)
+    - word-walad.png (boy/ولد), word-wajh.png (face/وجه)
+    - word-wisada.png (pillow/وسادة), word-wazza.png (goose/وزة)
+    - word-wiaa.png (bowl/وعاء), word-winsh.png (crane/ونش)
+    - word-waquud.png (fuel/وقود)
+    - word-yaqteen.png (pumpkin/يقطين), word-yakht.png (yacht/يخت)
+    - word-yarqa.png (caterpillar/يرقة), word-yasmeen.png (jasmine/ياسمين)
+    - word-yasoob.png (dragonfly/يعسوب), word-yanii.png (ripe/يانع)
+
+ARABIC AUDIO FILES - هوي category (/public/audio/ar/):
+    42 new audio files (15 Hebrew instruction + 27 Arabic word):
+
+    Hebrew TTS instruction audio (he-IL-HilaNeural, 15 files):
+    - intro-ha2/waw/ya.mp3 - Letter introductions
+    - select-all-ha2/waw/ya.mp3 - Multi-select instructions
+    - find-ha2/waw/ya.mp3 - Find letter instructions
+    - word-starts-ha2/waw/ya.mp3 - Word starts with instructions
+    - mark-all-alef-ha2/ha2-waw/ha2-ya.mp3 - Mark all letters
+
+    Arabic TTS word audio (ar-SA-ZariyahNeural, 27 files):
+    - word-hatif/haram/hadiya/hilal/hawaa/helicopter/hudhud/harisa/hirra.mp3
+    - word-warda/walad/wajh/wisada/wazza/waraqa/wiaa/winsh/waquud.mp3
+    - word-yad/yaqteen/yamama/yakht/yarqa/yasmeen/yasoob/yawm/yanii.mp3
+
+ARABIC ALPHABET COMPLETION:
+    All 28 Arabic letters are now implemented across 6 categories:
+    1. أبتثج (arabic-alef-jim): أ, ب, ت, ث, ج
+    2. حخدذر (arabic-ha-ra): ح, خ, د, ذ, ر
+    3. زسشصض (arabic-zay-dad): ز, س, ش, ص, ض
+    4. طظعغف (arabic-ta-fa): ط, ظ, ع, غ, ف
+    5. قكلمن (arabic-qaf-nun): ق, ك, ل, م, ن
+    6. هوي (arabic-ha-ya): ه, و, ي
 
 --------------------------------------------------------------------------------
                               HOOKS (src/hooks/)

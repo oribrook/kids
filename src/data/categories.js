@@ -249,6 +249,26 @@ export const categories = [
     backgroundColor: '#F5EEF8',
     games: ['learn-ta2-ar', 'learn-dha2-ar', 'learn-ain-ar', 'learn-ghain-ar', 'learn-fa-ar'],
   },
+  {
+    id: 'arabic-qaf-nun',
+    topicId: 'arabic-letters',
+    name: 'قكلمن',
+    description: 'אותיות ق עד ن',
+    icon: 'ق',
+    color: '#E67E22',
+    backgroundColor: '#FDF2E9',
+    games: ['learn-qaf-ar', 'learn-kaf-ar', 'learn-lam-ar', 'learn-mim-ar', 'learn-nun-ar'],
+  },
+  {
+    id: 'arabic-ha-ya',
+    topicId: 'arabic-letters',
+    name: 'هوي',
+    description: 'אותיות ه עד ي',
+    icon: 'ه',
+    color: '#1ABC9C',
+    backgroundColor: '#E8F8F5',
+    games: ['learn-ha2-ar', 'learn-waw-ar', 'learn-ya-ar'],
+  },
   // English Letters categories
   {
     id: 'letters-abcd',
