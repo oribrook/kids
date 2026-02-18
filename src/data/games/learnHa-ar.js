@@ -5,6 +5,8 @@
 // Words: حصان (horse), حليب (milk), حمار (donkey), حوت (whale), حمامة (pigeon),
 //        حبل (rope), حذاء (shoe), حلزون (snail), حقيبة (bag)
 
+import { generateCumulativeReview, arabicLetterOrder } from '../arabicWordBank';
+
 const learnHaAr = {
   id: 'learn-ha-ar',
   categoryId: 'arabic-ha-ra',
@@ -107,6 +109,8 @@ const learnHaAr = {
           { id: 'opt-4', image: 'word-gezer', label: 'جزر', optionAudio: '/audio/ar/word-jazar.mp3' },
         ],
       },
+      // Cumulative review
+      generateCumulativeReview(5, 'lh-ar', 7),
     ],
   },
 };

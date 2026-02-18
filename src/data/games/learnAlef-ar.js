@@ -5,6 +5,8 @@
 // Instructions in Hebrew, word audio in Arabic (spoken/colloquial)
 // Reuses existing images where possible
 
+import { generateCumulativeReview, arabicLetterOrder } from '../arabicWordBank';
+
 const learnAlefAr = {
   id: 'learn-alef-ar',
   categoryId: 'arabic-alef-jim',
@@ -101,6 +103,8 @@ const learnAlefAr = {
           { id: 'opt-4', image: 'word-tapuach', label: 'تفاح', optionAudio: '/audio/ar/word-tuffah.mp3' },
         ],
       },
+      // Cumulative review
+      generateCumulativeReview(0, 'la-ar', 7, 3),
     ],
   },
 };

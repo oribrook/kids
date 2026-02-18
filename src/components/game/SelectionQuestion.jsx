@@ -2746,6 +2746,10 @@ function SelectionQuestion({
                     <div className={styles.checkmark}>✓</div>
                   )}
                 </Card>
+                {/* Arabic word label below card */}
+                {question.showLabels && option.label && (
+                  <div className={styles.arabicLabel}>{option.label}</div>
+                )}
                 {/* Speaker icon to preview word audio */}
                 {option.optionAudio && onPlayOptionAudio && (
                   <button

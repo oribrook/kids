@@ -4,6 +4,8 @@
 // Instructions in Hebrew, word audio in Arabic (spoken/colloquial)
 // Words: جمل (jamal/camel), جبنة (jibne/cheese), جزر (jazar/carrots)
 
+import { generateCumulativeReview, arabicLetterOrder } from '../arabicWordBank';
+
 const learnJimAr = {
   id: 'learn-jim-ar',
   categoryId: 'arabic-alef-jim',
@@ -122,6 +124,8 @@ const learnJimAr = {
         ],
         correctCount: 4,
       },
+      // Cumulative review
+      generateCumulativeReview(4, 'lj-ar', 8),
     ],
   },
 };

@@ -5,6 +5,8 @@
 // Words: طائرة (plane), طبل (drum), طفل (child), طاولة (table), طبيب (doctor),
 //        طوق (hoop), طيارة (kite), طحين (flour), طماطم (tomato)
 
+import { generateCumulativeReview, arabicLetterOrder } from '../arabicWordBank';
+
 const learnTa2Ar = {
   id: 'learn-ta2-ar',
   categoryId: 'arabic-ta-fa',
@@ -107,6 +109,7 @@ const learnTa2Ar = {
           { id: 'opt-4', image: 'word-dub', label: 'دب', optionAudio: '/audio/ar/word-dub.mp3' },
         ],
       },
+      generateCumulativeReview(15, 'lt2-ar', 7),
     ],
   },
 };

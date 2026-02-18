@@ -5,6 +5,8 @@
 // Words: رمان (pomegranate), رجل (foot), رضاعة (bottle), رسالة (letter/mail),
 //        رمل (sand), رأس (head), ركبة (knee), ربيع (spring), رنين (ringing)
 
+import { generateCumulativeReview, arabicLetterOrder } from '../arabicWordBank';
+
 const learnRaAr = {
   id: 'learn-ra-ar',
   categoryId: 'arabic-ha-ra',
@@ -129,6 +131,8 @@ const learnRaAr = {
         ],
         correctCount: 4,
       },
+      // Cumulative review
+      generateCumulativeReview(9, 'lr-ar', 8),
     ],
   },
 };

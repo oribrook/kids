@@ -75,6 +75,18 @@
 }
 
 /* Speaker button below intro cards */
+/* Arabic word label below card */
+.arabicLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2D3436;
+  text-align: center;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  direction: rtl;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .speakerButton {
   width: 32px;
   height: 32px;
@@ -156,6 +168,10 @@
     font-size: 12px;
     top: 3px;
     right: 3px;
+  }
+
+  .arabicLabel {
+    font-size: 0.85rem;
   }
 
   .speakerButton {

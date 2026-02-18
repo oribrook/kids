@@ -5,6 +5,8 @@
 // Words: دب (bear), دجاجة (chicken), دلفين (dolphin), دراجة (bicycle),
 //        دمية (doll), دلو (bucket), دودة (worm), ديك (rooster), ديناصور (dinosaur)
 
+import { generateCumulativeReview, arabicLetterOrder } from '../arabicWordBank';
+
 const learnDalAr = {
   id: 'learn-dal-ar',
   categoryId: 'arabic-ha-ra',
@@ -115,6 +117,8 @@ const learnDalAr = {
         ],
         correctCount: 4,
       },
+      // Cumulative review
+      generateCumulativeReview(7, 'ld-ar', 7),
     ],
   },
 };

@@ -4,6 +4,8 @@
 // Instructions in Hebrew, word audio in Arabic (spoken/colloquial)
 // Words: بطة (batta/duck), بندورة (bandora/tomato), بيت (beit/house)
 
+import { generateCumulativeReview, arabicLetterOrder } from '../arabicWordBank';
+
 const learnBaAr = {
   id: 'learn-ba-ar',
   categoryId: 'arabic-alef-jim',
@@ -106,6 +108,8 @@ const learnBaAr = {
         ],
         correctCount: 4,
       },
+      // Cumulative review
+      generateCumulativeReview(1, 'lb-ar', 7, 5),
     ],
   },
 };

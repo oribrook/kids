@@ -6,6 +6,8 @@
 //        ذهب (gold), ذكي (smart), ذراع (arm), ذقن (chin), ذخيرة (ammo - replaced with ذاكرة memory)
 // Note: ذ has fewer common kids' words in عامية. Using best available options.
 
+import { generateCumulativeReview, arabicLetterOrder } from '../arabicWordBank';
+
 const learnDhalAr = {
   id: 'learn-dhal-ar',
   categoryId: 'arabic-ha-ra',
@@ -117,6 +119,8 @@ const learnDhalAr = {
         ],
         correctCount: 4,
       },
+      // Cumulative review
+      generateCumulativeReview(8, 'ldh-ar', 7),
     ],
   },
 };

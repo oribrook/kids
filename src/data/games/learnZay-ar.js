@@ -5,6 +5,8 @@
 // Words: زرافة (giraffe), زيتون (olive), زهرة (flower), زبدة (butter), زجاجة (bottle),
 //        زيبرا (zebra), زر (button), زنبور (wasp), زلاجة (sled)
 
+import { generateCumulativeReview, arabicLetterOrder } from '../arabicWordBank';
+
 const learnZayAr = {
   id: 'learn-zay-ar',
   categoryId: 'arabic-zay-dad',
@@ -107,6 +109,7 @@ const learnZayAr = {
           { id: 'opt-4', image: 'word-regel', label: 'رجل', optionAudio: '/audio/ar/word-rijl.mp3' },
         ],
       },
+      generateCumulativeReview(10, 'lz-ar', 7),
     ],
   },
 };
