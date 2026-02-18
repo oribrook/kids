@@ -737,8 +737,111 @@ ARABIC AUDIO FILES - زسشصض category (/public/audio/ar/):
     - word-sarookh-sad/sabbar/sahn/soof/sundooq/saqr/saboon/soora/sunboor.mp3
     - word-difda/daw/dahk/dayf/dabab/dimada/daba/dirs/dabb.mp3
 
+--------------------------------------------------------------------------------
+                    ARABIC LETTER GAMES - CATEGORY طظعغف (arabic-ta-fa)
+--------------------------------------------------------------------------------
+
+OVERVIEW:
+    Fourth Arabic letters category. Letters ط, ظ, ع, غ, ف.
+    Hierarchy: arabic → arabic-letters → arabic-ta-fa → 5 letter games
+    Color scheme: Purple (#9B59B6) for category, Green (#2ECC71) for letter icons
+    Q1 of each letter has 9 word objects
+
+./src/data/games/learnTa2-ar.js
+    "Learn the Letter Ta'" game data (למדו את האות ط):
+    - 6 questions teaching children the Arabic letter ط
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: طائرة (plane), طبل (drum), طفل (child),
+      طاولة (table), طبيب (doctor), طوق (hoop), طيارة (kite), طحين (flour), طماطم (tomato)
+    - Q2-Q6: Find letter, word association, multi-select
+    - Images reused: word-tayas, word-bandora
+    - New images: word-tabl, word-tifl, word-tawla, word-tabib, word-tawq, word-tayara, word-taheen
+
+./src/data/games/learnDha2-ar.js
+    "Learn the Letter Dha'" game data (למדו את האות ظ):
+    - 6 questions teaching children the Arabic letter ظ
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: ظرف (envelope), ظل (shadow), ظبي (gazelle),
+      ظفر (nail), ظهر (back), ظلام (darkness), ظريف (cute), ظبية (doe), ظمأ (thirst)
+    - Note: ظ has fewer common kids' words in عامية
+    - Q5: Reviews previous letter ط
+    - Q6: Multi-select marking أ and ط
+    - New images: word-dharf, word-dhill, word-dhabi, word-dhufr, word-dhahr,
+      word-dhalam, word-dharif, word-dhabya, word-dhama
+
+./src/data/games/learnAin-ar.js
+    "Learn the Letter Ain" game data (למדו את האות ع):
+    - 6 questions teaching children the Arabic letter ع
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: عين (eye), عنب (grapes), عسل (honey),
+      عصفور (bird), عجلة (wheel), عنكبوت (spider), عربة (cart), عظم (bone), عقرب (scorpion)
+    - Q5: Reviews previous letter ظ
+    - Q6: Multi-select marking ط, ظ, ع
+    - Images reused: word-ayin-eye, word-tsipor, word-akavish
+    - New images: word-inab, word-asal, word-ajala, word-araba, word-adhm, word-aqrab
+
+./src/data/games/learnGhain-ar.js
+    "Learn the Letter Ghain" game data (למדו את האות غ):
+    - 6 questions teaching children the Arabic letter غ
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: غزال (deer), غيمة (cloud), غراب (crow),
+      غسالة (washer), غابة (forest), غطاء (lid), غنم (sheep), غصن (branch), غار (cave)
+    - Q5: Reviews previous letter ع
+    - Q6: Multi-select marking ط, ظ, ع, غ (last 4 letters)
+    - New images: word-ghazal, word-ghayma, word-ghurab, word-ghassala, word-ghaba,
+      word-ghitaa, word-ghanam, word-ghusn, word-ghar
+
+./src/data/games/learnFa-ar.js
+    "Learn the Letter Fa" game data (למדו את האות ف):
+    - 7 questions teaching children the Arabic letter ف
+    - Instructions in Hebrew, word labels in Arabic
+    - Q1: Introduction with 9 words: فيل (elephant), فراشة (butterfly), فأر (mouse),
+      فراولة (strawberry), فستان (dress), فم (mouth), فلفل (pepper), فانوس (lantern), فنجان (cup)
+    - Q5-Q6: Find letter, word association
+    - Q7: Multi-select marking ظ, ع, غ, ف (last 4 letters)
+    - Images reused: word-pil, word-parpar, word-achbar, word-pilpel
+    - New images: word-farawla, word-fustan, word-fam, word-fanus, word-finjan
+
+NEW IMAGES ADDED (طظعغف category):
+    - word-tabl.png (drum/طبل), word-tifl.png (child/طفل)
+    - word-tawla.png (table/طاولة), word-tabib.png (doctor/طبيب)
+    - word-tawq.png (hoop/طوق), word-tayara.png (kite/طيارة)
+    - word-taheen.png (flour/طحين)
+    - word-dharf.png (envelope/ظرف), word-dhill.png (shadow/ظل)
+    - word-dhabi.png (gazelle/ظبي), word-dhufr.png (nail/ظفر)
+    - word-dhahr.png (back/ظهر), word-dhalam.png (darkness/ظلام)
+    - word-dharif.png (cute/ظريف), word-dhabya.png (doe/ظبية)
+    - word-dhama.png (thirst/ظمأ)
+    - word-inab.png (grapes/عنب), word-asal.png (honey/عسل)
+    - word-ajala.png (wheel/عجلة), word-araba.png (cart/عربة)
+    - word-adhm.png (bone/عظم), word-aqrab.png (scorpion/عقرب)
+    - word-ghazal.png (deer/غزال), word-ghayma.png (cloud/غيمة)
+    - word-ghurab.png (crow/غراب), word-ghassala.png (washer/غسالة)
+    - word-ghaba.png (forest/غابة), word-ghitaa.png (lid/غطاء)
+    - word-ghanam.png (sheep/غنم), word-ghusn.png (branch/غصن)
+    - word-ghar.png (cave/غار)
+    - word-farawla.png (strawberry/فراولة), word-fustan.png (dress/فستان)
+    - word-fam.png (mouth/فم), word-fanus.png (lantern/فانوس)
+    - word-finjan.png (cup/فنجان)
+
+ARABIC AUDIO FILES - طظعغف category (/public/audio/ar/):
+    69 new audio files (24 Hebrew instruction + 45 Arabic word):
+
+    Hebrew TTS instruction audio (he-IL-HilaNeural, 24 files):
+    - intro-ta2/dha2/ain/ghain/fa.mp3 - Letter introductions
+    - select-all-ta2/dha2/ain/ghain/fa.mp3 - Multi-select instructions
+    - find-ta2/dha2/ain/ghain/fa.mp3 - Find letter instructions
+    - word-starts-ta2/dha2/ain/ghain/fa.mp3 - Word starts with instructions
+    - mark-all-alef-ta2/ta2-ain/ta2-ghain/dha2-fa.mp3 - Mark all letters
+
+    Arabic TTS word audio (ar-SA-ZariyahNeural, 45 files):
+    - word-taira/tabl/tifl/tawla/tabib/tawq/tayara/taheen/tamatim.mp3
+    - word-dharf/dhill/dhabi/dhufr/dhahr/dhalam/dharif/dhabya/dhama.mp3
+    - word-ayn/inab/asal/usfur/ajala/ankabut/araba/adhm/aqrab.mp3
+    - word-ghazal/ghayma/ghurab/ghassala/ghaba/ghitaa/ghanam/ghusn/ghar.mp3
+    - word-fil/farasha/faar/farawla/fustan/fam/filfil/fanus/finjan.mp3
+
 FUTURE ARABIC CATEGORIES (planned):
-    - طظعغف (arabic-ta-fa): ط, ظ, ع, غ, ف
     - قكلمن (arabic-qaf-nun): ق, ك, ل, م, ن
     - هوي (arabic-ha-ya): ه, و, ي
 
