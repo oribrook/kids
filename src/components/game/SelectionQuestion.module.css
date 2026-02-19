@@ -77,7 +77,7 @@
 /* Speaker button below intro cards */
 /* Arabic word label below card */
 .arabicLabel {
-  font-size: 1rem;
+  font-size: 2rem;
   font-weight: 600;
   color: #2D3436;
   text-align: center;
@@ -171,7 +171,7 @@
   }
 
   .arabicLabel {
-    font-size: 0.85rem;
+    font-size: 1.7rem;
   }
 
   .speakerButton {
