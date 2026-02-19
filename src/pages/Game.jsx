@@ -14,6 +14,7 @@ import SelectionQuestion from '../components/game/SelectionQuestion';
 import ShadowQuestion from '../components/game/ShadowQuestion';
 import TimedQuestion from '../components/game/TimedQuestion';
 import MemoryQuestion from '../components/game/MemoryQuestion';
+import HiddenLetterInstruction from '../components/game/HiddenLetterInstruction';
 import styles from './Game.module.css';
 
 function Game() {
@@ -358,7 +359,11 @@ function Game() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <p className={styles.instructionText}>{currentQuestion?.instruction}</p>
+          <HiddenLetterInstruction
+            instruction={currentQuestion?.instruction}
+            isIntro={currentQuestion?.isIntroMultiSelect}
+            className={styles.instructionText}
+          />
         </motion.div>
 
         {/* Question content */}

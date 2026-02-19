@@ -1,0 +1,84 @@
+/* HiddenLetterInstruction - Star that hides target letter */
+
+.starWrapper {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 1.2em;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.starWrapper:active {
+  transform: scale(0.9);
+}
+
+/* The star icon - visible by default */
+.starIcon {
+  display: inline-block;
+  font-size: 1em;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  animation: gentlePulse 2s ease-in-out infinite;
+}
+
+/* The hidden letter text - invisible by default */
+.hiddenText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* When revealed: hide star, show letter */
+.revealed .starIcon {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.revealed .hiddenText {
+  opacity: 1;
+  animation: revealPop 0.3s ease forwards;
+}
+
+/* Animations */
+@keyframes gentlePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+@keyframes revealPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .starIcon {
+    animation: none;
+  }
+
+  .revealed .hiddenText {
+    animation: none;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
