@@ -124,6 +124,9 @@ import learnPatach from './learnPatach';
 import learnCholam from './learnCholam';
 import learnShuruk from './learnShuruk';
 
+// Hebrew Memory Games - Category: אותיות (memory-hebrew-letters)
+import memoryHebrewLetters from './memoryHebrewLetters';
+
 // Hebrew Toddler - Category: מה שומעים? (toddler-audio)
 import audioObjects from './audioObjects';
 
@@ -266,6 +269,8 @@ export const games = {
   'learn-patach': learnPatach,
   'learn-cholam': learnCholam,
   'learn-shuruk': learnShuruk,
+  // Hebrew Memory Games - Category: אותיות
+  'memory-hebrew-letters': memoryHebrewLetters,
   // Hebrew Toddler - Category: מה שומעים?
   'audio-objects': audioObjects,
   // English Toddler - Category: What do we hear?

@@ -1,0 +1,251 @@
+/* MemoryCardGame - Classic flip-and-match card game */
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #EDE7F6 0%, #FFF 100%);
+  padding: var(--spacing-sm);
+  direction: rtl;
+}
+
+/* ========== Size Selection Phase ========== */
+
+.sizeSelection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-xl);
+}
+
+.sizeTitle {
+  font-size: var(--font-size-3xl);
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.sizeSubtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-neutral-600);
+  margin: 0;
+}
+
+.sizeButtons {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.sizeButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xl) var(--spacing-2xl);
+  border: 3px solid var(--color-primary);
+  border-radius: var(--radius-xl);
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 140px;
+  box-shadow: var(--shadow-md);
+}
+
+.sizeButton:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.sizeButton:hover .sizeLabel,
+.sizeButton:hover .sizeCount {
+  color: white;
+}
+
+.sizeLabel {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.sizeCount {
+  font-size: var(--font-size-md);
+  color: var(--color-neutral-600);
+}
+
+/* ========== Game Header ========== */
+
+.gameHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  gap: var(--spacing-md);
+}
+
+.closeBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-neutral-200);
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.closeBtn:hover {
+  background: var(--color-neutral-300);
+}
+
+.movesCounter,
+.pairsCounter {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: white;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.movesLabel,
+.pairsLabel {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+}
+
+.movesValue,
+.pairsValue {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* ========== Card Grid ========== */
+
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols, 4), 1fr);
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  align-content: center;
+}
+
+/* ========== Card ========== */
+
+.card {
+  aspect-ratio: 1;
+  perspective: 600px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.4s ease;
+  transform-style: preserve-3d;
+}
+
+.cardFlipped .cardInner {
+  transform: rotateY(180deg);
+}
+
+.cardBack,
+.cardFace {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.cardBack {
+  background: linear-gradient(135deg, #6C5CE7, #A29BFE);
+  border: 2px solid #5A4BD1;
+}
+
+.cardBackIcon {
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 700;
+}
+
+.cardFace {
+  background: white;
+  border: 2px solid #E0E0E0;
+  transform: rotateY(180deg);
+  gap: 2px;
+}
+
+.cardMatched .cardFace {
+  background: #E8F8F5;
+  border-color: #2ECC71;
+}
+
+.cardChar {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #2D3436;
+  line-height: 1;
+}
+
+/* ========== Responsive ========== */
+
+/* 6x6 grid - smaller cards */
+.grid[style*="--grid-cols: 6"] .cardChar {
+  font-size: 1.8rem;
+}
+
+.grid[style*="--grid-cols: 6"] .cardBackIcon {
+  font-size: 1.4rem;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: var(--spacing-xs);
+  }
+
+  .grid {
+    gap: 4px;
+    padding: var(--spacing-xs);
+  }
+
+  .cardChar {
+    font-size: 2.2rem;
+  }
+
+  .cardBackIcon {
+    font-size: 1.5rem;
+  }
+
+  .grid[style*="--grid-cols: 6"] .cardChar {
+    font-size: 1.4rem;
+  }
+
+  .grid[style*="--grid-cols: 6"] .cardBackIcon {
+    font-size: 1.1rem;
+  }
+
+  .sizeButton {
+    padding: var(--spacing-lg) var(--spacing-xl);
+    min-width: 120px;
+  }
+}

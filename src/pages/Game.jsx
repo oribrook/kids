@@ -14,6 +14,7 @@ import SelectionQuestion from '../components/game/SelectionQuestion';
 import ShadowQuestion from '../components/game/ShadowQuestion';
 import TimedQuestion from '../components/game/TimedQuestion';
 import MemoryQuestion from '../components/game/MemoryQuestion';
+import MemoryCardGame from '../components/game/MemoryCardGame';
 import HiddenLetterInstruction from '../components/game/HiddenLetterInstruction';
 import styles from './Game.module.css';
 
@@ -104,6 +105,16 @@ function Game() {
         <h1>משחק לא נמצא</h1>
         <Button onClick={() => navigate('/home')}>חזרה לדף הבית</Button>
       </div>
+    );
+  }
+
+  // Memory card game - self-contained, bypasses question-based flow
+  if (game.gameType === 'memoryCard') {
+    return (
+      <MemoryCardGame
+        game={game}
+        onClose={() => navigate(`/category/${game.categoryId}`)}
+      />
     );
   }
 

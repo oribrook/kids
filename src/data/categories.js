@@ -71,6 +71,15 @@ export const topics = [
     color: '#FF6B9D',
     backgroundColor: '#FFE4EC',
   },
+  {
+    id: 'hebrew-memory',
+    languageId: 'hebrew',
+    name: 'משחקי זיכרון',
+    description: 'משחקי זיכרון לתרגול',
+    icon: '🧠',
+    color: '#6C5CE7',
+    backgroundColor: '#EDE7F6',
+  },
   // Arabic topics
   {
     id: 'arabic-letters',
@@ -206,6 +215,18 @@ export const categories = [
     color: '#FF6B9D',
     backgroundColor: '#FFE4EC',
     games: ['audio-objects'],
+  },
+
+  // Hebrew Memory Games categories
+  {
+    id: 'memory-hebrew-letters',
+    topicId: 'hebrew-memory',
+    name: 'אותיות',
+    description: 'משחק זיכרון - אותיות עברית',
+    icon: '🧠',
+    color: '#6C5CE7',
+    backgroundColor: '#EDE7F6',
+    games: ['memory-hebrew-letters'],
   },
 
   // Arabic Letters categories
