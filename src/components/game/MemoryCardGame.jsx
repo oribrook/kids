@@ -137,11 +137,8 @@ function MemoryCardGame({ game, onClose }) {
           }, 800);
         }
       } else {
-        // No match - flip back after delay
+        // No match - flip back after delay (no wrong sound - just flip back silently)
         setIsLocked(true);
-        setTimeout(() => {
-          playWrong();
-        }, 400);
         setTimeout(() => {
           setFlippedIndices([]);
           setIsLocked(false);
@@ -149,7 +146,7 @@ function MemoryCardGame({ game, onClose }) {
       }
     }
   }, [isLocked, flippedIndices, matchedPairIds, cards, gridSize, moves, game.id,
-      playInstruction, stopInstruction, playCorrect, playWrong, playComplete, addScore, recordGamePlayed]);
+      playInstruction, stopInstruction, playCorrect, playComplete, addScore, recordGamePlayed]);
 
   /**
    * Handle clicking an already-matched card (replay audio)
