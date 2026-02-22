@@ -4,7 +4,7 @@
 // Player picks grid size (4x4 or 6x6), then flips cards to find matching pairs.
 // Each card flip plays the letter name audio.
 
-import { hebrewLetters } from '../hebrewLetterBank';
+import { hebrewLettersAll } from '../hebrewLetterBank';
 
 const memoryHebrewLetters = {
   id: 'memory-hebrew-letters',
@@ -19,7 +19,7 @@ const memoryHebrewLetters = {
     { size: 16, label: '4×4', pairs: 8 },
     { size: 36, label: '6×6', pairs: 18 },
   ],
-  itemPool: hebrewLetters,
+  itemPool: hebrewLettersAll, // 22 letters + 5 sofit = 27 total
   // No questions array - this game type manages its own flow
   questions: { easy: [] },
 };

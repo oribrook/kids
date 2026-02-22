@@ -1,4 +1,4 @@
-// Hebrew Letter Bank - Centralized mapping of all 22 Hebrew letters
+// Hebrew Letter Bank - Centralized mapping of all 22 Hebrew letters + 5 final forms (sofit)
 // with their display character, name (with nikud), and audio file path.
 // Reusable across memory games, quizzes, instructions, and any future features.
 
@@ -26,5 +26,17 @@ export const hebrewLetters = [
   { id: 'shin',   char: 'ש', name: 'שִׁן',     audio: '/audio/letters/he/shin.mp3' },
   { id: 'tav',    char: 'ת', name: 'תָּף',     audio: '/audio/letters/he/tav.mp3' },
 ];
+
+// Final forms (sofit) - letters that look different at the end of a word
+export const hebrewLettersSofit = [
+  { id: 'mem-sofit',   char: 'ם', name: 'מֵם סוֹפִית',    audio: '/audio/letters/he/mem-sofit.mp3' },
+  { id: 'nun-sofit',   char: 'ן', name: 'נוּן סוֹפִית',   audio: '/audio/letters/he/nun-sofit.mp3' },
+  { id: 'tsade-sofit', char: 'ץ', name: 'צָדִיק סוֹפִית', audio: '/audio/letters/he/tsade-sofit.mp3' },
+  { id: 'peh-sofit',   char: 'ף', name: 'פֵּי סוֹפִית',   audio: '/audio/letters/he/peh-sofit.mp3' },
+  { id: 'kaf-sofit',   char: 'ך', name: 'כָּף סוֹפִית',   audio: '/audio/letters/he/kaf-sofit.mp3' },
+];
+
+// All Hebrew letters including final forms
+export const hebrewLettersAll = [...hebrewLetters, ...hebrewLettersSofit];
 
 export default hebrewLetters;
