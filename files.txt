@@ -28,6 +28,7 @@ FEATURES
 - Mobile-first responsive design
 - Audio infrastructure for voice instructions
 - Background music with mute/unmute toggle
+- Memory card game (classic flip-and-match) with Hebrew letters
 
 ================================================================================
                               FILE STRUCTURE
@@ -1674,5 +1675,78 @@ Quiz structure:
   3. Which word starts with letter X? (4 word options)
 
 Quiz naming: quiz-X-Y.js (e.g., quiz-vav-yod.js)
+
+--------------------------------------------------------------------------------
+                    MEMORY CARD GAME
+--------------------------------------------------------------------------------
+
+OVERVIEW:
+    New game type: memoryCard - classic flip-and-match memory card game.
+    Hierarchy: hebrew → hebrew-memory (משחקי זיכרון) → memory-hebrew-letters (אותיות)
+    Player selects grid size (4×4 or 6×6), then flips cards to find matching pairs.
+    Each card flip plays the letter name audio (TTS).
+    Matched pairs stay face-up. Mismatches silently flip back after 1.3s.
+    Tapping an already-matched card replays its audio (educational re-listen).
+    Scoring based on move count → stars (3/2/1).
+
+GAME TYPE: memoryCard
+    - Self-contained component, bypasses the question-based GameContext flow
+    - Game.jsx detects gameType === 'memoryCard' and renders <MemoryCardGame>
+    - No questions array needed - the component manages its own state
+
+./src/data/hebrewLetterBank.js
+    Centralized Hebrew letter data bank. Reusable across memory games, quizzes,
+    instructions, and any future features.
+    Exports:
+    - hebrewLetters: Array of 22 standard Hebrew letters
+      Each: { id, char, name (with nikud), audio (path) }
+    - hebrewLettersSofit: Array of 5 final-form letters (םןץףך)
+      Names use "X סוֹפִית" pattern (e.g., "נוּן סוֹפִית")
+    - hebrewLettersAll: Combined array of all 27 letters
+
+./src/data/games/memoryHebrewLetters.js
+    Game data for Hebrew letters memory card game:
+    - id: 'memory-hebrew-letters'
+    - categoryId: 'memory-hebrew-letters'
+    - gameType: 'memoryCard'
+    - gridSizes: 4×4 (8 pairs) and 6×6 (18 pairs)
+    - itemPool: hebrewLettersAll (27 letters)
+    - Randomly picks N/2 items from pool per game session
+
+./src/components/game/MemoryCardGame.jsx + .module.css
+    Self-contained memory card game component.
+    Phases: select-size → playing → complete
+    Features:
+    - Card flip animation (CSS 3D transform with perspective)
+    - Audio plays on every card flip (letter name TTS)
+    - Input locked while two mismatched cards are showing
+    - Already-matched cards can be tapped to replay audio
+    - Stars based on moves: ratio ≤1.5 = 3★, ≤2.5 = 2★, else 1★
+    - Uses useAudio hook for playInstruction, playCorrect, playComplete
+    - Purple gradient card backs with "?" icon
+    - Green border on matched pairs
+    - Responsive: smaller cards on mobile, 6×6 hides name on small screens
+
+HEBREW LETTER-NAME AUDIO FILES (/public/audio/letters/he/):
+    27 audio files total (Hebrew TTS, he-IL-HilaNeural voice):
+
+    Standard letters (22 files):
+    - alef.mp3 (אָלֶף), bet.mp3 (בֵּת), gimel.mp3 (גִּימֶל),
+      dalet.mp3 (דָּלֶת), he.mp3 (הֵי), vav.mp3 (וָו),
+      zayin.mp3 (זָאִין), chet.mp3 (חֵת), tet.mp3 (טֶת),
+      yod.mp3 (יוּד), kaf.mp3 (כָּף), lamed.mp3 (לָמֶד),
+      mem.mp3 (מֵם), nun.mp3 (נוּן), samech.mp3 (סָמֶךְ),
+      ayin.mp3 (עַיִן), peh.mp3 (פֵּי), tsade.mp3 (צָדִיק),
+      kof.mp3 (קוּף), resh.mp3 (רֵישׁ), shin.mp3 (שִׁן), tav.mp3 (תָּף)
+
+    Final forms / sofit (5 files):
+    - mem-sofit.mp3 (מֵם סוֹפִית), nun-sofit.mp3 (נוּן סוֹפִית),
+      tsade-sofit.mp3 (צָדִיק סוֹפִית), peh-sofit.mp3 (פֵּי סוֹפִית),
+      kaf-sofit.mp3 (כָּף סוֹפִית)
+
+CATEGORIES ADDED:
+    Topic: hebrew-memory (משחקי זיכרון) under hebrew language
+    Category: memory-hebrew-letters (אותיות) under hebrew-memory topic
+    Color: #6C5CE7 (purple)
 
 ================================================================================
