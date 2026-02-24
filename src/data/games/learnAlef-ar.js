@@ -29,7 +29,7 @@ const learnAlefAr = {
         options: [
           { id: 'opt-1', image: 'word-rabbit', label: 'أرنب', isCorrect: true, optionAudio: '/audio/ar/word-arnab.mp3' },
           { id: 'opt-2', image: 'word-arye', label: 'أسد', isCorrect: true, optionAudio: '/audio/ar/word-asad.mp3' },
-          { id: 'opt-3', image: 'word-ozen', label: 'إجاص', isCorrect: true, optionAudio: '/audio/ar/word-ijas.mp3' },
+          { id: 'opt-3', image: 'word-ozen', label: 'أُذن', isCorrect: true, optionAudio: '/audio/ar/word-udhun.mp3' },
         ],
       },
       // Question 2: Select all أ letters from 3x3 grid

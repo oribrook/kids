@@ -7,7 +7,7 @@ const arabicWordBank = {
   'أ': [
     { image: 'word-rabbit', label: 'أرنب', optionAudio: '/audio/ar/word-arnab.mp3' },
     { image: 'word-arye', label: 'أسد', optionAudio: '/audio/ar/word-asad.mp3' },
-    { image: 'word-ozen', label: 'إجاص', optionAudio: '/audio/ar/word-ijas.mp3' },
+    { image: 'word-ozen', label: 'أُذن', optionAudio: '/audio/ar/word-udhun.mp3' },
   ],
   'ب': [
     { image: 'word-barvaz', label: 'بطة', optionAudio: '/audio/ar/word-batta.mp3' },
