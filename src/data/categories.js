@@ -228,6 +228,16 @@ export const categories = [
     backgroundColor: '#EDE7F6',
     games: ['memory-hebrew-letters'],
   },
+  {
+    id: 'memory-objects',
+    topicId: 'hebrew-memory',
+    name: 'מילים',
+    description: 'משחק זיכרון - חפצים חמודים',
+    icon: '🎀',
+    color: '#E84393',
+    backgroundColor: '#FDEEF4',
+    games: ['memory-objects'],
+  },
 
   // Arabic Letters categories
   {

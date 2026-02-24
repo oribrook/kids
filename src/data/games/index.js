@@ -127,6 +127,9 @@ import learnShuruk from './learnShuruk';
 // Hebrew Memory Games - Category: אותיות (memory-hebrew-letters)
 import memoryHebrewLetters from './memoryHebrewLetters';
 
+// Hebrew Memory Games - Category: מילים (memory-objects)
+import memoryObjects from './memoryObjects';
+
 // Hebrew Toddler - Category: מה שומעים? (toddler-audio)
 import audioObjects from './audioObjects';
 
@@ -271,6 +274,8 @@ export const games = {
   'learn-shuruk': learnShuruk,
   // Hebrew Memory Games - Category: אותיות
   'memory-hebrew-letters': memoryHebrewLetters,
+  // Hebrew Memory Games - Category: מילים
+  'memory-objects': memoryObjects,
   // Hebrew Toddler - Category: מה שומעים?
   'audio-objects': audioObjects,
   // English Toddler - Category: What do we hear?

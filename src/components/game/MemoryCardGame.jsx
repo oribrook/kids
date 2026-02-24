@@ -71,6 +71,9 @@ function MemoryCardGame({ game, onClose }) {
         char: item.char,
         name: item.name,
         audio: item.audio,
+        image: item.image || null,
+        letter: item.letter || null,
+        label: item.label || null,
       });
       cardPairs.push({
         cardIndex: idx * 2 + 1,
@@ -78,6 +81,9 @@ function MemoryCardGame({ game, onClose }) {
         char: item.char,
         name: item.name,
         audio: item.audio,
+        image: item.image || null,
+        letter: item.letter || null,
+        label: item.label || null,
       });
     });
 
@@ -249,7 +255,16 @@ function MemoryCardGame({ game, onClose }) {
                   <span className={styles.cardBackIcon}>?</span>
                 </div>
                 <div className={styles.cardFace}>
-                  <span className={styles.cardChar}>{card.char}</span>
+                  {card.image ? (
+                    <>
+                      <img src={card.image} alt={card.label || ''} className={styles.cardImage} draggable={false} />
+                      {card.letter && (
+                        <span className={styles.letterBadge}>{card.letter}</span>
+                      )}
+                    </>
+                  ) : (
+                    <span className={styles.cardChar}>{card.char}</span>
+                  )}
                 </div>
               </div>
             </motion.div>

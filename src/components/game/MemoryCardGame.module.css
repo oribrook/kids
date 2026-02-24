@@ -207,6 +207,31 @@
   line-height: 1;
 }
 
+.cardImage {
+  width: 75%;
+  height: 75%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.letterBadge {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #6C5CE7;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
 /* ========== Responsive ========== */
 
 /* 6x6 grid - smaller cards */
@@ -216,6 +241,14 @@
 
 .grid[style*="--grid-cols: 6"] .cardBackIcon {
   font-size: 1.4rem;
+}
+
+.grid[style*="--grid-cols: 6"] .letterBadge {
+  width: 18px;
+  height: 18px;
+  font-size: 0.6rem;
+  bottom: 2px;
+  left: 2px;
 }
 
 @media (max-width: 480px) {
@@ -242,6 +275,22 @@
 
   .grid[style*="--grid-cols: 6"] .cardBackIcon {
     font-size: 1.1rem;
+  }
+
+  .letterBadge {
+    width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
+    bottom: 3px;
+    left: 3px;
+  }
+
+  .grid[style*="--grid-cols: 6"] .letterBadge {
+    width: 15px;
+    height: 15px;
+    font-size: 0.55rem;
+    bottom: 2px;
+    left: 2px;
   }
 
   .sizeButton {
