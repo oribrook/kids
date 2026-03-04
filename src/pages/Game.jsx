@@ -15,6 +15,7 @@ import ShadowQuestion from '../components/game/ShadowQuestion';
 import TimedQuestion from '../components/game/TimedQuestion';
 import MemoryQuestion from '../components/game/MemoryQuestion';
 import MemoryCardGame from '../components/game/MemoryCardGame';
+import DrawingBoard from '../components/game/DrawingBoard';
 import HiddenLetterInstruction from '../components/game/HiddenLetterInstruction';
 import styles from './Game.module.css';
 
@@ -112,6 +113,16 @@ function Game() {
   if (game.gameType === 'memoryCard') {
     return (
       <MemoryCardGame
+        game={game}
+        onClose={() => navigate(`/category/${game.categoryId}`)}
+      />
+    );
+  }
+
+  // Drawing board - self-contained, bypasses question-based flow
+  if (game.gameType === 'drawingBoard') {
+    return (
+      <DrawingBoard
         game={game}
         onClose={() => navigate(`/category/${game.categoryId}`)}
       />

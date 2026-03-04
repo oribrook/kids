@@ -217,6 +217,18 @@ export const categories = [
     games: ['audio-objects', 'audio-objects-2', 'audio-objects-3', 'audio-objects-4'],
   },
 
+  // Hebrew Toddler - Drawing (לוח ציור)
+  {
+    id: 'toddler-drawing',
+    topicId: 'hebrew-toddler',
+    name: 'לוח ציור',
+    description: 'ציירו חופשי!',
+    icon: '🎨',
+    color: '#FF9F43',
+    backgroundColor: '#FFF3E0',
+    games: ['drawing-board'],
+  },
+
   // Hebrew Memory Games categories
   {
     id: 'memory-hebrew-letters',

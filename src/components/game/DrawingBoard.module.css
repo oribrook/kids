@@ -1,0 +1,263 @@
+/* DrawingBoard - Free-play drawing canvas for toddlers */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background: #f8f9fa;
+  overflow: hidden;
+  direction: rtl;
+}
+
+/* ========== Top Bar ========== */
+.topBar {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #FF9F43, #FFBE76);
+  gap: 10px;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.backButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: background 0.2s;
+}
+
+.backButton:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.title {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  text-align: center;
+}
+
+.topActions {
+  display: flex;
+  gap: 6px;
+}
+
+.actionButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.actionButton:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+.actionButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.actionButton.active {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* ========== Background Picker ========== */
+.bgPicker {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  gap: 8px;
+  flex-shrink: 0;
+  z-index: 3;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.bgPickerLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  margin-left: 4px;
+}
+
+.bgColorBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 3px solid #ddd;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.bgColorBtn:hover {
+  transform: scale(1.1);
+}
+
+.bgColorBtn.selectedBg {
+  border-color: #FF9F43;
+  transform: scale(1.15);
+}
+
+/* ========== Canvas ========== */
+.canvasWrapper {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+/* ========== Bottom Toolbar ========== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  background: #fff;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+  gap: 14px;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+/* Color Palette */
+.colorPalette {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex: 1;
+  justify-content: center;
+}
+
+.colorBtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.colorBtn:hover {
+  transform: scale(1.12);
+}
+
+.colorBtn.selectedColor {
+  border-color: #2D3436;
+  transform: scale(1.18);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Brush Sizes */
+.brushSizes {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.brushBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  background: #f0f0f0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.brushBtn:hover {
+  transform: scale(1.08);
+  background: #e5e5e5;
+}
+
+.brushBtn.selectedBrush {
+  border-color: #FF9F43;
+  background: #FFF3E0;
+}
+
+.brushDot {
+  border-radius: 50%;
+  transition: width 0.15s, height 0.15s, background-color 0.15s;
+}
+
+/* ========== Mobile Responsive ========== */
+@media (max-width: 480px) {
+  .topBar {
+    padding: 6px 8px;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .actionButton {
+    width: 36px;
+    height: 36px;
+    font-size: 17px;
+  }
+
+  .toolbar {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .colorBtn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brushBtn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .bgColorBtn {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 360px) {
+  .colorBtn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .brushBtn {
+    width: 34px;
+    height: 34px;
+  }
+}

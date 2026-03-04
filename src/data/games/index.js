@@ -142,6 +142,9 @@ import audioObjectsEn2 from './audioObjectsEn2';
 import audioObjectsEn3 from './audioObjectsEn3';
 import audioObjectsEn4 from './audioObjectsEn4';
 
+// Hebrew Toddler - Category: לוח ציור (toddler-drawing)
+import drawingBoard from './drawingBoard';
+
 // Numbers - Category: 12345 (numbers-12345)
 import learnOne from './learnOne';
 import learnTwo from './learnTwo';
@@ -292,6 +295,8 @@ export const games = {
   'audio-objects-en-2': audioObjectsEn2,
   'audio-objects-en-3': audioObjectsEn3,
   'audio-objects-en-4': audioObjectsEn4,
+  // Hebrew Toddler - Category: לוח ציור
+  'drawing-board': drawingBoard,
   // Numbers - Category: 12345
   'learn-one': learnOne,
   'learn-two': learnTwo,
