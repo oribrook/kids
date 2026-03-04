@@ -214,7 +214,7 @@ export const categories = [
     icon: '🔊',
     color: '#FF6B9D',
     backgroundColor: '#FFE4EC',
-    games: ['audio-objects'],
+    games: ['audio-objects', 'audio-objects-2', 'audio-objects-3', 'audio-objects-4'],
   },
 
   // Hebrew Memory Games categories
@@ -380,7 +380,7 @@ export const categories = [
     icon: '🔊',
     color: '#FF6B9D',
     backgroundColor: '#FFE4EC',
-    games: ['audio-objects-en'],
+    games: ['audio-objects-en', 'audio-objects-en-2', 'audio-objects-en-3', 'audio-objects-en-4'],
   },
   // Numbers - הכרת המספרים categories
   {

@@ -132,9 +132,15 @@ import memoryObjects from './memoryObjects';
 
 // Hebrew Toddler - Category: מה שומעים? (toddler-audio)
 import audioObjects from './audioObjects';
+import audioObjects2 from './audioObjects2';
+import audioObjects3 from './audioObjects3';
+import audioObjects4 from './audioObjects4';
 
 // English Toddler - Category: What do we hear? (toddler-audio-en)
 import audioObjectsEn from './audioObjectsEn';
+import audioObjectsEn2 from './audioObjectsEn2';
+import audioObjectsEn3 from './audioObjectsEn3';
+import audioObjectsEn4 from './audioObjectsEn4';
 
 // Numbers - Category: 12345 (numbers-12345)
 import learnOne from './learnOne';
@@ -278,8 +284,14 @@ export const games = {
   'memory-objects': memoryObjects,
   // Hebrew Toddler - Category: מה שומעים?
   'audio-objects': audioObjects,
+  'audio-objects-2': audioObjects2,
+  'audio-objects-3': audioObjects3,
+  'audio-objects-4': audioObjects4,
   // English Toddler - Category: What do we hear?
   'audio-objects-en': audioObjectsEn,
+  'audio-objects-en-2': audioObjectsEn2,
+  'audio-objects-en-3': audioObjectsEn3,
+  'audio-objects-en-4': audioObjectsEn4,
   // Numbers - Category: 12345
   'learn-one': learnOne,
   'learn-two': learnTwo,
