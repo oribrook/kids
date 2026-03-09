@@ -16,6 +16,7 @@ import TimedQuestion from '../components/game/TimedQuestion';
 import MemoryQuestion from '../components/game/MemoryQuestion';
 import MemoryCardGame from '../components/game/MemoryCardGame';
 import DrawingBoard from '../components/game/DrawingBoard';
+import MazeGame from '../components/game/MazeGame';
 import HiddenLetterInstruction from '../components/game/HiddenLetterInstruction';
 import styles from './Game.module.css';
 
@@ -123,6 +124,16 @@ function Game() {
   if (game.gameType === 'drawingBoard') {
     return (
       <DrawingBoard
+        game={game}
+        onClose={() => navigate(`/category/${game.categoryId}`)}
+      />
+    );
+  }
+
+  // Maze game - self-contained, bypasses question-based flow
+  if (game.gameType === 'mazeGame') {
+    return (
+      <MazeGame
         game={game}
         onClose={() => navigate(`/category/${game.categoryId}`)}
       />

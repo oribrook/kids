@@ -229,6 +229,18 @@ export const categories = [
     games: ['drawing-board'],
   },
 
+  // Hebrew Toddler - Maze (מבוך)
+  {
+    id: 'toddler-maze',
+    topicId: 'hebrew-toddler',
+    name: 'מבוך',
+    description: 'מצאו את הדרך!',
+    icon: '🧩',
+    color: '#6C5CE7',
+    backgroundColor: '#EDE7F6',
+    games: ['maze-game'],
+  },
+
   // Hebrew Memory Games categories
   {
     id: 'memory-hebrew-letters',

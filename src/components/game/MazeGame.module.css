@@ -1,0 +1,130 @@
+/* MazeGame - Draw-your-path maze game for toddlers */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background: #f8f9fa;
+  overflow: hidden;
+  direction: rtl;
+}
+
+/* ========== Top Bar ========== */
+.topBar {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #6C5CE7, #A29BFE);
+  gap: 10px;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.backButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: background 0.2s;
+}
+
+.backButton:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.title {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  text-align: center;
+}
+
+.topActions {
+  display: flex;
+  gap: 6px;
+}
+
+.actionButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.actionButton:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+.actionButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ========== Instruction ========== */
+.instruction {
+  text-align: center;
+  padding: 6px 12px;
+  background: #FFF9E6;
+  font-size: 16px;
+  font-weight: 600;
+  color: #5D4037;
+  flex-shrink: 0;
+  border-bottom: 1px solid #F0E68C;
+}
+
+/* ========== Canvas ========== */
+.canvasWrapper {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+  background: #FFFFFF;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+/* ========== Mobile Responsive ========== */
+@media (max-width: 480px) {
+  .topBar {
+    padding: 6px 8px;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .actionButton {
+    width: 36px;
+    height: 36px;
+    font-size: 17px;
+  }
+
+  .instruction {
+    font-size: 14px;
+    padding: 5px 8px;
+  }
+}
