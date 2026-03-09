@@ -238,7 +238,7 @@ export const categories = [
     icon: '🧩',
     color: '#6C5CE7',
     backgroundColor: '#EDE7F6',
-    games: ['maze-game'],
+    games: ['maze-game', 'maze-game-2', 'maze-game-3'],
   },
 
   // Hebrew Memory Games categories

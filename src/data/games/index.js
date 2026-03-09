@@ -147,6 +147,8 @@ import drawingBoard from './drawingBoard';
 
 // Hebrew Toddler - Category: מבוך (toddler-maze)
 import mazeGame from './mazeGame';
+import mazeGame2 from './mazeGame2';
+import mazeGame3 from './mazeGame3';
 
 // Numbers - Category: 12345 (numbers-12345)
 import learnOne from './learnOne';
@@ -302,6 +304,8 @@ export const games = {
   'drawing-board': drawingBoard,
   // Hebrew Toddler - Category: מבוך
   'maze-game': mazeGame,
+  'maze-game-2': mazeGame2,
+  'maze-game-3': mazeGame3,
   // Numbers - Category: 12345
   'learn-one': learnOne,
   'learn-two': learnTwo,

@@ -112,14 +112,17 @@ function drawMaze(ctx, grid, cols, rows, cellSize, offsetX, offsetY, wallColor, 
   ctx.fillText('⭐', exitX, exitY);
 }
 
-const MAZE_COLS = 6;
-const MAZE_ROWS = 8;
+const DEFAULT_COLS = 6;
+const DEFAULT_ROWS = 8;
 const DRAW_COLOR = '#E74C3C';
 const DRAW_WIDTH = 5;
 const WALL_COLOR = '#2D3436';
-const WALL_WIDTH = 3;
+const DEFAULT_WALL_WIDTH = 3;
 
 function MazeGame({ game, onClose }) {
+  const MAZE_COLS = game?.mazeConfig?.cols || DEFAULT_COLS;
+  const MAZE_ROWS = game?.mazeConfig?.rows || DEFAULT_ROWS;
+  const WALL_WIDTH = game?.mazeConfig?.wallWidth || DEFAULT_WALL_WIDTH;
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
   const isDrawingRef = useRef(false);
