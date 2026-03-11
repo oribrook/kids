@@ -155,21 +155,14 @@ function BalloonPop({ game, onClose }) {
       </div>
 
       {/* Balloons */}
-      {phase === 'playing' && balloons.map(balloon => {
-        const elapsed = (Date.now() - balloon.createdAt) / 1000;
-        const progress = elapsed / balloon.speed;
-        const bottomY = window.innerHeight + 60;
-        const currentY = bottomY - (bottomY + 80) * progress;
-
-        return (
+      {phase === 'playing' && balloons.map(balloon => (
           <div
             key={balloon.id}
             className={styles.balloon}
             style={{
               left: `${balloon.x}%`,
-              top: `${currentY}px`,
-              fontSize: `${balloon.size}px`,
-              transform: `translateX(${Math.sin(elapsed * 3) * balloon.wobble}px)`,
+              '--float-duration': `${balloon.speed}s`,
+              '--wobble-amount': `${balloon.wobble}px`,
             }}
             onClick={(e) => handlePop(e, balloon)}
             onTouchStart={(e) => { e.preventDefault(); handlePop(e, balloon); }}
@@ -181,8 +174,7 @@ function BalloonPop({ game, onClose }) {
               <line x1="25" y1="55" x2="25" y2="65" stroke="#999" strokeWidth="1.5" />
             </svg>
           </div>
-        );
-      })}
+      ))}
 
       {/* Pop effects */}
       {pops.map(pop => (

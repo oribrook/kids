@@ -21,7 +21,7 @@ import BrickBreaker from '../components/game/BrickBreaker';
 import TempleRun from '../components/game/TempleRun';
 import BalloonPop from '../components/game/BalloonPop';
 import SimonSays from '../components/game/SimonSays';
-import JigsawPuzzle from '../components/game/JigsawPuzzle';
+
 import SortGame from '../components/game/SortGame';
 import HiddenLetterInstruction from '../components/game/HiddenLetterInstruction';
 import styles from './Game.module.css';
@@ -186,15 +186,6 @@ function Game() {
     );
   }
 
-  // Jigsaw Puzzle - self-contained, bypasses question-based flow
-  if (game.gameType === 'jigsawPuzzle') {
-    return (
-      <JigsawPuzzle
-        game={game}
-        onClose={() => navigate(`/category/${game.categoryId}`)}
-      />
-    );
-  }
 
   // Sort Game - self-contained, bypasses question-based flow
   if (game.gameType === 'sortGame') {

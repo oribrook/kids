@@ -289,17 +289,6 @@ export const categories = [
     games: ['simon-says'],
   },
 
-  // Hebrew Toddler - Jigsaw Puzzle (פאזל)
-  {
-    id: 'jigsaw-puzzle',
-    topicId: 'hebrew-toddler',
-    name: 'פאזל',
-    description: 'סדרו את החלקים!',
-    icon: '🧩',
-    color: '#4D96FF',
-    backgroundColor: '#E3F2FD',
-    games: ['jigsaw-puzzle'],
-  },
 
   // Hebrew Toddler - Sort Game (סדרו בסדר!)
   {

@@ -162,8 +162,6 @@ import balloonPop from './balloonPop';
 // Hebrew Toddler - Category: שמעון אומר (simon-says)
 import simonSays from './simonSays';
 
-// Hebrew Toddler - Category: פאזל (jigsaw-puzzle)
-import jigsawPuzzle from './jigsawPuzzle';
 
 // Hebrew Toddler - Category: סדרו בסדר! (sort-game)
 import sortGame from './sortGame';
@@ -332,8 +330,7 @@ export const games = {
   'balloon-pop': balloonPop,
   // Hebrew Toddler - Category: שמעון אומר
   'simon-says': simonSays,
-  // Hebrew Toddler - Category: פאזל
-  'jigsaw-puzzle': jigsawPuzzle,
+
   // Hebrew Toddler - Category: סדרו בסדר!
   'sort-game': sortGame,
   // Numbers - Category: 12345
