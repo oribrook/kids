@@ -253,6 +253,18 @@ export const categories = [
     games: ['brick-breaker'],
   },
 
+  // Hebrew Toddler - Temple Run (רוץ שפנפן!)
+  {
+    id: 'temple-run',
+    topicId: 'hebrew-toddler',
+    name: 'רוץ שפנפן!',
+    description: 'אספו יהלומים והימנעו ממכשולים!',
+    icon: '🐰',
+    color: '#27AE60',
+    backgroundColor: '#D5F5E3',
+    games: ['temple-run'],
+  },
+
   // Hebrew Memory Games categories
   {
     id: 'memory-hebrew-letters',

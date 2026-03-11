@@ -18,6 +18,7 @@ import MemoryCardGame from '../components/game/MemoryCardGame';
 import DrawingBoard from '../components/game/DrawingBoard';
 import MazeGame from '../components/game/MazeGame';
 import BrickBreaker from '../components/game/BrickBreaker';
+import TempleRun from '../components/game/TempleRun';
 import HiddenLetterInstruction from '../components/game/HiddenLetterInstruction';
 import styles from './Game.module.css';
 
@@ -145,6 +146,16 @@ function Game() {
   if (game.gameType === 'brickBreaker') {
     return (
       <BrickBreaker
+        game={game}
+        onClose={() => navigate(`/category/${game.categoryId}`)}
+      />
+    );
+  }
+
+  // Temple Run - self-contained, bypasses question-based flow
+  if (game.gameType === 'templeRun') {
+    return (
+      <TempleRun
         game={game}
         onClose={() => navigate(`/category/${game.categoryId}`)}
       />

@@ -1,0 +1,294 @@
+/* TempleRun - Portrait endless runner for toddlers */
+
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Top HUD bar */
+.hud {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.closeBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s;
+}
+
+.closeBtn:active {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.scoreDisplay {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  padding: 6px 14px;
+  backdrop-filter: blur(4px);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.diamonds {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lives {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.level {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Canvas */
+.canvas {
+  display: block;
+  touch-action: none;
+}
+
+/* Control buttons at bottom */
+.controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 18vh;
+  display: flex;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.controlBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 36px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.controlBtn:active {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.controlBtnMiddle {
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Start overlay */
+.startOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 20;
+  gap: 16px;
+}
+
+.startBunny {
+  font-size: 80px;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.startText {
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  direction: rtl;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.startSubtext {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  direction: rtl;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.startBtn {
+  margin-top: 8px;
+  padding: 14px 40px;
+  border-radius: 25px;
+  border: none;
+  background: linear-gradient(135deg, #27AE60, #2ECC71);
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  direction: rtl;
+  transition: transform 0.2s;
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+}
+
+.startBtn:active {
+  transform: scale(0.95);
+}
+
+/* Level up overlay */
+.levelUpOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.levelUpText {
+  color: #FFD700;
+  font-size: 48px;
+  font-weight: bold;
+  direction: rtl;
+  text-shadow: 0 2px 16px rgba(255, 215, 0, 0.6);
+  animation: levelPop 0.5s ease-out;
+}
+
+@keyframes levelPop {
+  0% { transform: scale(0.3); opacity: 0; }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Game over overlay */
+.gameOverOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 20;
+  gap: 12px;
+}
+
+.gameOverText {
+  color: white;
+  font-size: 32px;
+  font-weight: bold;
+  direction: rtl;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.gameOverScore {
+  color: #FFD700;
+  font-size: 24px;
+  font-weight: bold;
+  direction: rtl;
+}
+
+.gameOverStars {
+  font-size: 40px;
+  display: flex;
+  gap: 8px;
+}
+
+.gameOverBtn {
+  margin-top: 8px;
+  padding: 12px 32px;
+  border-radius: 25px;
+  border: none;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #1a1a2e;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  direction: rtl;
+  transition: transform 0.2s;
+}
+
+.gameOverBtn:active {
+  transform: scale(0.95);
+}
+
+.gameOverBtnSecondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Hit flash effect */
+.hitFlash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 0, 0, 0.3);
+  z-index: 15;
+  pointer-events: none;
+  animation: flashOut 0.3s ease-out forwards;
+}
+
+@keyframes flashOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}

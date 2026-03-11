@@ -1817,4 +1817,100 @@ CATEGORY ADDED:
     Category: brick-breaker (שבירת לבנים) under hebrew-toddler topic
     Color: #E74C3C (red), Background: #FADBD8
 
+--------------------------------------------------------------------------------
+                    TEMPLE RUN GAME (רוץ שפנפן!)
+--------------------------------------------------------------------------------
+
+OVERVIEW:
+    Game type: templeRun - standalone canvas-based endless runner for toddlers.
+    Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → temple-run (רוץ שפנפן!)
+    3-lane runner: bunny runs forward, collect diamonds, avoid obstacles.
+    Portrait orientation (natural phone holding).
+    3 lives (hearts). After 3 obstacle hits → game over with score/stars.
+    5 speed levels - every 10 diamonds triggers level up with background change.
+
+GAME TYPE: templeRun
+    - Self-contained component, bypasses the question-based GameContext flow
+    - Game.jsx detects gameType === 'templeRun' and renders <TempleRun>
+    - No questions array needed - the component manages its own state via canvas
+    - Uses requestAnimationFrame game loop with canvas rendering
+
+GAME MECHANICS:
+    - 3 lanes (left, center, right). Bunny starts in center lane.
+    - Touch left/right button → bunny slides to that lane for 800ms, returns to center
+    - Touch up button → bunny jumps vertically (parabolic arc)
+    - Diamonds (💎 cyan with glow) and obstacles (🪨 dark rocks) spawn at top,
+      scroll downward toward the bunny
+    - Diamond collision → score +1, playCorrect() sound
+    - Obstacle collision → lives -1, playWrong() sound, red flash effect
+    - 55% diamonds / 45% obstacles spawn ratio
+    - Anti-overlap: won't spawn items too close in same lane
+    - Lives: 3 hearts (❤️). 0 hearts → game over
+    - Scoring: 40+ diamonds = 3★, 20+ = 2★, 5+ = 1★
+    - Score = stars × 16 (recorded via useUser.recordGamePlayed)
+
+LEVEL PROGRESSION (5 levels, every 10 diamonds):
+    Level 1: 🌳 Forest - green grass, blue sky, brown road (speed 2.5)
+    Level 2: 🏜️ Desert - sandy yellow theme (speed 3.1)
+    Level 3: 🧊 Ice - blue/white icy theme (speed 3.7)
+    Level 4: 🚀 Space - purple/dark theme (speed 4.3)
+    Level 5: 🌋 Lava - red/dark theme (speed 4.9)
+    Level up shows brief "!שלב X" flash overlay
+
+VISUALS (all canvas-drawn, no external assets):
+    - Bunny: white circle body, pink ears, black dot eyes with shine,
+      pink nose, pink cheeks. Shadow on ground during jump.
+    - Diamonds: cyan diamond shape with white inner shine and glow
+    - Obstacles: dark gray rock/mountain polygonal shape
+    - Road: colored path with white edge lines and dashed lane dividers
+      that scroll downward (simulating forward movement)
+    - Background gradient changes per level
+
+CONTROLS:
+    Bottom 18% of screen divided into 3 touch buttons:
+    - ➡️ (left side) → move right lane
+    - ⬆️ (center) → jump up
+    - ⬅️ (right side) → move left lane
+    Buttons use onTouchStart (mobile) and onMouseDown (desktop)
+
+./src/data/games/templeRun.js
+    Game data for Temple Run:
+    - id: 'temple-run'
+    - categoryId: 'temple-run'
+    - gameType: 'templeRun'
+    - questions: { easy: [] } (empty, standalone game)
+
+./src/components/game/TempleRun.jsx
+    Self-contained endless runner game component.
+    Phases: waiting → playing → levelUp → gameOver
+    Features:
+    - Full-screen canvas rendering with requestAnimationFrame loop
+    - 3-lane touch controls (left/up/right buttons)
+    - Bunny auto-returns to center lane after 800ms
+    - Jump with parabolic physics (gravity simulation)
+    - Item spawning system with anti-overlap check
+    - Level progression with background/speed changes
+    - Red flash overlay on obstacle hit
+    - Level-up flash overlay with level number
+    - Game over screen with diamond count, stars, play-again/back buttons
+    - Start screen with instructions in Hebrew
+    - Uses useAudio hook for playCorrect/playWrong/playComplete
+    - Uses useUser hook for addScore and recordGamePlayed
+
+./src/components/game/TempleRun.module.css
+    Styles for Temple Run:
+    - Fixed full-viewport container
+    - HUD bar with close button, score (diamonds + hearts + level)
+    - Control buttons at bottom (3 equal columns, 18vh height)
+    - Start overlay with bouncing bunny emoji animation
+    - Game over overlay with stars and buttons
+    - Level up overlay with pop animation
+    - Red hit flash animation (0.3s fadeout)
+    - All text in Hebrew RTL direction
+    - touch-action: none to prevent scroll interference
+
+CATEGORY ADDED:
+    Category: temple-run (רוץ שפנפן!) under hebrew-toddler topic
+    Color: #27AE60 (green), Background: #D5F5E3
+
 ================================================================================

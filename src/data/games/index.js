@@ -153,6 +153,9 @@ import mazeGame3 from './mazeGame3';
 // Hebrew Toddler - Category: שבירת לבנים (brick-breaker)
 import brickBreaker from './brickBreaker';
 
+// Hebrew Toddler - Category: רוץ שפנפן! (temple-run)
+import templeRun from './templeRun';
+
 // Numbers - Category: 12345 (numbers-12345)
 import learnOne from './learnOne';
 import learnTwo from './learnTwo';
@@ -311,6 +314,8 @@ export const games = {
   'maze-game-3': mazeGame3,
   // Hebrew Toddler - Category: שבירת לבנים
   'brick-breaker': brickBreaker,
+  // Hebrew Toddler - Category: רוץ שפנפן!
+  'temple-run': templeRun,
   // Numbers - Category: 12345
   'learn-one': learnOne,
   'learn-two': learnTwo,
