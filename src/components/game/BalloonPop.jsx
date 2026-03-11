@@ -15,38 +15,13 @@ function BalloonPop({ game, onClose }) {
   const [phase, setPhase] = useState('waiting'); // waiting | playing | ended
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
+  const [balloons, setBalloons] = useState([]);
   const [pops, setPops] = useState([]);
   const [stars, setStars] = useState(0);
-  const [, forceRender] = useState(0);
   const balloonIdRef = useRef(0);
-  const balloonsRef = useRef([]);
-  const rafRef = useRef(null);
 
   const { addScore, recordGamePlayed } = useUser();
   const { playCorrect, playComplete } = useAudio();
-
-  // Animation loop - runs every frame for smooth movement
-  useEffect(() => {
-    if (phase !== 'playing') return;
-
-    const animate = () => {
-      const now = Date.now();
-      let changed = false;
-      const before = balloonsRef.current.length;
-      balloonsRef.current = balloonsRef.current.filter(b => {
-        const elapsed = (now - b.createdAt) / 1000;
-        return elapsed < b.speed + 0.5;
-      });
-      if (balloonsRef.current.length !== before) changed = true;
-      if (changed) forceRender(v => v + 1);
-      rafRef.current = requestAnimationFrame(animate);
-    };
-    rafRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [phase]);
 
   // Timer countdown
   useEffect(() => {
@@ -83,16 +58,18 @@ function BalloonPop({ game, onClose }) {
 
     const spawner = setInterval(() => {
       const id = balloonIdRef.current++;
-      balloonsRef.current = [...balloonsRef.current, {
-        id,
-        x: 10 + Math.random() * 80,
-        size: 50 + Math.random() * 30,
-        speed: 2.5 + Math.random() * 2,
-        color: COLORS[Math.floor(Math.random() * COLORS.length)],
-        wobble: Math.random() * 20 - 10,
-        createdAt: Date.now(),
-      }];
-      forceRender(v => v + 1);
+      const x = 10 + Math.random() * 80;
+      const size = 50 + Math.random() * 30;
+      const speed = 2.5 + Math.random() * 2; // seconds to float up
+      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+      const wobble = (Math.random() * 20 - 10).toFixed(1);
+
+      setBalloons(prev => [...prev, { id, x, size, speed, color, wobble }]);
+
+      // Auto-remove after animation ends
+      setTimeout(() => {
+        setBalloons(prev => prev.filter(b => b.id !== id));
+      }, speed * 1000 + 500);
     }, SPAWN_INTERVAL);
 
     return () => clearInterval(spawner);
@@ -116,7 +93,7 @@ function BalloonPop({ game, onClose }) {
       y: e.clientY,
     }]);
 
-    balloonsRef.current = balloonsRef.current.filter(b => b.id !== balloon.id);
+    setBalloons(prev => prev.filter(b => b.id !== balloon.id));
     setScore(prev => prev + 1);
     playCorrect();
   }, [playCorrect]);
@@ -125,7 +102,7 @@ function BalloonPop({ game, onClose }) {
     setPhase('playing');
     setScore(0);
     setTimeLeft(GAME_DURATION);
-    balloonsRef.current = [];
+    setBalloons([]);
     balloonIdRef.current = 0;
   };
 
@@ -133,12 +110,25 @@ function BalloonPop({ game, onClose }) {
     setPhase('waiting');
     setScore(0);
     setTimeLeft(GAME_DURATION);
-    balloonsRef.current = [];
+    setBalloons([]);
     setPops([]);
   };
 
   return (
     <div className={styles.container}>
+      {/* Global keyframes - injected here to avoid CSS Modules mangling */}
+      <style>{`
+        @keyframes balloonFloatUp {
+          from { transform: translateY(0); }
+          to { transform: translateY(calc(-100vh - 160px)); }
+        }
+        @keyframes balloonWobble {
+          0%, 100% { margin-left: 0; }
+          25% { margin-left: var(--wobble); }
+          75% { margin-left: calc(var(--wobble) * -1); }
+        }
+      `}</style>
+
       {/* Clouds decoration */}
       <div className={styles.cloud} style={{ top: '10%', animationDelay: '0s' }}>☁️</div>
       <div className={styles.cloud} style={{ top: '25%', animationDelay: '-7s' }}>☁️</div>
@@ -156,33 +146,26 @@ function BalloonPop({ game, onClose }) {
       </div>
 
       {/* Balloons */}
-      {phase === 'playing' && balloonsRef.current.map(balloon => {
-        const elapsed = (Date.now() - balloon.createdAt) / 1000;
-        const progress = Math.min(elapsed / balloon.speed, 1);
-        const totalDistance = window.innerHeight + 140;
-        const translateY = -progress * totalDistance;
-        const wobbleX = Math.sin(elapsed * 3) * balloon.wobble;
-
-        return (
-          <div
-            key={balloon.id}
-            className={styles.balloon}
-            style={{
-              left: `${balloon.x}%`,
-              transform: `translateY(${translateY}px) translateX(${wobbleX}px)`,
-            }}
-            onClick={(e) => handlePop(e, balloon)}
-            onTouchStart={(e) => { e.preventDefault(); handlePop(e, balloon); }}
-          >
-            <svg width={balloon.size} height={balloon.size * 1.3} viewBox="0 0 50 65">
-              <ellipse cx="25" cy="25" rx="22" ry="25" fill={balloon.color} />
-              <ellipse cx="18" cy="18" rx="6" ry="8" fill="rgba(255,255,255,0.3)" transform="rotate(-20 18 18)" />
-              <polygon points="25,50 22,55 28,55" fill={balloon.color} />
-              <line x1="25" y1="55" x2="25" y2="65" stroke="#999" strokeWidth="1.5" />
-            </svg>
-          </div>
-        );
-      })}
+      {phase === 'playing' && balloons.map(balloon => (
+        <div
+          key={balloon.id}
+          className={styles.balloon}
+          style={{
+            left: `${balloon.x}%`,
+            '--wobble': `${balloon.wobble}px`,
+            animation: `balloonFloatUp ${balloon.speed}s linear forwards, balloonWobble ${balloon.speed / 2}s ease-in-out infinite`,
+          }}
+          onClick={(e) => handlePop(e, balloon)}
+          onTouchStart={(e) => { e.preventDefault(); handlePop(e, balloon); }}
+        >
+          <svg width={balloon.size} height={balloon.size * 1.3} viewBox="0 0 50 65">
+            <ellipse cx="25" cy="25" rx="22" ry="25" fill={balloon.color} />
+            <ellipse cx="18" cy="18" rx="6" ry="8" fill="rgba(255,255,255,0.3)" transform="rotate(-20 18 18)" />
+            <polygon points="25,50 22,55 28,55" fill={balloon.color} />
+            <line x1="25" y1="55" x2="25" y2="65" stroke="#999" strokeWidth="1.5" />
+          </svg>
+        </div>
+      ))}
 
       {/* Pop effects */}
       {pops.map(pop => (
