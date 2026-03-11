@@ -88,42 +88,6 @@
   touch-action: none;
 }
 
-/* Jump button at bottom center */
-.controls {
-  position: absolute;
-  bottom: 12px;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  z-index: 10;
-  pointer-events: none;
-}
-
-.jumpBtn {
-  pointer-events: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 12px 32px;
-  border-radius: 25px;
-  border: none;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(4px);
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 22px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.15s, transform 0.1s;
-  direction: rtl;
-}
-
-.jumpBtn:active {
-  background: rgba(255, 255, 255, 0.4);
-  transform: scale(0.95);
-}
-
 /* Start overlay */
 .startOverlay {
   position: absolute;

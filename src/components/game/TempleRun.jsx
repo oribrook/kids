@@ -492,7 +492,7 @@ function TempleRun({ game, onClose }) {
     }
   }, [phase]);
 
-  // Lane tap handler - tap left/right of bunny to move one lane in that direction
+  // Lane tap handler - tap a lane to move one step toward it, tap current lane to jump
   const handleLaneTap = useCallback((e) => {
     const gs = gsRef.current;
     if (!gs || phase !== 'playing') return;
@@ -509,15 +509,21 @@ function TempleRun({ game, onClose }) {
     }
     const tapX = clientX - rect.left;
 
-    // Use bunny's current actual X position to determine direction
-    // Tap left of bunny = move one lane left, tap right = move one lane right
+    // Determine which lane was tapped
+    const tappedLane = Math.min(LANE_COUNT - 1, Math.max(0, Math.floor(tapX / gs.laneW)));
     const currentLane = gs.bunny.targetLane;
-    if (tapX < gs.bunny.x && currentLane > 0) {
+
+    if (tappedLane === currentLane) {
+      // Tap on same lane = jump
+      jumpBunny();
+    } else if (tappedLane < currentLane) {
+      // Tapped a lane to the left - move one lane left (never skip)
       gs.bunny.targetLane = currentLane - 1;
-    } else if (tapX > gs.bunny.x && currentLane < LANE_COUNT - 1) {
+    } else {
+      // Tapped a lane to the right - move one lane right (never skip)
       gs.bunny.targetLane = currentLane + 1;
     }
-  }, [phase]);
+  }, [phase, jumpBunny]);
 
   // Start game
   const handleStart = useCallback(() => {
@@ -573,19 +579,6 @@ function TempleRun({ game, onClose }) {
         </div>
       )}
 
-      {/* Jump button */}
-      {phase === 'playing' && (
-        <div className={styles.controls}>
-          <button
-            className={styles.jumpBtn}
-            onTouchStart={(e) => { e.preventDefault(); jumpBunny(); }}
-            onMouseDown={() => jumpBunny()}
-          >
-            ⬆️ קפיצה
-          </button>
-        </div>
-      )}
-
       {/* Start overlay */}
       {phase === 'waiting' && (
         <div className={styles.startOverlay}>
@@ -595,7 +588,8 @@ function TempleRun({ game, onClose }) {
             אספו 💎 יהלומים<br />
             הימנעו מ-🪨 מכשולים<br />
             קפצו מעל 🚧 מחסומים<br />
-            לחצו על הנתיב כדי לזוז, ⬆️ לקפוץ
+            לחצו על נתיב אחר כדי לזוז<br />
+            לחצו על הנתיב שלכם כדי לקפוץ
           </div>
           <button className={styles.startBtn} onClick={handleStart}>!בואו נרוץ 🏃</button>
         </div>
