@@ -482,27 +482,44 @@ function TempleRun({ game, onClose }) {
 
   }, []);
 
-  // Controls - bunny stays in lane until user manually changes
-  const moveBunny = useCallback((direction) => {
+  // Jump control
+  const jumpBunny = useCallback(() => {
+    const gs = gsRef.current;
+    if (!gs || phase !== 'playing') return;
+    if (!gs.bunny.isJumping) {
+      gs.bunny.isJumping = true;
+      gs.bunny.jumpVel = -12;
+    }
+  }, [phase]);
+
+  // Lane tap handler - tap on a lane to move toward it (one lane at a time)
+  const handleLaneTap = useCallback((e) => {
     const gs = gsRef.current;
     if (!gs || phase !== 'playing') return;
 
-    if (direction === 'left') {
-      // Move one lane to the left (or stay if already at leftmost)
-      if (gs.bunny.targetLane > 0) {
-        gs.bunny.targetLane = gs.bunny.targetLane - 1;
-      }
-    } else if (direction === 'right') {
-      // Move one lane to the right (or stay if already at rightmost)
-      if (gs.bunny.targetLane < LANE_COUNT - 1) {
-        gs.bunny.targetLane = gs.bunny.targetLane + 1;
-      }
-    } else if (direction === 'up') {
-      if (!gs.bunny.isJumping) {
-        gs.bunny.isJumping = true;
-        gs.bunny.jumpVel = -12;
-      }
+    // Get tap X position relative to canvas
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    let clientX;
+    if (e.touches && e.touches.length > 0) {
+      clientX = e.touches[0].clientX;
+    } else {
+      clientX = e.clientX;
     }
+    const tapX = clientX - rect.left;
+
+    // Determine which lane was tapped
+    const tappedLane = Math.floor(tapX / gs.laneW);
+    const clampedLane = Math.max(0, Math.min(LANE_COUNT - 1, tappedLane));
+
+    // Move only one lane at a time toward the tapped lane
+    if (clampedLane < gs.bunny.targetLane) {
+      gs.bunny.targetLane = gs.bunny.targetLane - 1;
+    } else if (clampedLane > gs.bunny.targetLane) {
+      gs.bunny.targetLane = gs.bunny.targetLane + 1;
+    }
+    // If tapped same lane, do nothing
   }, [phase]);
 
   // Start game
@@ -525,8 +542,13 @@ function TempleRun({ game, onClose }) {
 
   return (
     <div className={styles.container}>
-      {/* Canvas */}
-      <canvas ref={canvasRef} className={styles.canvas} />
+      {/* Canvas - tap on lanes to move */}
+      <canvas
+        ref={canvasRef}
+        className={styles.canvas}
+        onTouchStart={(e) => { e.preventDefault(); handleLaneTap(e); }}
+        onMouseDown={(e) => handleLaneTap(e)}
+      />
 
       {/* HUD */}
       <div className={styles.hud}>
@@ -554,29 +576,15 @@ function TempleRun({ game, onClose }) {
         </div>
       )}
 
-      {/* Control buttons */}
+      {/* Jump button */}
       {phase === 'playing' && (
         <div className={styles.controls}>
           <button
-            className={styles.controlBtn}
-            onTouchStart={(e) => { e.preventDefault(); moveBunny('left'); }}
-            onMouseDown={() => moveBunny('left')}
+            className={styles.jumpBtn}
+            onTouchStart={(e) => { e.preventDefault(); jumpBunny(); }}
+            onMouseDown={() => jumpBunny()}
           >
-            ⬅️
-          </button>
-          <button
-            className={`${styles.controlBtn} ${styles.controlBtnMiddle}`}
-            onTouchStart={(e) => { e.preventDefault(); moveBunny('up'); }}
-            onMouseDown={() => moveBunny('up')}
-          >
-            ⬆️
-          </button>
-          <button
-            className={styles.controlBtn}
-            onTouchStart={(e) => { e.preventDefault(); moveBunny('right'); }}
-            onMouseDown={() => moveBunny('right')}
-          >
-            ➡️
+            ⬆️ קפיצה
           </button>
         </div>
       )}
@@ -590,7 +598,7 @@ function TempleRun({ game, onClose }) {
             אספו 💎 יהלומים<br />
             הימנעו מ-🪨 מכשולים<br />
             קפצו מעל 🚧 מחסומים<br />
-            לחצו ⬅️ ➡️ לזוז, ⬆️ לקפוץ
+            לחצו על הנתיב כדי לזוז, ⬆️ לקפוץ
           </div>
           <button className={styles.startBtn} onClick={handleStart}>!בואו נרוץ 🏃</button>
         </div>

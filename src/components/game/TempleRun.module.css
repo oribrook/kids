@@ -88,40 +88,40 @@
   touch-action: none;
 }
 
-/* Control buttons at bottom */
+/* Jump button at bottom center */
 .controls {
   position: absolute;
-  bottom: 0;
+  bottom: 12px;
   left: 0;
   right: 0;
-  height: 18vh;
   display: flex;
-  direction: ltr;
+  justify-content: center;
   z-index: 10;
-  pointer-events: auto;
+  pointer-events: none;
 }
 
-.controlBtn {
-  flex: 1;
+.jumpBtn {
+  pointer-events: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.08);
+  gap: 6px;
+  padding: 12px 32px;
+  border-radius: 25px;
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 36px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 22px;
+  font-weight: bold;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, transform 0.1s;
+  direction: rtl;
 }
 
-.controlBtn:active {
-  background: rgba(255, 255, 255, 0.25);
-}
-
-.controlBtnMiddle {
-  border-left: 1px solid rgba(255, 255, 255, 0.15);
-  border-right: 1px solid rgba(255, 255, 255, 0.15);
+.jumpBtn:active {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0.95);
 }
 
 /* Start overlay */
