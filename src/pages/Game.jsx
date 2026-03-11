@@ -19,6 +19,10 @@ import DrawingBoard from '../components/game/DrawingBoard';
 import MazeGame from '../components/game/MazeGame';
 import BrickBreaker from '../components/game/BrickBreaker';
 import TempleRun from '../components/game/TempleRun';
+import BalloonPop from '../components/game/BalloonPop';
+import SimonSays from '../components/game/SimonSays';
+import JigsawPuzzle from '../components/game/JigsawPuzzle';
+import SortGame from '../components/game/SortGame';
 import HiddenLetterInstruction from '../components/game/HiddenLetterInstruction';
 import styles from './Game.module.css';
 
@@ -156,6 +160,46 @@ function Game() {
   if (game.gameType === 'templeRun') {
     return (
       <TempleRun
+        game={game}
+        onClose={() => navigate(`/category/${game.categoryId}`)}
+      />
+    );
+  }
+
+  // Balloon Pop - self-contained, bypasses question-based flow
+  if (game.gameType === 'balloonPop') {
+    return (
+      <BalloonPop
+        game={game}
+        onClose={() => navigate(`/category/${game.categoryId}`)}
+      />
+    );
+  }
+
+  // Simon Says - self-contained, bypasses question-based flow
+  if (game.gameType === 'simonSays') {
+    return (
+      <SimonSays
+        game={game}
+        onClose={() => navigate(`/category/${game.categoryId}`)}
+      />
+    );
+  }
+
+  // Jigsaw Puzzle - self-contained, bypasses question-based flow
+  if (game.gameType === 'jigsawPuzzle') {
+    return (
+      <JigsawPuzzle
+        game={game}
+        onClose={() => navigate(`/category/${game.categoryId}`)}
+      />
+    );
+  }
+
+  // Sort Game - self-contained, bypasses question-based flow
+  if (game.gameType === 'sortGame') {
+    return (
+      <SortGame
         game={game}
         onClose={() => navigate(`/category/${game.categoryId}`)}
       />

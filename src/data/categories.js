@@ -265,6 +265,54 @@ export const categories = [
     games: ['temple-run'],
   },
 
+  // Hebrew Toddler - Balloon Pop (פוצצו בלונים!)
+  {
+    id: 'balloon-pop',
+    topicId: 'hebrew-toddler',
+    name: 'פוצצו בלונים!',
+    description: 'לחצו על הבלונים לפני שהם בורחים!',
+    icon: '🎈',
+    color: '#FF6B6B',
+    backgroundColor: '#FFE4E4',
+    games: ['balloon-pop'],
+  },
+
+  // Hebrew Toddler - Simon Says (שמעון אומר)
+  {
+    id: 'simon-says',
+    topicId: 'hebrew-toddler',
+    name: 'שמעון אומר',
+    description: 'זכרו את סדר הצבעים!',
+    icon: '🔴',
+    color: '#6C5CE7',
+    backgroundColor: '#EDE7F6',
+    games: ['simon-says'],
+  },
+
+  // Hebrew Toddler - Jigsaw Puzzle (פאזל)
+  {
+    id: 'jigsaw-puzzle',
+    topicId: 'hebrew-toddler',
+    name: 'פאזל',
+    description: 'סדרו את החלקים!',
+    icon: '🧩',
+    color: '#4D96FF',
+    backgroundColor: '#E3F2FD',
+    games: ['jigsaw-puzzle'],
+  },
+
+  // Hebrew Toddler - Sort Game (סדרו בסדר!)
+  {
+    id: 'sort-game',
+    topicId: 'hebrew-toddler',
+    name: 'סדרו בסדר!',
+    description: 'סדרו מספרים ואותיות!',
+    icon: '🔢',
+    color: '#764BA2',
+    backgroundColor: '#F3E5F5',
+    games: ['sort-game'],
+  },
+
   // Hebrew Memory Games categories
   {
     id: 'memory-hebrew-letters',

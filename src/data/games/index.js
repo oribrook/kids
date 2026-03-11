@@ -156,6 +156,18 @@ import brickBreaker from './brickBreaker';
 // Hebrew Toddler - Category: רוץ שפנפן! (temple-run)
 import templeRun from './templeRun';
 
+// Hebrew Toddler - Category: פוצצו בלונים! (balloon-pop)
+import balloonPop from './balloonPop';
+
+// Hebrew Toddler - Category: שמעון אומר (simon-says)
+import simonSays from './simonSays';
+
+// Hebrew Toddler - Category: פאזל (jigsaw-puzzle)
+import jigsawPuzzle from './jigsawPuzzle';
+
+// Hebrew Toddler - Category: סדרו בסדר! (sort-game)
+import sortGame from './sortGame';
+
 // Numbers - Category: 12345 (numbers-12345)
 import learnOne from './learnOne';
 import learnTwo from './learnTwo';
@@ -316,6 +328,14 @@ export const games = {
   'brick-breaker': brickBreaker,
   // Hebrew Toddler - Category: רוץ שפנפן!
   'temple-run': templeRun,
+  // Hebrew Toddler - Category: פוצצו בלונים!
+  'balloon-pop': balloonPop,
+  // Hebrew Toddler - Category: שמעון אומר
+  'simon-says': simonSays,
+  // Hebrew Toddler - Category: פאזל
+  'jigsaw-puzzle': jigsawPuzzle,
+  // Hebrew Toddler - Category: סדרו בסדר!
+  'sort-game': sortGame,
   // Numbers - Category: 12345
   'learn-one': learnOne,
   'learn-two': learnTwo,
