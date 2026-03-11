@@ -223,6 +223,17 @@ ENTRY POINTS
     - numbers-10-20: "10-20" - Numbers 10 to 20
     - numbers-20-100: "20-100" - Numbers 20 to 100
 
+    Hebrew Toddler (לגיל הרך):
+    - toddler-audio: "מה שומעים?" - Audio object recognition (4 levels)
+    - toddler-drawing: "לוח ציור" - Free drawing board
+    - toddler-maze: "מבוך" - Maze games (3 levels)
+    - brick-breaker: "שבירת לבנים" - Breakout-style arcade game
+    - temple-run: "רוץ שפנפן!" - Endless runner game
+    - balloon-pop: "פוצצו בלונים!" - Timed balloon popping game
+    - simon-says: "שמעון אומר" - Color sequence memory game
+    - jigsaw-puzzle: "פאזל" - Emoji jigsaw puzzles (2x2 and 3x3)
+    - sort-game: "סדרו בסדר!" - Sort numbers/Hebrew letters by order
+
     Arabic:
     - arabic-alef-jim: "أبتثج" - Letters أ through ج
     - arabic-ha-ra: "حخدذر" - Letters ح through ر
@@ -1946,5 +1957,183 @@ GAME TYPE: mazeGame
 
 DATA FILES:
     ./src/data/games/mazeGame.js, mazeGame2.js, mazeGame3.js
+
+GAME TYPE: balloonPop
+    - Self-contained component, bypasses the question-based GameContext flow
+    - Game.jsx detects gameType === 'balloonPop' and renders <BalloonPop>
+    - No questions array needed - the component manages its own state
+    - 30-second timed game: colorful SVG balloons float upward, tap to pop
+    - Balloons spawn every 800ms with random color, size, speed, and wobble
+    - SVG-rendered balloons (ellipse + shine + string) in 8 colors
+    - Score: count of popped balloons. Stars: 25+=3, 15+=2, else 1
+    - Pop effect animation (💥 emoji scales up and fades)
+    - Sky background with drifting cloud decorations
+    - Phases: waiting (start screen) → playing (timer + balloons) → ended (score)
+
+    Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → balloon-pop (פוצצו בלונים!)
+
+./src/data/games/balloonPop.js
+    Game definition:
+    - id: 'balloon-pop'
+    - categoryId: 'balloon-pop'
+    - gameType: 'balloonPop'
+    - icon: '🎈'
+
+./src/components/game/BalloonPop.jsx
+    Self-contained balloon pop game component.
+    Key features:
+    - SVG balloon rendering with random colors and wobble animation
+    - Timer countdown (30s), spawner interval (800ms)
+    - Touch + click support for popping
+    - Auto-cleanup of off-screen balloons
+    - useUser for score/recordGamePlayed, useAudio for sound effects
+
+./src/components/game/BalloonPop.module.css
+    Styles for Balloon Pop:
+    - Sky gradient background (#87CEEB → #E0F7FA → #B2EBF2)
+    - Balloon positioning and pop animation
+    - Cloud drift animation (20s linear infinite)
+    - Start/end overlays with gradient buttons
+
+CATEGORY ADDED:
+    Category: balloon-pop (פוצצו בלונים!) under hebrew-toddler topic
+    Color: #FF6B6B (coral red), Background: #FFE4E4
+
+GAME TYPE: simonSays
+    - Self-contained component, bypasses the question-based GameContext flow
+    - Game.jsx detects gameType === 'simonSays' and renders <SimonSays>
+    - No questions array needed - the component manages its own state
+    - Classic color sequence memory game with 4 colored buttons
+    - Computer shows a growing sequence of colors, player repeats it
+    - Audio tones via Web Audio API (C4, E4, G4, C5 frequencies)
+    - Buttons flash/glow when active (showing or player pressing)
+    - Stars: 8+ rounds=3, 4+=2, 1+=1
+    - Phases: waiting → showing (computer plays) → playerTurn → ended
+
+    Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → simon-says (שמעון אומר)
+
+./src/data/games/simonSays.js
+    Game definition:
+    - id: 'simon-says'
+    - categoryId: 'simon-says'
+    - gameType: 'simonSays'
+    - icon: '🔴'
+
+./src/components/game/SimonSays.jsx
+    Self-contained Simon Says game component.
+    Key features:
+    - 4 colored buttons: Red (#FF6B6B), Blue (#4D96FF), Green (#6BCB77), Yellow (#FFD93D)
+    - playTone() function using Web Audio API oscillator
+    - Async showSequence() with delays between color flashes
+    - Round tracking and best round display
+    - useUser for score/recordGamePlayed, useAudio for correct/wrong/complete
+
+./src/components/game/SimonSays.module.css
+    Styles for Simon Says:
+    - Dark gradient background (#1a1a2e → #16213e → #0f3460)
+    - 2x2 button grid with rounded corners and shine overlay
+    - Active state: brightness(1.5), white border, glow box-shadow
+    - Start/end overlays
+
+CATEGORY ADDED:
+    Category: simon-says (שמעון אומר) under hebrew-toddler topic
+    Color: #6C5CE7 (purple), Background: #EDE7F6
+
+GAME TYPE: jigsawPuzzle
+    - Self-contained component, bypasses the question-based GameContext flow
+    - Game.jsx detects gameType === 'jigsawPuzzle' and renders <JigsawPuzzle>
+    - No questions array needed - the component manages its own state
+    - Emoji-based jigsaw puzzle: select a piece from tray, click correct grid slot
+    - 6 puzzles: חיות (2x2), פירות (2x2), כלי תחבורה (2x2),
+      אוכל (3x3), טבע (3x3), חיות ים (3x3)
+    - Tap piece to select (gold highlight), tap slot to place
+    - Wrong placement plays wrong sound, correct plays correct sound
+    - Stars based on wrong attempts: 0=3, ≤3=2, else 1
+    - "Next puzzle" flow: complete one → next → etc.
+    - Phases: waiting → playing → complete (per puzzle, with next button)
+
+    Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → jigsaw-puzzle (פאזל)
+
+./src/data/games/jigsawPuzzle.js
+    Game definition:
+    - id: 'jigsaw-puzzle'
+    - categoryId: 'jigsaw-puzzle'
+    - gameType: 'jigsawPuzzle'
+    - icon: '🧩'
+
+./src/components/game/JigsawPuzzle.jsx
+    Self-contained jigsaw puzzle game component.
+    Key features:
+    - PUZZLES array with 6 themed emoji sets (2x2 and 3x3 grids)
+    - Selected piece highlighting, slot hover highlighting
+    - correctIdx matching for placement validation
+    - Multi-puzzle progression with completion tracking
+
+./src/components/game/JigsawPuzzle.module.css
+    Styles for Jigsaw Puzzle:
+    - Light gradient background (#F8F9FA → #E9ECEF → #DEE2E6)
+    - Puzzle board with dashed-border slots and filled state
+    - Piece tray with white cards and blue borders
+    - Selected piece: gold border, yellow background, scale(1.1)
+    - piecePlace animation on correct placement
+
+CATEGORY ADDED:
+    Category: jigsaw-puzzle (פאזל) under hebrew-toddler topic
+    Color: #4D96FF (blue), Background: #E3F2FD
+
+GAME TYPE: sortGame
+    - Self-contained component, bypasses the question-based GameContext flow
+    - Game.jsx detects gameType === 'sortGame' and renders <SortGame>
+    - No questions array needed - the component manages its own state
+    - Sorting game with two modes: Numbers and Hebrew Letters
+    - Select an item from the bottom tray, click the next empty slot in drop zone
+    - Items must be placed in correct ascending order (left to right)
+    - 3 rounds per game, stars based on total wrong attempts: 0=3, ≤5=2, else 1
+
+    NUMBER DIFFICULTIES:
+    - Easy (🐣): Sort 1,2,3,4,5
+    - Medium (🐥): 5 random numbers from 1-10 (with gaps, e.g. 1,5,7,8,10)
+    - Hard (🐔): 5 from single digits (1-9) + round tens (10,20,...100)
+    - Very Hard (🦅): 5 random numbers from 1-100
+
+    LETTER DIFFICULTIES (Hebrew only):
+    - Easy (🐣): First 5 letters א-ה
+    - Medium (🐥): 5 from first 10 letters (with gaps)
+    - Hard (🐔): 5 from first 15 letters
+    - Very Hard (🦅): 5 from all 22 letters
+
+    Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → sort-game (סדרו בסדר!)
+
+./src/data/games/sortGame.js
+    Game definition:
+    - id: 'sort-game'
+    - categoryId: 'sort-game'
+    - gameType: 'sortGame'
+    - icon: '🔢'
+
+./src/components/game/SortGame.jsx
+    Self-contained sort game component.
+    Key features:
+    - Mode selector (numbers/letters) and difficulty selector on start screen
+    - generateItems() function creates items based on mode + difficulty
+    - HEBREW_LETTERS array (22 letters in order) for letter mode
+    - Drop zone with numbered dashed slots, items area with white cards
+    - Selected item highlighting, next-slot highlighting
+    - Wrong attempt shake animation, 3-round progression
+    - useUser for score/recordGamePlayed, useAudio for sound effects
+
+./src/components/game/SortGame.module.css
+    Styles for Sort Game:
+    - Purple gradient background (#667eea → #764ba2)
+    - Drop zone with dashed border slots and filled state
+    - Sort items: white cards with blue borders
+    - Mode selector buttons with gold active highlight
+    - Difficulty buttons row with emoji labels
+    - Shake animation for wrong attempts
+    - Start/end overlays
+
+CATEGORY ADDED:
+    Category: sort-game (סדרו בסדר!) under hebrew-toddler topic
+    Color: #764BA2 (purple), Background: #F3E5F5
 
 ================================================================================
