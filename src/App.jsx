@@ -4,6 +4,7 @@ import { GameProvider } from './context/GameContext';
 import { BackgroundMusicProvider } from './context/BackgroundMusicContext';
 import { Onboarding, Home, Language, Topic, Category, Game } from './pages';
 import { MusicToggle } from './components/common';
+import { usePageTracking } from './hooks/usePageTracking';
 import './index.css';
 
 // Protected route wrapper - redirects to onboarding if not completed
@@ -29,6 +30,8 @@ function OnboardingRoute() {
 }
 
 function AppRoutes() {
+  usePageTracking();
+
   return (
     <Routes>
       <Route path="/" element={<OnboardingRoute />} />
