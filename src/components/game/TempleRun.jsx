@@ -25,6 +25,7 @@ function TempleRun({ game, onClose }) {
   const animFrameRef = useRef(null);
   const gsRef = useRef(null);
   const lastSpawnRef = useRef(0);
+  const lastTapRef = useRef(0); // debounce touch+mouse double-fire
 
   const [phase, setPhase] = useState('waiting'); // waiting | playing | levelUp | gameOver
   const [diamonds, setDiamonds] = useState(0);
@@ -494,6 +495,11 @@ function TempleRun({ game, onClose }) {
 
   // Lane tap handler - tap a lane to move one step toward it, tap current lane to jump
   const handleLaneTap = useCallback((e) => {
+    // Debounce: prevent touch+mouse double-fire (within 100ms)
+    const now = Date.now();
+    if (now - lastTapRef.current < 100) return;
+    lastTapRef.current = now;
+
     const gs = gsRef.current;
     if (!gs || phase !== 'playing') return;
 
@@ -509,8 +515,12 @@ function TempleRun({ game, onClose }) {
     }
     const tapX = clientX - rect.left;
 
-    // Determine which lane was tapped
-    const tappedLane = Math.min(LANE_COUNT - 1, Math.max(0, Math.floor(tapX / gs.laneW)));
+    // Calculate tapped lane based on road boundaries (road starts at 8%, width 84%)
+    const roadX = gs.w * 0.08;
+    const roadW = gs.w * 0.84;
+    const roadTapX = Math.max(0, Math.min(tapX - roadX, roadW));
+    const laneTapW = roadW / LANE_COUNT;
+    const tappedLane = Math.min(LANE_COUNT - 1, Math.floor(roadTapX / laneTapW));
     const currentLane = gs.bunny.targetLane;
 
     if (tappedLane === currentLane) {
