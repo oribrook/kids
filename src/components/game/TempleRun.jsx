@@ -492,7 +492,7 @@ function TempleRun({ game, onClose }) {
     }
   }, [phase]);
 
-  // Lane tap handler - tap on a lane to move toward it (one lane at a time)
+  // Lane tap handler - tap left/right of bunny to move one lane in that direction
   const handleLaneTap = useCallback((e) => {
     const gs = gsRef.current;
     if (!gs || phase !== 'playing') return;
@@ -509,17 +509,14 @@ function TempleRun({ game, onClose }) {
     }
     const tapX = clientX - rect.left;
 
-    // Determine which lane was tapped
-    const tappedLane = Math.floor(tapX / gs.laneW);
-    const clampedLane = Math.max(0, Math.min(LANE_COUNT - 1, tappedLane));
-
-    // Move only one lane at a time toward the tapped lane
-    if (clampedLane < gs.bunny.targetLane) {
-      gs.bunny.targetLane = gs.bunny.targetLane - 1;
-    } else if (clampedLane > gs.bunny.targetLane) {
-      gs.bunny.targetLane = gs.bunny.targetLane + 1;
+    // Use bunny's current actual X position to determine direction
+    // Tap left of bunny = move one lane left, tap right = move one lane right
+    const currentLane = gs.bunny.targetLane;
+    if (tapX < gs.bunny.x && currentLane > 0) {
+      gs.bunny.targetLane = currentLane - 1;
+    } else if (tapX > gs.bunny.x && currentLane < LANE_COUNT - 1) {
+      gs.bunny.targetLane = currentLane + 1;
     }
-    // If tapped same lane, do nothing
   }, [phase]);
 
   // Start game
