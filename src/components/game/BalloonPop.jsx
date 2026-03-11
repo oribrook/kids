@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useUser } from '../../context/UserContext';
 import { useAudio } from '../../hooks/useAudio';
 import styles from './BalloonPop.module.css';
@@ -16,7 +17,6 @@ function BalloonPop({ game, onClose }) {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
   const [balloons, setBalloons] = useState([]);
-  const [pops, setPops] = useState([]);
   const [stars, setStars] = useState(0);
   const balloonIdRef = useRef(0);
 
@@ -60,39 +60,23 @@ function BalloonPop({ game, onClose }) {
       const id = balloonIdRef.current++;
       const x = 10 + Math.random() * 80;
       const size = 50 + Math.random() * 30;
-      const speed = 2.5 + Math.random() * 2; // seconds to float up
+      const speed = 3 + Math.random() * 2;
       const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-      const wobble = (Math.random() * 20 - 10).toFixed(1);
+      const wobble = 8 + Math.random() * 15;
 
       setBalloons(prev => [...prev, { id, x, size, speed, color, wobble }]);
 
-      // Auto-remove after animation ends
+      // Auto-remove after animation completes
       setTimeout(() => {
         setBalloons(prev => prev.filter(b => b.id !== id));
-      }, speed * 1000 + 500);
+      }, speed * 1000 + 200);
     }, SPAWN_INTERVAL);
 
     return () => clearInterval(spawner);
   }, [phase]);
 
-  // Clean up pop effects
-  useEffect(() => {
-    if (pops.length === 0) return;
-    const timer = setTimeout(() => {
-      setPops(prev => prev.slice(1));
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [pops]);
-
   const handlePop = useCallback((e, balloon) => {
     e.stopPropagation();
-
-    setPops(prev => [...prev, {
-      id: balloon.id,
-      x: balloon.x,
-      y: e.clientY,
-    }]);
-
     setBalloons(prev => prev.filter(b => b.id !== balloon.id));
     setScore(prev => prev + 1);
     playCorrect();
@@ -111,24 +95,10 @@ function BalloonPop({ game, onClose }) {
     setScore(0);
     setTimeLeft(GAME_DURATION);
     setBalloons([]);
-    setPops([]);
   };
 
   return (
     <div className={styles.container}>
-      {/* Global keyframes - injected here to avoid CSS Modules mangling */}
-      <style>{`
-        @keyframes balloonFloatUp {
-          from { transform: translateY(0); }
-          to { transform: translateY(calc(-100vh - 160px)); }
-        }
-        @keyframes balloonWobble {
-          0%, 100% { margin-left: 0; }
-          25% { margin-left: var(--wobble); }
-          75% { margin-left: calc(var(--wobble) * -1); }
-        }
-      `}</style>
-
       {/* Clouds decoration */}
       <div className={styles.cloud} style={{ top: '10%', animationDelay: '0s' }}>☁️</div>
       <div className={styles.cloud} style={{ top: '25%', animationDelay: '-7s' }}>☁️</div>
@@ -145,38 +115,36 @@ function BalloonPop({ game, onClose }) {
         )}
       </div>
 
-      {/* Balloons */}
-      {phase === 'playing' && balloons.map(balloon => (
-        <div
-          key={balloon.id}
-          className={styles.balloon}
-          style={{
-            left: `${balloon.x}%`,
-            '--wobble': `${balloon.wobble}px`,
-            animation: `balloonFloatUp ${balloon.speed}s linear forwards, balloonWobble ${balloon.speed / 2}s ease-in-out infinite`,
-          }}
-          onClick={(e) => handlePop(e, balloon)}
-          onTouchStart={(e) => { e.preventDefault(); handlePop(e, balloon); }}
-        >
-          <svg width={balloon.size} height={balloon.size * 1.3} viewBox="0 0 50 65">
-            <ellipse cx="25" cy="25" rx="22" ry="25" fill={balloon.color} />
-            <ellipse cx="18" cy="18" rx="6" ry="8" fill="rgba(255,255,255,0.3)" transform="rotate(-20 18 18)" />
-            <polygon points="25,50 22,55 28,55" fill={balloon.color} />
-            <line x1="25" y1="55" x2="25" y2="65" stroke="#999" strokeWidth="1.5" />
-          </svg>
-        </div>
-      ))}
-
-      {/* Pop effects */}
-      {pops.map(pop => (
-        <div
-          key={pop.id}
-          className={styles.popEffect}
-          style={{ left: `${pop.x}%`, top: `${pop.y}px` }}
-        >
-          💥
-        </div>
-      ))}
+      {/* Balloons - Framer Motion handles smooth GPU-accelerated animation */}
+      <AnimatePresence>
+        {phase === 'playing' && balloons.map(balloon => (
+          <motion.div
+            key={balloon.id}
+            className={styles.balloon}
+            style={{ left: `${balloon.x}%` }}
+            initial={{ y: 0 }}
+            animate={{
+              y: -(window.innerHeight + 160),
+              x: [0, balloon.wobble, 0, -balloon.wobble, 0],
+            }}
+            exit={{ scale: 1.5, opacity: 0 }}
+            transition={{
+              y: { duration: balloon.speed, ease: 'linear' },
+              x: { duration: balloon.speed * 0.4, ease: 'easeInOut', repeat: Infinity },
+              exit: { duration: 0.2 },
+            }}
+            onClick={(e) => handlePop(e, balloon)}
+            onTouchStart={(e) => { e.preventDefault(); handlePop(e, balloon); }}
+          >
+            <svg width={balloon.size} height={balloon.size * 1.3} viewBox="0 0 50 65">
+              <ellipse cx="25" cy="25" rx="22" ry="25" fill={balloon.color} />
+              <ellipse cx="18" cy="18" rx="6" ry="8" fill="rgba(255,255,255,0.3)" transform="rotate(-20 18 18)" />
+              <polygon points="25,50 22,55 28,55" fill={balloon.color} />
+              <line x1="25" y1="55" x2="25" y2="65" stroke="#999" strokeWidth="1.5" />
+            </svg>
+          </motion.div>
+        ))}
+      </AnimatePresence>
 
       {/* Start overlay */}
       {phase === 'waiting' && (
