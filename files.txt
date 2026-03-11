@@ -1913,4 +1913,38 @@ CATEGORY ADDED:
     Category: temple-run (רוץ שפנפן!) under hebrew-toddler topic
     Color: #27AE60 (green), Background: #D5F5E3
 
+GAME TYPE: mazeGame
+    - Self-contained component, bypasses the question-based GameContext flow
+    - Game.jsx detects gameType === 'mazeGame' and renders <MazeGame>
+    - No questions array needed - the component manages its own state via canvas
+    - Procedurally generates solvable mazes using recursive backtracking (DFS)
+    - Cell-based path tracking: user drags through cells, path snaps to cell centers
+    - Wall collision detection: can only move to adjacent cells with no wall between them
+    - Must start from entrance cell (top-left, row 0 col 0)
+    - Backtracking support: drag backward along path to undo wrong turns
+    - No-loop constraint: cannot revisit cells already in path
+    - Win detection: reaching exit cell (bottom-right) triggers celebration overlay
+    - Configurable grid size via game.mazeConfig: { cols, rows, wallWidth }
+    - Default: 6 columns x 8 rows
+    - Buttons: undo (remove last cell), clear path, new maze
+    - Green highlighted cells show visited path
+    - Red line through cell centers with dot at current head position
+
+./src/components/game/MazeGame.jsx
+    Self-contained maze game component.
+    Key functions:
+    - generateMaze(): recursive backtracking maze generation
+    - canMove(): wall collision check between adjacent cells
+    - drawMaze(): renders maze walls + entrance arrow + exit star on canvas
+    - drawPath(): renders user path (highlighted cells + line + head dot)
+    - pixelToCell(): converts touch/mouse coordinates to grid cell
+
+./src/components/game/MazeGame.module.css
+    Styles for Maze Game:
+    - Full-viewport container with RTL direction
+    - Win overlay: semi-transparent backdrop, centered card with animation
+
+DATA FILES:
+    ./src/data/games/mazeGame.js, mazeGame2.js, mazeGame3.js
+
 ================================================================================

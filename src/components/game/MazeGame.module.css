@@ -107,6 +107,70 @@
   touch-action: none;
 }
 
+/* ========== Win Overlay ========== */
+.winOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.winContent {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px 40px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  max-width: 320px;
+  width: 90%;
+}
+
+.winEmoji {
+  font-size: 64px;
+  margin-bottom: 12px;
+}
+
+.winTitle {
+  font-size: 28px;
+  font-weight: 800;
+  color: #2D3436;
+  margin: 0 0 8px 0;
+}
+
+.winSubtitle {
+  font-size: 16px;
+  color: #636E72;
+  margin: 0 0 24px 0;
+}
+
+.winButton {
+  background: linear-gradient(135deg, #6C5CE7, #A29BFE);
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 32px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+}
+
+.winButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(108, 92, 231, 0.4);
+}
+
+.winButton:active {
+  transform: scale(0.98);
+}
+
 /* ========== Mobile Responsive ========== */
 @media (max-width: 480px) {
   .topBar {
