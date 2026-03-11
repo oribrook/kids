@@ -15,18 +15,16 @@ const LEVELS = [
 const DIAMONDS_PER_LEVEL = 10;
 const MAX_LIVES = 3;
 const LANE_COUNT = 3; // left=0, center=1, right=2
-const BUNNY_RETURN_MS = 800; // ms before bunny returns to center
-
 // Item types
 const ITEM_DIAMOND = 'diamond';
 const ITEM_OBSTACLE = 'obstacle';
+const ITEM_BARRIER = 'barrier'; // spans all lanes, must jump over
 
 function TempleRun({ game, onClose }) {
   const canvasRef = useRef(null);
   const animFrameRef = useRef(null);
   const gsRef = useRef(null);
   const lastSpawnRef = useRef(0);
-  const bunnyTimerRef = useRef(null);
 
   const [phase, setPhase] = useState('waiting'); // waiting | playing | levelUp | gameOver
   const [diamonds, setDiamonds] = useState(0);
@@ -90,7 +88,6 @@ function TempleRun({ game, onClose }) {
     return () => {
       window.removeEventListener('resize', handleResize);
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      if (bunnyTimerRef.current) clearTimeout(bunnyTimerRef.current);
     };
   }, [resizeCanvas, phase]);
 
@@ -166,7 +163,36 @@ function TempleRun({ game, onClose }) {
 
       if (item.collected) continue;
 
-      // Collision check
+      // Collision check - barriers span all lanes
+      if (item.type === ITEM_BARRIER) {
+        // Barrier spans full width of road
+        const barrierHitbox = {
+          x: 0,
+          y: item.y - item.size / 4,
+          w: gs.w,
+          h: item.size / 2,
+        };
+
+        if (rectsOverlap(bunnyHitbox, barrierHitbox)) {
+          // Only hit if NOT jumping
+          if (!gs.bunny.isJumping) {
+            item.collected = true;
+            gs.lives--;
+            setLives(gs.lives);
+            playWrong();
+            setShowHit(true);
+            setTimeout(() => setShowHit(false), 300);
+            if (gs.lives <= 0) {
+              handleGameOver(gs.diamonds);
+            }
+          } else {
+            // Jumping over - mark as collected (passed)
+            item.collected = true;
+          }
+        }
+        continue;
+      }
+
       const itemX = gs.laneW * item.lane + gs.laneW / 2;
       const itemHitbox = {
         x: itemX - item.size / 2,
@@ -211,9 +237,29 @@ function TempleRun({ game, onClose }) {
 
   // Spawn a new item
   const spawnItem = useCallback((gs) => {
-    const lane = Math.floor(Math.random() * LANE_COUNT);
-    const isDiamond = Math.random() < 0.55; // 55% diamonds, 45% obstacles
+    const roll = Math.random();
     const size = Math.min(40, gs.w * 0.09);
+
+    // 15% chance to spawn a barrier (spans all lanes, must jump)
+    if (roll < 0.15) {
+      // Don't spawn barrier too close to existing barriers
+      const tooCloseBarrier = gs.items.some(
+        item => item.type === ITEM_BARRIER && item.y < 200
+      );
+      if (tooCloseBarrier) return;
+
+      gs.items.push({
+        type: ITEM_BARRIER,
+        lane: 1, // center lane for position reference, but it spans all
+        y: -size,
+        size,
+        collected: false,
+      });
+      return;
+    }
+
+    const lane = Math.floor(Math.random() * LANE_COUNT);
+    const isDiamond = roll < 0.62; // ~55% diamonds, ~30% obstacles (after barrier check)
 
     // Don't spawn too close to existing items in same lane
     const tooClose = gs.items.some(
@@ -291,7 +337,30 @@ function TempleRun({ game, onClose }) {
       const iy = item.y;
       const sz = item.size;
 
-      if (item.type === ITEM_DIAMOND) {
+      if (item.type === ITEM_BARRIER) {
+        // Barrier - horizontal bar spanning all lanes
+        const roadX = w * 0.08;
+        const roadW = w * 0.84;
+        const barHeight = sz / 2.5;
+
+        // Main barrier bar
+        ctx.fillStyle = '#C0392B';
+        ctx.shadowColor = 'rgba(0,0,0,0.4)';
+        ctx.shadowBlur = 6;
+        ctx.fillRect(roadX, iy - barHeight / 2, roadW, barHeight);
+        ctx.shadowBlur = 0;
+
+        // Striped warning pattern (red/yellow)
+        const stripeW = 20;
+        ctx.fillStyle = '#F1C40F';
+        for (let sx = roadX; sx < roadX + roadW; sx += stripeW * 2) {
+          ctx.fillRect(sx, iy - barHeight / 2, stripeW, barHeight);
+        }
+
+        // Top highlight
+        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+        ctx.fillRect(roadX, iy - barHeight / 2, roadW, 2);
+      } else if (item.type === ITEM_DIAMOND) {
         // Diamond shape
         ctx.fillStyle = '#00D2FF';
         ctx.shadowColor = '#00D2FF';
@@ -413,34 +482,27 @@ function TempleRun({ game, onClose }) {
 
   }, []);
 
-  // Controls
+  // Controls - bunny stays in lane until user manually changes
   const moveBunny = useCallback((direction) => {
     const gs = gsRef.current;
     if (!gs || phase !== 'playing') return;
 
-    if (bunnyTimerRef.current) {
-      clearTimeout(bunnyTimerRef.current);
-    }
-
     if (direction === 'left') {
-      gs.bunny.targetLane = 0;
+      // Move one lane to the left (or stay if already at leftmost)
+      if (gs.bunny.targetLane > 0) {
+        gs.bunny.targetLane = gs.bunny.targetLane - 1;
+      }
     } else if (direction === 'right') {
-      gs.bunny.targetLane = 2;
+      // Move one lane to the right (or stay if already at rightmost)
+      if (gs.bunny.targetLane < LANE_COUNT - 1) {
+        gs.bunny.targetLane = gs.bunny.targetLane + 1;
+      }
     } else if (direction === 'up') {
       if (!gs.bunny.isJumping) {
         gs.bunny.isJumping = true;
         gs.bunny.jumpVel = -12;
       }
-      // Also stay in current lane (no lane change on jump)
-      // But still set return timer
     }
-
-    // Return to center after delay
-    bunnyTimerRef.current = setTimeout(() => {
-      if (gsRef.current) {
-        gsRef.current.bunny.targetLane = 1;
-      }
-    }, BUNNY_RETURN_MS);
   }, [phase]);
 
   // Start game
@@ -527,7 +589,8 @@ function TempleRun({ game, onClose }) {
           <div className={styles.startSubtext}>
             אספו 💎 יהלומים<br />
             הימנעו מ-🪨 מכשולים<br />
-            לחצו ⬅️ ➡️ ⬆️ כדי לזוז
+            קפצו מעל 🚧 מחסומים<br />
+            לחצו ⬅️ ➡️ לזוז, ⬆️ לקפוץ
           </div>
           <button className={styles.startBtn} onClick={handleStart}>!בואו נרוץ 🏃</button>
         </div>
