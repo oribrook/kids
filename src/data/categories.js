@@ -241,6 +241,18 @@ export const categories = [
     games: ['maze-game', 'maze-game-2', 'maze-game-3'],
   },
 
+  // Hebrew Toddler - Brick Breaker (שבירת לבנים)
+  {
+    id: 'brick-breaker',
+    topicId: 'hebrew-toddler',
+    name: 'שבירת לבנים',
+    description: 'שברו את כל הלבנים!',
+    icon: '🧱',
+    color: '#E74C3C',
+    backgroundColor: '#FADBD8',
+    games: ['brick-breaker'],
+  },
+
   // Hebrew Memory Games categories
   {
     id: 'memory-hebrew-letters',

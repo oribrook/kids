@@ -1749,4 +1749,72 @@ CATEGORIES ADDED:
     Category: memory-hebrew-letters (אותיות) under hebrew-memory topic
     Color: #6C5CE7 (purple)
 
+--------------------------------------------------------------------------------
+                    BRICK BREAKER GAME
+--------------------------------------------------------------------------------
+
+OVERVIEW:
+    Game type: brickBreaker - standalone canvas-based arcade game for toddlers.
+    Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → brick-breaker (שבירת לבנים)
+    Super simple brick breaker designed for ages 3-5.
+    Forced landscape orientation (shows "rotate phone" overlay in portrait).
+    No game-over / no lives - ball auto-respawns if it falls below the paddle.
+    Touch-drag paddle control, generous paddle width (25% of screen).
+
+GAME TYPE: brickBreaker
+    - Self-contained component, bypasses the question-based GameContext flow
+    - Game.jsx detects gameType === 'brickBreaker' and renders <BrickBreaker>
+    - No questions array needed - the component manages its own state via canvas
+    - Uses requestAnimationFrame game loop with canvas rendering
+
+GAME MECHANICS:
+    - 3 rows × 5 columns = 15 bricks (single-hit, no powerups)
+    - Brick colors per row: red (#FF6B6B), orange (#FFA502), yellow (#FFD93D)
+    - Ball bounces off walls, paddle, and bricks
+    - Paddle angle adjusts based on where ball hits (left/right offset)
+    - If ball falls below screen, it respawns on paddle and auto-launches after 600ms
+    - Speed control: 3 presets (🐢 very slow [default], 🐇 normal, 🚀 fast)
+    - Speed can be changed mid-game (adjusts live ball velocity)
+    - Win: all 15 bricks broken → win overlay with stars
+    - Stars: 15 bricks = 3★, 10+ = 2★, else 1★
+    - Score = stars × 16 (recorded via useUser.recordGamePlayed)
+
+./src/data/games/brickBreaker.js
+    Game data for Brick Breaker:
+    - id: 'brick-breaker'
+    - categoryId: 'brick-breaker'
+    - gameType: 'brickBreaker'
+    - questions: { easy: [] } (empty, standalone game)
+
+./src/components/game/BrickBreaker.jsx
+    Self-contained brick breaker game component.
+    Phases: waiting → playing → won
+    Features:
+    - Full-screen canvas rendering with requestAnimationFrame loop
+    - Touch/mouse pointer control for paddle movement
+    - Orientation detection: shows rotate-phone overlay in portrait mode
+    - Speed control buttons in top bar (3 presets, default very-slow)
+    - Start overlay with "לחצו להתחיל" tap instruction
+    - Win overlay with stars, play-again button, and back button
+    - Ball glow effect (gold shadow on white ball)
+    - Brick shine effect (semi-transparent top half)
+    - Gradient paddle with rounded corners
+    - Dark blue/purple gradient background (arcade feel)
+    - Uses useAudio hook for playComplete on win
+    - Uses useUser hook for addScore and recordGamePlayed
+
+./src/components/game/BrickBreaker.module.css
+    Styles for Brick Breaker:
+    - Fixed full-viewport container with dark gradient background
+    - Rotate overlay for portrait mode (animated phone icon)
+    - Top bar with close button, score display, speed control
+    - Speed buttons with active state (gold border highlight)
+    - Start/win overlays with semi-transparent backgrounds
+    - All text in Hebrew RTL direction
+    - touch-action: none to prevent scroll interference
+
+CATEGORY ADDED:
+    Category: brick-breaker (שבירת לבנים) under hebrew-toddler topic
+    Color: #E74C3C (red), Background: #FADBD8
+
 ================================================================================
