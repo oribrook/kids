@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { UserProvider, useUser } from './context/UserContext';
 import { GameProvider } from './context/GameContext';
 import { BackgroundMusicProvider } from './context/BackgroundMusicContext';
@@ -31,8 +31,12 @@ function OnboardingRoute() {
 
 function AppRoutes() {
   usePageTracking();
+  const location = useLocation();
+  const isInGame = location.pathname.startsWith('/game/');
 
   return (
+    <>
+    {!isInGame && <MusicToggle />}
     <Routes>
       <Route path="/" element={<OnboardingRoute />} />
       <Route
@@ -78,6 +82,7 @@ function AppRoutes() {
       {/* Fallback route */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </>
   );
 }
 
@@ -87,7 +92,6 @@ function App() {
       <BackgroundMusicProvider>
         <UserProvider>
           <GameProvider>
-            <MusicToggle />
             <AppRoutes />
           </GameProvider>
         </UserProvider>
