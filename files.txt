@@ -1189,6 +1189,12 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
     - Speaker icon with sound waves / muted icon
     - Hebrew aria-labels for accessibility
 
+./src/components/common/ContactButton.jsx + ContactButton.module.css
+    Floating contact button (bottom-left on nav pages, hidden during games).
+    Opens modal with Hebrew message for parents, Telegram link (t.me/ori_br)
+    and email (brook.ori@gmail.com). Big noticeable close button for easy
+    dismissal by kids. Rendered in App.jsx with same !isInGame guard as MusicToggle.
+
 ./src/components/common/Button.module.css
 ./src/components/common/Card.module.css
 ./src/components/common/ProgressBar.module.css
@@ -1196,6 +1202,7 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
 ./src/components/common/AudioButton.module.css
 ./src/components/common/Mascot.module.css
 ./src/components/common/MusicToggle.module.css
+./src/components/common/ContactButton.module.css
     CSS Modules for each common component with responsive styles.
 
 --------------------------------------------------------------------------------

@@ -3,7 +3,7 @@ import { UserProvider, useUser } from './context/UserContext';
 import { GameProvider } from './context/GameContext';
 import { BackgroundMusicProvider } from './context/BackgroundMusicContext';
 import { Onboarding, Home, Language, Topic, Category, Game } from './pages';
-import { MusicToggle } from './components/common';
+import { MusicToggle, ContactButton } from './components/common';
 import { usePageTracking } from './hooks/usePageTracking';
 import './index.css';
 
@@ -37,6 +37,7 @@ function AppRoutes() {
   return (
     <>
     {!isInGame && <MusicToggle />}
+    {!isInGame && <ContactButton />}
     <Routes>
       <Route path="/" element={<OnboardingRoute />} />
       <Route
