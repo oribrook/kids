@@ -10,15 +10,6 @@
   direction: rtl;
 }
 
-/* ========== Hidden Color Input ========== */
-.hiddenColorInput {
-  position: absolute;
-  width: 0;
-  height: 0;
-  opacity: 0;
-  pointer-events: none;
-}
-
 /* ========== Top Bar ========== */
 .topBar {
   display: flex;
@@ -105,13 +96,6 @@
   justify-content: center;
 }
 
-.bgPickerLabel {
-  font-size: 14px;
-  font-weight: 600;
-  color: #555;
-  margin-left: 4px;
-}
-
 .bgColorBtn {
   width: 36px;
   height: 36px;
@@ -130,13 +114,66 @@
   transform: scale(1.15);
 }
 
+/* ========== Color Wheel Modal ========== */
+.wheelOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.wheelContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.wheelClose {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  border: none;
+  font-size: 26px;
+  font-weight: 700;
+  color: #555;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s, background 0.15s;
+  align-self: center;
+}
+
+.wheelClose:hover {
+  transform: scale(1.1);
+  background: #fff;
+}
+
+.wheelCanvas {
+  width: min(75vw, 75vh, 340px);
+  height: min(75vw, 75vh, 340px);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.35);
+  transition: transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wheelCanvas:active {
+  transform: scale(0.97);
+}
+
 /* ========== Gallery Modal ========== */
 .galleryOverlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 100;
   display: flex;
@@ -160,26 +197,20 @@
 .galleryHeader {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid #eee;
+  justify-content: flex-end;
+  padding: 12px 16px;
   flex-shrink: 0;
 }
 
-.galleryTitle {
-  font-size: 20px;
-  font-weight: 700;
-  color: #333;
-  margin: 0;
-}
-
 .galleryClose {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: #f0f0f0;
   border: none;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #555;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -193,30 +224,23 @@
 
 .galleryEmpty {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
-  color: #999;
+  padding: 50px 20px;
 }
 
 .galleryEmptyIcon {
-  font-size: 48px;
-  margin-bottom: 12px;
-}
-
-.galleryEmpty p {
-  font-size: 16px;
-  margin: 0;
+  font-size: 56px;
+  opacity: 0.5;
 }
 
 .galleryGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  padding: 16px;
+  padding: 4px 16px 16px;
   overflow-y: auto;
-  max-height: calc(80vh - 70px);
+  max-height: calc(80vh - 64px);
 }
 
 .galleryItem {
@@ -225,6 +249,7 @@
   border: 2px solid #eee;
   transition: border-color 0.2s, transform 0.15s;
   cursor: pointer;
+  position: relative;
 }
 
 .galleryItem:hover {
@@ -239,32 +264,40 @@
   display: block;
 }
 
-.galleryItemInfo {
+.galleryDeleteBtn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 4px 8px;
-  background: #fafafa;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s;
+  line-height: 1;
 }
 
-.galleryTimestamp {
-  font-size: 10px;
-  color: #999;
-  direction: ltr;
+.galleryItem:hover .galleryDeleteBtn {
+  opacity: 1;
 }
 
-.galleryDeleteBtn {
-  background: none;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-  padding: 2px;
-  opacity: 0.5;
-  transition: opacity 0.2s;
+/* Always show delete button on touch devices */
+@media (hover: none) {
+  .galleryDeleteBtn {
+    opacity: 0.7;
+  }
 }
 
 .galleryDeleteBtn:hover {
-  opacity: 1;
+  background: rgba(231, 76, 60, 0.85);
 }
 
 /* ========== Canvas ========== */
@@ -314,6 +347,7 @@
   transition: transform 0.15s, border-color 0.15s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
   position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .colorBtn:hover {
@@ -329,6 +363,7 @@
 /* Eraser button */
 .eraserBtn {
   border: 2px solid #ccc;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -356,6 +391,7 @@
   transition: transform 0.15s, border-color 0.15s;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .colorPickerBtn::after {
@@ -364,7 +400,7 @@
   color: #fff;
   font-size: 20px;
   font-weight: 800;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .colorPickerBtn:hover {
@@ -390,6 +426,7 @@
   align-items: center;
   justify-content: center;
   transition: transform 0.15s, border-color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .brushBtn:hover {
@@ -436,7 +473,6 @@
   .colorPickerBtn {
     width: 32px;
     height: 32px;
-    font-size: 18px;
   }
 
   .colorPickerBtn::after {
@@ -460,7 +496,18 @@
   .galleryGrid {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
-    padding: 12px;
+    padding: 4px 12px 12px;
+  }
+
+  .wheelCanvas {
+    width: min(80vw, 70vh, 300px);
+    height: min(80vw, 70vh, 300px);
+  }
+
+  .wheelClose {
+    width: 46px;
+    height: 46px;
+    font-size: 22px;
   }
 }
 
@@ -473,7 +520,6 @@
   .colorPickerBtn {
     width: 28px;
     height: 28px;
-    font-size: 15px;
   }
 
   .colorPickerBtn::after {

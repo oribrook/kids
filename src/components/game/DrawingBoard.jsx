@@ -6,26 +6,53 @@ const STORAGE_KEY_RECENT_COLORS = 'drawingBoard_recentColors';
 const STORAGE_KEY_SAVED_DRAWINGS = 'drawingBoard_savedDrawings';
 const MAX_RECENT_COLORS = 8;
 const MAX_SAVED_DRAWINGS = 50;
+const WHEEL_SIZE = 300; // Internal canvas resolution for color wheel
 
 const DEFAULT_COLORS = ['#2D3436', '#E74C3C', '#3498DB', '#2ECC71', '#F1C40F', '#E67E22', '#9B59B6', '#FD79A8'];
 
 const BG_COLORS = [
-  { id: 'white', hex: '#FFFFFF', label: 'לבן' },
-  { id: 'lightblue', hex: '#D6EAF8', label: 'תכלת' },
-  { id: 'lightyellow', hex: '#FEF9E7', label: 'צהבהב' },
-  { id: 'lightgreen', hex: '#D5F5E3', label: 'ירקרק' },
-  { id: 'lightpink', hex: '#FDEDEC', label: 'ורדרד' },
-  { id: 'lightpurple', hex: '#F5EEF8', label: 'סגלגל' },
+  { id: 'white', hex: '#FFFFFF' },
+  { id: 'lightblue', hex: '#D6EAF8' },
+  { id: 'lightyellow', hex: '#FEF9E7' },
+  { id: 'lightgreen', hex: '#D5F5E3' },
+  { id: 'lightpink', hex: '#FDEDEC' },
+  { id: 'lightpurple', hex: '#F5EEF8' },
 ];
 
 const BRUSH_SIZES = [
-  { id: 'thin', size: 3, label: 'דק' },
-  { id: 'medium', size: 8, label: 'בינוני' },
-  { id: 'thick', size: 16, label: 'עבה' },
-  { id: 'xthick', size: 28, label: 'עבה מאוד' },
+  { id: 'thin', size: 3 },
+  { id: 'medium', size: 8 },
+  { id: 'thick', size: 16 },
+  { id: 'xthick', size: 28 },
 ];
 
-// Load recent colors from localStorage
+// HSL to RGB conversion
+function hslToRgb(h, s, l) {
+  h /= 360;
+  s /= 100;
+  l /= 100;
+  let r, g, b;
+  if (s === 0) {
+    r = g = b = l;
+  } else {
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1 / 3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1 / 3);
+  }
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
+// LocalStorage helpers
 function loadRecentColors() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY_RECENT_COLORS);
@@ -37,14 +64,10 @@ function loadRecentColors() {
   return DEFAULT_COLORS;
 }
 
-// Save recent colors to localStorage
 function saveRecentColors(colors) {
-  try {
-    localStorage.setItem(STORAGE_KEY_RECENT_COLORS, JSON.stringify(colors));
-  } catch {}
+  try { localStorage.setItem(STORAGE_KEY_RECENT_COLORS, JSON.stringify(colors)); } catch {}
 }
 
-// Load saved drawings from localStorage
 function loadSavedDrawings() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY_SAVED_DRAWINGS);
@@ -56,40 +79,135 @@ function loadSavedDrawings() {
   return [];
 }
 
-// Save drawings to localStorage
 function saveSavedDrawings(drawings) {
-  try {
-    localStorage.setItem(STORAGE_KEY_SAVED_DRAWINGS, JSON.stringify(drawings));
-  } catch {}
+  try { localStorage.setItem(STORAGE_KEY_SAVED_DRAWINGS, JSON.stringify(drawings)); } catch {}
 }
 
 /**
  * DrawingBoard - Free-play drawing canvas for toddlers
- * Supports touch and mouse, color picker with FIFO recent colors,
- * brush thickness, undo, clear, background color, save/load drawings
+ * Features: custom color wheel, FIFO recent colors, save/load gallery, undo, bg colors
  */
 function DrawingBoard({ game, onClose }) {
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
   const isDrawingRef = useRef(false);
   const lastPointRef = useRef(null);
-  const colorInputRef = useRef(null);
+  const wheelCanvasRef = useRef(null);
 
   const [recentColors, setRecentColors] = useState(loadRecentColors);
   const [selectedColor, setSelectedColor] = useState(() => loadRecentColors()[0] || '#2D3436');
   const [brushSize, setBrushSize] = useState(BRUSH_SIZES[1].size);
   const [bgColor, setBgColor] = useState(BG_COLORS[0].hex);
   const [showBgPicker, setShowBgPicker] = useState(false);
+  const [showColorWheel, setShowColorWheel] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [savedDrawings, setSavedDrawings] = useState(loadSavedDrawings);
-  // History stack for undo - stores canvas ImageData snapshots
   const [history, setHistory] = useState([]);
   const [canvasReady, setCanvasReady] = useState(false);
 
-  // Add a color to recent list (FIFO)
+  // ======================== Color Wheel ========================
+
+  // Draw the HSL color wheel on canvas
+  const drawColorWheel = useCallback(() => {
+    const canvas = wheelCanvasRef.current;
+    if (!canvas) return;
+
+    canvas.width = WHEEL_SIZE;
+    canvas.height = WHEEL_SIZE;
+
+    const ctx = canvas.getContext('2d');
+    const center = WHEEL_SIZE / 2;
+    const radius = center - 4;
+    const imageData = ctx.createImageData(WHEEL_SIZE, WHEEL_SIZE);
+    const data = imageData.data;
+
+    for (let y = 0; y < WHEEL_SIZE; y++) {
+      for (let x = 0; x < WHEEL_SIZE; x++) {
+        const dx = x - center;
+        const dy = y - center;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist <= radius) {
+          const angle = (Math.atan2(dy, dx) * 180 / Math.PI + 360) % 360;
+          const t = dist / radius; // 0 at center, 1 at edge
+
+          let s, l;
+          if (t < 0.82) {
+            // Main area: white center → vivid colors at edge
+            const nt = t / 0.82;
+            s = nt * 100;
+            l = 100 - nt * 50; // 100 (white) → 50 (vivid)
+          } else {
+            // Outer dark ring: vivid → dark
+            const nt = (t - 0.82) / 0.18;
+            s = 100 - nt * 30;
+            l = 50 - nt * 35; // 50 (vivid) → 15 (dark)
+          }
+
+          const [r, g, b] = hslToRgb(angle, s, l);
+          const idx = (y * WHEEL_SIZE + x) * 4;
+          data[idx] = r;
+          data[idx + 1] = g;
+          data[idx + 2] = b;
+          data[idx + 3] = 255;
+        }
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+  }, []);
+
+  // Draw wheel when modal opens
+  useEffect(() => {
+    if (showColorWheel) {
+      // Small delay to ensure canvas is mounted
+      requestAnimationFrame(() => drawColorWheel());
+    }
+  }, [showColorWheel, drawColorWheel]);
+
+  // Handle tap on color wheel - read pixel color
+  const handleWheelTap = useCallback((e) => {
+    const canvas = wheelCanvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    let clientX, clientY;
+
+    if (e.changedTouches && e.changedTouches.length > 0) {
+      clientX = e.changedTouches[0].clientX;
+      clientY = e.changedTouches[0].clientY;
+    } else if (e.touches && e.touches.length > 0) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const cx = Math.round((clientX - rect.left) * scaleX);
+    const cy = Math.round((clientY - rect.top) * scaleY);
+
+    if (cx < 0 || cy < 0 || cx >= canvas.width || cy >= canvas.height) return;
+
+    const ctx = canvas.getContext('2d');
+    const pixel = ctx.getImageData(cx, cy, 1, 1).data;
+
+    // Only pick if pixel is not transparent (inside the wheel circle)
+    if (pixel[3] > 0) {
+      const hex = '#' + [pixel[0], pixel[1], pixel[2]]
+        .map(v => v.toString(16).padStart(2, '0')).join('');
+      addToRecentColors(hex);
+      setSelectedColor(hex);
+      setShowColorWheel(false);
+    }
+  }, []);
+
+  // ======================== Recent Colors ========================
+
   const addToRecentColors = useCallback((hex) => {
     setRecentColors(prev => {
-      // Remove if already exists (move to front)
       const filtered = prev.filter(c => c.toLowerCase() !== hex.toLowerCase());
       const updated = [hex, ...filtered].slice(0, MAX_RECENT_COLORS);
       saveRecentColors(updated);
@@ -97,21 +215,8 @@ function DrawingBoard({ game, onClose }) {
     });
   }, []);
 
-  // Handle color picked from native color input
-  const handleColorPicked = useCallback((e) => {
-    const hex = e.target.value;
-    addToRecentColors(hex);
-    setSelectedColor(hex);
-  }, [addToRecentColors]);
+  // ======================== Canvas Init ========================
 
-  // Open native color picker
-  const openColorPicker = useCallback(() => {
-    if (colorInputRef.current) {
-      colorInputRef.current.click();
-    }
-  }, []);
-
-  // Initialize canvas
   const initCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -131,7 +236,6 @@ function DrawingBoard({ game, onClose }) {
     ctx.lineJoin = 'round';
     ctxRef.current = ctx;
 
-    // Fill background
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, rect.width, rect.height);
 
@@ -162,18 +266,17 @@ function DrawingBoard({ game, onClose }) {
     return () => window.removeEventListener('resize', handleResize);
   }, [initCanvas]);
 
-  // Change background color - redraw canvas
   useEffect(() => {
     if (!canvasReady) return;
     const canvas = canvasRef.current;
     const ctx = ctxRef.current;
     if (!canvas || !ctx) return;
-
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     ctx.putImageData(imageData, 0, 0);
   }, [bgColor, canvasReady]);
 
-  // Save snapshot to history before each stroke
+  // ======================== History / Undo ========================
+
   const saveToHistory = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -190,7 +293,6 @@ function DrawingBoard({ game, onClose }) {
     if (history.length === 0) return;
     const ctx = ctxRef.current;
     if (!ctx) return;
-
     const newHistory = [...history];
     const lastState = newHistory.pop();
     setHistory(newHistory);
@@ -201,25 +303,19 @@ function DrawingBoard({ game, onClose }) {
     const canvas = canvasRef.current;
     const ctx = ctxRef.current;
     if (!canvas || !ctx) return;
-
     saveToHistory();
     const dpr = window.devicePixelRatio || 1;
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, canvas.width / dpr, canvas.height / dpr);
   }, [bgColor, saveToHistory]);
 
-  // Save current drawing
+  // ======================== Save / Load ========================
+
   const saveDrawing = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const dataUrl = canvas.toDataURL('image/png');
-    const newDrawing = {
-      id: Date.now(),
-      dataUrl,
-      timestamp: new Date().toLocaleString('he-IL'),
-    };
-
+    const newDrawing = { id: Date.now(), dataUrl };
     setSavedDrawings(prev => {
       const updated = [newDrawing, ...prev].slice(0, MAX_SAVED_DRAWINGS);
       saveSavedDrawings(updated);
@@ -227,14 +323,11 @@ function DrawingBoard({ game, onClose }) {
     });
   }, []);
 
-  // Load a saved drawing onto canvas
   const loadDrawing = useCallback((drawing) => {
     const canvas = canvasRef.current;
     const ctx = ctxRef.current;
     if (!canvas || !ctx) return;
-
     saveToHistory();
-
     const img = new Image();
     img.onload = () => {
       const dpr = window.devicePixelRatio || 1;
@@ -247,7 +340,6 @@ function DrawingBoard({ game, onClose }) {
     setShowGallery(false);
   }, [saveToHistory]);
 
-  // Delete a saved drawing
   const deleteDrawing = useCallback((drawingId) => {
     setSavedDrawings(prev => {
       const updated = prev.filter(d => d.id !== drawingId);
@@ -256,12 +348,12 @@ function DrawingBoard({ game, onClose }) {
     });
   }, []);
 
-  // Get coordinates from event (mouse or touch)
+  // ======================== Drawing Events ========================
+
   const getCoords = useCallback((e) => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
     const rect = canvas.getBoundingClientRect();
-
     let clientX, clientY;
     if (e.touches && e.touches.length > 0) {
       clientX = e.touches[0].clientX;
@@ -273,22 +365,16 @@ function DrawingBoard({ game, onClose }) {
       clientX = e.clientX;
       clientY = e.clientY;
     }
-
-    return {
-      x: clientX - rect.left,
-      y: clientY - rect.top,
-    };
+    return { x: clientX - rect.left, y: clientY - rect.top };
   }, []);
 
   const startDrawing = useCallback((e) => {
     e.preventDefault();
     const coords = getCoords(e);
     if (!coords) return;
-
     saveToHistory();
     isDrawingRef.current = true;
     lastPointRef.current = coords;
-
     const ctx = ctxRef.current;
     if (ctx) {
       ctx.strokeStyle = selectedColor;
@@ -303,20 +389,16 @@ function DrawingBoard({ game, onClose }) {
   const draw = useCallback((e) => {
     e.preventDefault();
     if (!isDrawingRef.current) return;
-
     const coords = getCoords(e);
     if (!coords || !lastPointRef.current) return;
-
     const ctx = ctxRef.current;
     if (!ctx) return;
-
     ctx.strokeStyle = selectedColor;
     ctx.lineWidth = brushSize;
     ctx.beginPath();
     ctx.moveTo(lastPointRef.current.x, lastPointRef.current.y);
     ctx.lineTo(coords.x, coords.y);
     ctx.stroke();
-
     lastPointRef.current = coords;
   }, [getCoords, selectedColor, brushSize]);
 
@@ -326,57 +408,33 @@ function DrawingBoard({ game, onClose }) {
     lastPointRef.current = null;
   }, []);
 
+  // ======================== Render ========================
+
   return (
     <div className={styles.container}>
-      {/* Hidden native color input */}
-      <input
-        ref={colorInputRef}
-        type="color"
-        className={styles.hiddenColorInput}
-        value={selectedColor}
-        onChange={handleColorPicked}
-      />
-
       {/* Top bar */}
       <div className={styles.topBar}>
-        <button className={styles.backButton} onClick={onClose}>
-          ✕
-        </button>
+        <button className={styles.backButton} onClick={onClose}>✕</button>
         <h1 className={styles.title}>{game?.name || 'לוח ציור'}</h1>
         <div className={styles.topActions}>
-          <button
-            className={styles.actionButton}
-            onClick={undo}
-            disabled={history.length === 0}
-            title="ביטול"
-          >
+          <button className={styles.actionButton} onClick={undo} disabled={history.length === 0}>
             ↩️
           </button>
-          <button
-            className={styles.actionButton}
-            onClick={clearCanvas}
-            title="נקה הכל"
-          >
+          <button className={styles.actionButton} onClick={clearCanvas}>
             🗑️
           </button>
           <button
             className={`${styles.actionButton} ${showBgPicker ? styles.active : ''}`}
             onClick={() => { setShowBgPicker(!showBgPicker); setShowGallery(false); }}
-            title="צבע רקע"
           >
             🎨
           </button>
-          <button
-            className={styles.actionButton}
-            onClick={() => { saveDrawing(); }}
-            title="שמור ציור"
-          >
+          <button className={styles.actionButton} onClick={saveDrawing}>
             💾
           </button>
           <button
             className={`${styles.actionButton} ${showGallery ? styles.active : ''}`}
             onClick={() => { setShowGallery(!showGallery); setShowBgPicker(false); }}
-            title="טען ציור"
           >
             📂
           </button>
@@ -389,9 +447,7 @@ function DrawingBoard({ game, onClose }) {
           className={styles.bgPicker}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
         >
-          <span className={styles.bgPickerLabel}>צבע רקע:</span>
           {BG_COLORS.map(c => (
             <button
               key={c.id}
@@ -409,19 +465,42 @@ function DrawingBoard({ game, onClose }) {
                   ctx.fillRect(0, 0, canvas.width / dpr, canvas.height / dpr);
                 }
               }}
-              title={c.label}
             />
           ))}
         </motion.div>
       )}
 
-      {/* Gallery modal for saved drawings */}
+      {/* Color Wheel Modal */}
+      {showColorWheel && (
+        <motion.div
+          className={styles.wheelOverlay}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          onClick={() => setShowColorWheel(false)}
+        >
+          <motion.div
+            className={styles.wheelContainer}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button className={styles.wheelClose} onClick={() => setShowColorWheel(false)}>✕</button>
+            <canvas
+              ref={wheelCanvasRef}
+              className={styles.wheelCanvas}
+              onClick={handleWheelTap}
+            />
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Gallery modal */}
       {showGallery && (
         <motion.div
           className={styles.galleryOverlay}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
           onClick={() => setShowGallery(false)}
         >
           <motion.div
@@ -431,13 +510,11 @@ function DrawingBoard({ game, onClose }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className={styles.galleryHeader}>
-              <h2 className={styles.galleryTitle}>הציורים שלי</h2>
               <button className={styles.galleryClose} onClick={() => setShowGallery(false)}>✕</button>
             </div>
             {savedDrawings.length === 0 ? (
               <div className={styles.galleryEmpty}>
                 <span className={styles.galleryEmptyIcon}>🖼️</span>
-                <p>אין ציורים שמורים עדיין</p>
               </div>
             ) : (
               <div className={styles.galleryGrid}>
@@ -445,20 +522,16 @@ function DrawingBoard({ game, onClose }) {
                   <div key={drawing.id} className={styles.galleryItem}>
                     <img
                       src={drawing.dataUrl}
-                      alt="ציור שמור"
+                      alt=""
                       className={styles.galleryThumb}
                       onClick={() => loadDrawing(drawing)}
                     />
-                    <div className={styles.galleryItemInfo}>
-                      <span className={styles.galleryTimestamp}>{drawing.timestamp}</span>
-                      <button
-                        className={styles.galleryDeleteBtn}
-                        onClick={(e) => { e.stopPropagation(); deleteDrawing(drawing.id); }}
-                        title="מחק"
-                      >
-                        🗑️
-                      </button>
-                    </div>
+                    <button
+                      className={styles.galleryDeleteBtn}
+                      onClick={(e) => { e.stopPropagation(); deleteDrawing(drawing.id); }}
+                    >
+                      ✕
+                    </button>
                   </div>
                 ))}
               </div>
@@ -485,7 +558,7 @@ function DrawingBoard({ game, onClose }) {
 
       {/* Bottom toolbar */}
       <div className={styles.toolbar}>
-        {/* Color palette: recent colors + picker + eraser */}
+        {/* Recent colors + picker + eraser */}
         <div className={styles.colorPalette}>
           {recentColors.map((hex, idx) => (
             <button
@@ -495,20 +568,13 @@ function DrawingBoard({ game, onClose }) {
               onClick={() => setSelectedColor(hex)}
             />
           ))}
-          {/* Color picker button */}
           <button
             className={styles.colorPickerBtn}
-            onClick={openColorPicker}
-            title="בחר צבע"
-          >
-            🌈
-          </button>
-          {/* Eraser */}
+            onClick={() => setShowColorWheel(true)}
+          />
           <button
             className={`${styles.colorBtn} ${styles.eraserBtn} ${selectedColor === '#FFFFFF' ? styles.selectedColor : ''}`}
-            style={{ backgroundColor: '#FFFFFF' }}
             onClick={() => setSelectedColor('#FFFFFF')}
-            title="מחק"
           >
             <span className={styles.eraserIcon}>✏️</span>
           </button>
@@ -521,7 +587,6 @@ function DrawingBoard({ game, onClose }) {
               key={b.id}
               className={`${styles.brushBtn} ${brushSize === b.size ? styles.selectedBrush : ''}`}
               onClick={() => setBrushSize(b.size)}
-              title={b.label}
             >
               <span
                 className={styles.brushDot}
