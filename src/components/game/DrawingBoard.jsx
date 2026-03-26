@@ -4,9 +4,11 @@ import styles from './DrawingBoard.module.css';
 
 const STORAGE_KEY_RECENT_COLORS = 'drawingBoard_recentColors';
 const STORAGE_KEY_SAVED_DRAWINGS = 'drawingBoard_savedDrawings';
+const STORAGE_KEY_AUTOSAVE = 'drawingBoard_autosave';
 const MAX_RECENT_COLORS = 8;
 const MAX_SAVED_DRAWINGS = 50;
 const WHEEL_SIZE = 300; // Internal canvas resolution for color wheel
+const AUTOSAVE_DEBOUNCE_MS = 500;
 
 const DEFAULT_COLORS = ['#2D3436', '#E74C3C', '#3498DB', '#2ECC71', '#F1C40F', '#E67E22', '#9B59B6', '#FD79A8'];
 
@@ -93,6 +95,7 @@ function DrawingBoard({ game, onClose }) {
   const isDrawingRef = useRef(false);
   const lastPointRef = useRef(null);
   const wheelCanvasRef = useRef(null);
+  const autosaveTimerRef = useRef(null);
 
   const [recentColors, setRecentColors] = useState(loadRecentColors);
   const [selectedColor, setSelectedColor] = useState(() => loadRecentColors()[0] || '#2D3436');
@@ -104,6 +107,28 @@ function DrawingBoard({ game, onClose }) {
   const [savedDrawings, setSavedDrawings] = useState(loadSavedDrawings);
   const [history, setHistory] = useState([]);
   const [canvasReady, setCanvasReady] = useState(false);
+
+  // ======================== Auto-Save (debounced, async) ========================
+
+  const autoSave = useCallback(() => {
+    // Cancel any pending autosave
+    if (autosaveTimerRef.current) clearTimeout(autosaveTimerRef.current);
+    autosaveTimerRef.current = setTimeout(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      try {
+        const dataUrl = canvas.toDataURL('image/png');
+        localStorage.setItem(STORAGE_KEY_AUTOSAVE, dataUrl);
+      } catch {}
+    }, AUTOSAVE_DEBOUNCE_MS);
+  }, []);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (autosaveTimerRef.current) clearTimeout(autosaveTimerRef.current);
+    };
+  }, []);
 
   // ======================== Color Wheel ========================
 
@@ -239,6 +264,18 @@ function DrawingBoard({ game, onClose }) {
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, rect.width, rect.height);
 
+    // Restore autosaved drawing if exists
+    try {
+      const autosaved = localStorage.getItem(STORAGE_KEY_AUTOSAVE);
+      if (autosaved) {
+        const img = new Image();
+        img.onload = () => {
+          ctx.drawImage(img, 0, 0, rect.width, rect.height);
+        };
+        img.src = autosaved;
+      }
+    } catch {}
+
     setCanvasReady(true);
   }, []);
 
@@ -297,7 +334,8 @@ function DrawingBoard({ game, onClose }) {
     const lastState = newHistory.pop();
     setHistory(newHistory);
     ctx.putImageData(lastState, 0, 0);
-  }, [history]);
+    autoSave();
+  }, [history, autoSave]);
 
   const clearCanvas = useCallback(() => {
     const canvas = canvasRef.current;
@@ -307,7 +345,8 @@ function DrawingBoard({ game, onClose }) {
     const dpr = window.devicePixelRatio || 1;
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, canvas.width / dpr, canvas.height / dpr);
-  }, [bgColor, saveToHistory]);
+    autoSave();
+  }, [bgColor, saveToHistory, autoSave]);
 
   // ======================== Save / Load ========================
 
@@ -335,10 +374,11 @@ function DrawingBoard({ game, onClose }) {
       const h = canvas.height / dpr;
       ctx.clearRect(0, 0, w, h);
       ctx.drawImage(img, 0, 0, w, h);
+      autoSave();
     };
     img.src = drawing.dataUrl;
     setShowGallery(false);
-  }, [saveToHistory]);
+  }, [saveToHistory, autoSave]);
 
   const deleteDrawing = useCallback((drawingId) => {
     setSavedDrawings(prev => {
@@ -404,9 +444,10 @@ function DrawingBoard({ game, onClose }) {
 
   const stopDrawing = useCallback((e) => {
     if (e) e.preventDefault();
+    if (isDrawingRef.current) autoSave();
     isDrawingRef.current = false;
     lastPointRef.current = null;
-  }, []);
+  }, [autoSave]);
 
   // ======================== Render ========================
 
@@ -463,6 +504,7 @@ function DrawingBoard({ game, onClose }) {
                   const dpr = window.devicePixelRatio || 1;
                   ctx.fillStyle = c.hex;
                   ctx.fillRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+                  autoSave();
                 }
               }}
             />
