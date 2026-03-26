@@ -2,18 +2,12 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import styles from './DrawingBoard.module.css';
 
-const COLORS = [
-  { id: 'black', hex: '#2D3436', label: 'שחור' },
-  { id: 'red', hex: '#E74C3C', label: 'אדום' },
-  { id: 'blue', hex: '#3498DB', label: 'כחול' },
-  { id: 'green', hex: '#2ECC71', label: 'ירוק' },
-  { id: 'yellow', hex: '#F1C40F', label: 'צהוב' },
-  { id: 'orange', hex: '#E67E22', label: 'כתום' },
-  { id: 'purple', hex: '#9B59B6', label: 'סגול' },
-  { id: 'pink', hex: '#FD79A8', label: 'ורוד' },
-  { id: 'brown', hex: '#8B4513', label: 'חום' },
-  { id: 'white', hex: '#FFFFFF', label: 'מחק' },
-];
+const STORAGE_KEY_RECENT_COLORS = 'drawingBoard_recentColors';
+const STORAGE_KEY_SAVED_DRAWINGS = 'drawingBoard_savedDrawings';
+const MAX_RECENT_COLORS = 8;
+const MAX_SAVED_DRAWINGS = 50;
+
+const DEFAULT_COLORS = ['#2D3436', '#E74C3C', '#3498DB', '#2ECC71', '#F1C40F', '#E67E22', '#9B59B6', '#FD79A8'];
 
 const BG_COLORS = [
   { id: 'white', hex: '#FFFFFF', label: 'לבן' },
@@ -31,23 +25,91 @@ const BRUSH_SIZES = [
   { id: 'xthick', size: 28, label: 'עבה מאוד' },
 ];
 
+// Load recent colors from localStorage
+function loadRecentColors() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY_RECENT_COLORS);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed.slice(0, MAX_RECENT_COLORS);
+    }
+  } catch {}
+  return DEFAULT_COLORS;
+}
+
+// Save recent colors to localStorage
+function saveRecentColors(colors) {
+  try {
+    localStorage.setItem(STORAGE_KEY_RECENT_COLORS, JSON.stringify(colors));
+  } catch {}
+}
+
+// Load saved drawings from localStorage
+function loadSavedDrawings() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY_SAVED_DRAWINGS);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch {}
+  return [];
+}
+
+// Save drawings to localStorage
+function saveSavedDrawings(drawings) {
+  try {
+    localStorage.setItem(STORAGE_KEY_SAVED_DRAWINGS, JSON.stringify(drawings));
+  } catch {}
+}
+
 /**
  * DrawingBoard - Free-play drawing canvas for toddlers
- * Supports touch and mouse, color/thickness selection, undo, clear, background color
+ * Supports touch and mouse, color picker with FIFO recent colors,
+ * brush thickness, undo, clear, background color, save/load drawings
  */
 function DrawingBoard({ game, onClose }) {
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
   const isDrawingRef = useRef(false);
   const lastPointRef = useRef(null);
+  const colorInputRef = useRef(null);
 
-  const [selectedColor, setSelectedColor] = useState(COLORS[0].hex);
+  const [recentColors, setRecentColors] = useState(loadRecentColors);
+  const [selectedColor, setSelectedColor] = useState(() => loadRecentColors()[0] || '#2D3436');
   const [brushSize, setBrushSize] = useState(BRUSH_SIZES[1].size);
   const [bgColor, setBgColor] = useState(BG_COLORS[0].hex);
   const [showBgPicker, setShowBgPicker] = useState(false);
+  const [showGallery, setShowGallery] = useState(false);
+  const [savedDrawings, setSavedDrawings] = useState(loadSavedDrawings);
   // History stack for undo - stores canvas ImageData snapshots
   const [history, setHistory] = useState([]);
   const [canvasReady, setCanvasReady] = useState(false);
+
+  // Add a color to recent list (FIFO)
+  const addToRecentColors = useCallback((hex) => {
+    setRecentColors(prev => {
+      // Remove if already exists (move to front)
+      const filtered = prev.filter(c => c.toLowerCase() !== hex.toLowerCase());
+      const updated = [hex, ...filtered].slice(0, MAX_RECENT_COLORS);
+      saveRecentColors(updated);
+      return updated;
+    });
+  }, []);
+
+  // Handle color picked from native color input
+  const handleColorPicked = useCallback((e) => {
+    const hex = e.target.value;
+    addToRecentColors(hex);
+    setSelectedColor(hex);
+  }, [addToRecentColors]);
+
+  // Open native color picker
+  const openColorPicker = useCallback(() => {
+    if (colorInputRef.current) {
+      colorInputRef.current.click();
+    }
+  }, []);
 
   // Initialize canvas
   const initCanvas = useCallback(() => {
@@ -80,7 +142,6 @@ function DrawingBoard({ game, onClose }) {
     initCanvas();
 
     const handleResize = () => {
-      // Save current drawing
       const canvas = canvasRef.current;
       if (!canvas) return;
       const tempCanvas = document.createElement('canvas');
@@ -89,10 +150,8 @@ function DrawingBoard({ game, onClose }) {
       const tempCtx = tempCanvas.getContext('2d');
       tempCtx.drawImage(canvas, 0, 0);
 
-      // Reinitialize
       initCanvas();
 
-      // Restore drawing
       const ctx = ctxRef.current;
       if (ctx) {
         ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, canvas.width / (window.devicePixelRatio || 1), canvas.height / (window.devicePixelRatio || 1));
@@ -110,27 +169,7 @@ function DrawingBoard({ game, onClose }) {
     const ctx = ctxRef.current;
     if (!canvas || !ctx) return;
 
-    const dpr = window.devicePixelRatio || 1;
-    const w = canvas.width / dpr;
-    const h = canvas.height / dpr;
-
-    // Save current image
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-    // Fill with new bg
-    ctx.fillStyle = bgColor;
-    ctx.fillRect(0, 0, w, h);
-
-    // Create temp canvas to composite
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = canvas.width;
-    tempCanvas.height = canvas.height;
-    const tempCtx = tempCanvas.getContext('2d');
-    tempCtx.putImageData(imageData, 0, 0);
-
-    // Draw old content on top (only non-bg pixels ideally, but for simplicity just overlay)
-    // We just fill bg and note: user strokes will remain from the imageData
-    // Actually let's just put imageData back - the bg change will only apply to new clear
     ctx.putImageData(imageData, 0, 0);
   }, [bgColor, canvasReady]);
 
@@ -142,7 +181,6 @@ function DrawingBoard({ game, onClose }) {
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     setHistory(prev => {
       const newHistory = [...prev, imageData];
-      // Keep max 30 steps
       if (newHistory.length > 30) newHistory.shift();
       return newHistory;
     });
@@ -169,6 +207,54 @@ function DrawingBoard({ game, onClose }) {
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, canvas.width / dpr, canvas.height / dpr);
   }, [bgColor, saveToHistory]);
+
+  // Save current drawing
+  const saveDrawing = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const dataUrl = canvas.toDataURL('image/png');
+    const newDrawing = {
+      id: Date.now(),
+      dataUrl,
+      timestamp: new Date().toLocaleString('he-IL'),
+    };
+
+    setSavedDrawings(prev => {
+      const updated = [newDrawing, ...prev].slice(0, MAX_SAVED_DRAWINGS);
+      saveSavedDrawings(updated);
+      return updated;
+    });
+  }, []);
+
+  // Load a saved drawing onto canvas
+  const loadDrawing = useCallback((drawing) => {
+    const canvas = canvasRef.current;
+    const ctx = ctxRef.current;
+    if (!canvas || !ctx) return;
+
+    saveToHistory();
+
+    const img = new Image();
+    img.onload = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.width / dpr;
+      const h = canvas.height / dpr;
+      ctx.clearRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+    };
+    img.src = drawing.dataUrl;
+    setShowGallery(false);
+  }, [saveToHistory]);
+
+  // Delete a saved drawing
+  const deleteDrawing = useCallback((drawingId) => {
+    setSavedDrawings(prev => {
+      const updated = prev.filter(d => d.id !== drawingId);
+      saveSavedDrawings(updated);
+      return updated;
+    });
+  }, []);
 
   // Get coordinates from event (mouse or touch)
   const getCoords = useCallback((e) => {
@@ -203,7 +289,6 @@ function DrawingBoard({ game, onClose }) {
     isDrawingRef.current = true;
     lastPointRef.current = coords;
 
-    // Draw a dot for single taps
     const ctx = ctxRef.current;
     if (ctx) {
       ctx.strokeStyle = selectedColor;
@@ -243,6 +328,15 @@ function DrawingBoard({ game, onClose }) {
 
   return (
     <div className={styles.container}>
+      {/* Hidden native color input */}
+      <input
+        ref={colorInputRef}
+        type="color"
+        className={styles.hiddenColorInput}
+        value={selectedColor}
+        onChange={handleColorPicked}
+      />
+
       {/* Top bar */}
       <div className={styles.topBar}>
         <button className={styles.backButton} onClick={onClose}>
@@ -267,10 +361,24 @@ function DrawingBoard({ game, onClose }) {
           </button>
           <button
             className={`${styles.actionButton} ${showBgPicker ? styles.active : ''}`}
-            onClick={() => setShowBgPicker(!showBgPicker)}
+            onClick={() => { setShowBgPicker(!showBgPicker); setShowGallery(false); }}
             title="צבע רקע"
           >
             🎨
+          </button>
+          <button
+            className={styles.actionButton}
+            onClick={() => { saveDrawing(); }}
+            title="שמור ציור"
+          >
+            💾
+          </button>
+          <button
+            className={`${styles.actionButton} ${showGallery ? styles.active : ''}`}
+            onClick={() => { setShowGallery(!showGallery); setShowBgPicker(false); }}
+            title="טען ציור"
+          >
+            📂
           </button>
         </div>
       </div>
@@ -292,7 +400,6 @@ function DrawingBoard({ game, onClose }) {
               onClick={() => {
                 setBgColor(c.hex);
                 setShowBgPicker(false);
-                // Clear canvas with new bg
                 const canvas = canvasRef.current;
                 const ctx = ctxRef.current;
                 if (canvas && ctx) {
@@ -305,6 +412,58 @@ function DrawingBoard({ game, onClose }) {
               title={c.label}
             />
           ))}
+        </motion.div>
+      )}
+
+      {/* Gallery modal for saved drawings */}
+      {showGallery && (
+        <motion.div
+          className={styles.galleryOverlay}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setShowGallery(false)}
+        >
+          <motion.div
+            className={styles.galleryModal}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.galleryHeader}>
+              <h2 className={styles.galleryTitle}>הציורים שלי</h2>
+              <button className={styles.galleryClose} onClick={() => setShowGallery(false)}>✕</button>
+            </div>
+            {savedDrawings.length === 0 ? (
+              <div className={styles.galleryEmpty}>
+                <span className={styles.galleryEmptyIcon}>🖼️</span>
+                <p>אין ציורים שמורים עדיין</p>
+              </div>
+            ) : (
+              <div className={styles.galleryGrid}>
+                {savedDrawings.map(drawing => (
+                  <div key={drawing.id} className={styles.galleryItem}>
+                    <img
+                      src={drawing.dataUrl}
+                      alt="ציור שמור"
+                      className={styles.galleryThumb}
+                      onClick={() => loadDrawing(drawing)}
+                    />
+                    <div className={styles.galleryItemInfo}>
+                      <span className={styles.galleryTimestamp}>{drawing.timestamp}</span>
+                      <button
+                        className={styles.galleryDeleteBtn}
+                        onClick={(e) => { e.stopPropagation(); deleteDrawing(drawing.id); }}
+                        title="מחק"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </motion.div>
         </motion.div>
       )}
 
@@ -326,17 +485,33 @@ function DrawingBoard({ game, onClose }) {
 
       {/* Bottom toolbar */}
       <div className={styles.toolbar}>
-        {/* Color palette */}
+        {/* Color palette: recent colors + picker + eraser */}
         <div className={styles.colorPalette}>
-          {COLORS.map(c => (
+          {recentColors.map((hex, idx) => (
             <button
-              key={c.id}
-              className={`${styles.colorBtn} ${selectedColor === c.hex ? styles.selectedColor : ''}`}
-              style={{ backgroundColor: c.hex, border: c.id === 'white' ? '2px solid #ccc' : undefined }}
-              onClick={() => setSelectedColor(c.hex)}
-              title={c.label}
+              key={`${hex}-${idx}`}
+              className={`${styles.colorBtn} ${selectedColor === hex ? styles.selectedColor : ''}`}
+              style={{ backgroundColor: hex }}
+              onClick={() => setSelectedColor(hex)}
             />
           ))}
+          {/* Color picker button */}
+          <button
+            className={styles.colorPickerBtn}
+            onClick={openColorPicker}
+            title="בחר צבע"
+          >
+            🌈
+          </button>
+          {/* Eraser */}
+          <button
+            className={`${styles.colorBtn} ${styles.eraserBtn} ${selectedColor === '#FFFFFF' ? styles.selectedColor : ''}`}
+            style={{ backgroundColor: '#FFFFFF' }}
+            onClick={() => setSelectedColor('#FFFFFF')}
+            title="מחק"
+          >
+            <span className={styles.eraserIcon}>✏️</span>
+          </button>
         </div>
 
         {/* Brush sizes */}

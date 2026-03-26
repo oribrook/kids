@@ -1965,6 +1965,50 @@ GAME TYPE: mazeGame
 DATA FILES:
     ./src/data/games/mazeGame.js, mazeGame2.js, mazeGame3.js
 
+GAME TYPE: drawingBoard
+    - Self-contained component, bypasses the question-based GameContext flow
+    - Game.jsx detects gameType === 'drawingBoard' and renders <DrawingBoard>
+    - No questions array needed - pure creative free-play canvas
+    - Color palette: FIFO recent colors (max 8) replacing fixed color list
+    - Rainbow button (🌈) opens native <input type="color"> for full spectrum picker
+    - Picked colors push to front of recent list; oldest drops off (FIFO)
+    - White/eraser is a dedicated permanent button, not part of FIFO
+    - Recent colors persisted to localStorage key: drawingBoard_recentColors
+    - Save (💾) button: saves canvas as PNG dataURL to localStorage (FIFO, max 50)
+    - Load (📂) button: opens gallery modal with thumbnails of saved drawings
+    - Gallery: 3-column grid, timestamps, per-item delete, click to load onto canvas
+    - Saved drawings persisted to localStorage key: drawingBoard_savedDrawings
+    - Default recent colors: black, red, blue, green, yellow, orange, purple, pink
+    - Brush sizes: thin (3), medium (8), thick (16), extra thick (28)
+    - Background color picker (🎨): 6 pastel options
+    - Undo (↩️) up to 30 steps, Clear (🗑️) fills with background color
+
+    Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → toddler-drawing (לוח ציור)
+
+./src/components/game/DrawingBoard.jsx
+    Self-contained drawing board component.
+    Key features:
+    - Canvas with touch + mouse support (crosshair cursor)
+    - Hidden <input type="color"> triggered by rainbow button click
+    - recentColors state with FIFO logic (addToRecentColors)
+    - saveDrawing/loadDrawing/deleteDrawing for gallery management
+    - saveToHistory for undo stack (ImageData snapshots, max 30)
+    - Device pixel ratio aware (HiDPI support)
+    - Resize handler preserves current drawing
+
+./src/components/game/DrawingBoard.module.css
+    Styles for Drawing Board:
+    - Full-viewport RTL container
+    - Hidden color input (opacity 0, pointer-events none)
+    - Color picker button: conic-gradient rainbow background with "+" overlay
+    - Eraser button: white with border + pencil icon
+    - Gallery overlay: fixed backdrop, centered modal with rounded corners
+    - Gallery grid: 3 columns (2 on mobile), thumbnails with 4:3 aspect ratio
+    - Mobile responsive: smaller buttons at 480px and 360px breakpoints
+
+DATA FILES:
+    ./src/data/games/drawingBoard.js
+
 GAME TYPE: balloonPop
     - Self-contained component, bypasses the question-based GameContext flow
     - Game.jsx detects gameType === 'balloonPop' and renders <BalloonPop>
