@@ -28,6 +28,89 @@ const BRUSH_SIZES = [
   { id: 'xthick', size: 28 },
 ];
 
+const SHAPES = [
+  { id: 'circle', label: '●' },
+  { id: 'square', label: '■' },
+  { id: 'triangle', label: '▲' },
+  { id: 'star', label: '★' },
+  { id: 'heart', label: '♥' },
+  { id: 'diamond', label: '◆' },
+];
+
+const SHAPE_SIZES = [
+  { id: 'small', size: 25, label: 'S' },
+  { id: 'medium', size: 50, label: 'M' },
+  { id: 'large', size: 80, label: 'L' },
+];
+
+// Draw a shape on the canvas at (x, y)
+function drawShapeOnCanvas(ctx, x, y, shapeId, size, color) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+
+  switch (shapeId) {
+    case 'circle':
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+
+    case 'square':
+      ctx.fillRect(x - size, y - size, size * 2, size * 2);
+      break;
+
+    case 'triangle': {
+      const h = size * Math.sqrt(3);
+      ctx.moveTo(x, y - size);
+      ctx.lineTo(x + h / 2, y + size / 2);
+      ctx.lineTo(x - h / 2, y + size / 2);
+      ctx.closePath();
+      ctx.fill();
+      break;
+    }
+
+    case 'star': {
+      const spikes = 5;
+      const outerR = size;
+      const innerR = size * 0.4;
+      let rot = -Math.PI / 2;
+      for (let i = 0; i < spikes * 2; i++) {
+        const r = i % 2 === 0 ? outerR : innerR;
+        const angle = rot + (i * Math.PI) / spikes;
+        const sx = x + Math.cos(angle) * r;
+        const sy = y + Math.sin(angle) * r;
+        if (i === 0) ctx.moveTo(sx, sy);
+        else ctx.lineTo(sx, sy);
+      }
+      ctx.closePath();
+      ctx.fill();
+      break;
+    }
+
+    case 'heart': {
+      const s = size * 0.6;
+      ctx.moveTo(x, y + s * 0.7);
+      ctx.bezierCurveTo(x, y - s * 0.2, x - s * 1.5, y - s * 0.8, x, y - s * 1.5);
+      ctx.moveTo(x, y + s * 0.7);
+      ctx.bezierCurveTo(x, y - s * 0.2, x + s * 1.5, y - s * 0.8, x, y - s * 1.5);
+      ctx.fill();
+      break;
+    }
+
+    case 'diamond': {
+      ctx.moveTo(x, y - size);
+      ctx.lineTo(x + size * 0.65, y);
+      ctx.lineTo(x, y + size);
+      ctx.lineTo(x - size * 0.65, y);
+      ctx.closePath();
+      ctx.fill();
+      break;
+    }
+
+    default:
+      break;
+  }
+}
+
 // HSL to RGB conversion
 function hslToRgb(h, s, l) {
   h /= 360;
@@ -107,6 +190,13 @@ function DrawingBoard({ game, onClose }) {
   const [savedDrawings, setSavedDrawings] = useState(loadSavedDrawings);
   const [history, setHistory] = useState([]);
   const [canvasReady, setCanvasReady] = useState(false);
+
+  // Shapes stamp mode
+  const [activeMode, setActiveMode] = useState('draw'); // 'draw' | 'stamp'
+  const [showShapesMenu, setShowShapesMenu] = useState(false);
+  const [selectedShape, setSelectedShape] = useState(null);
+  const [shapeSize, setShapeSize] = useState(SHAPE_SIZES[1].size);
+  const [shapesMenuStep, setShapesMenuStep] = useState('shape'); // 'shape' | 'size'
 
   // ======================== Auto-Save (debounced, async) ========================
 
@@ -412,6 +502,19 @@ function DrawingBoard({ game, onClose }) {
     e.preventDefault();
     const coords = getCoords(e);
     if (!coords) return;
+
+    // Stamp mode: place shape and return
+    if (activeMode === 'stamp' && selectedShape) {
+      saveToHistory();
+      const ctx = ctxRef.current;
+      if (ctx) {
+        drawShapeOnCanvas(ctx, coords.x, coords.y, selectedShape, shapeSize, selectedColor);
+        autoSave();
+      }
+      return;
+    }
+
+    // Normal draw mode
     saveToHistory();
     isDrawingRef.current = true;
     lastPointRef.current = coords;
@@ -424,7 +527,7 @@ function DrawingBoard({ game, onClose }) {
       ctx.lineTo(coords.x + 0.1, coords.y + 0.1);
       ctx.stroke();
     }
-  }, [getCoords, saveToHistory, selectedColor, brushSize]);
+  }, [getCoords, saveToHistory, selectedColor, brushSize, activeMode, selectedShape, shapeSize, autoSave]);
 
   const draw = useCallback((e) => {
     e.preventDefault();
@@ -582,6 +685,76 @@ function DrawingBoard({ game, onClose }) {
         </motion.div>
       )}
 
+      {/* Shapes menu dropdown */}
+      {showShapesMenu && (
+        <motion.div
+          className={styles.shapesMenu}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          {shapesMenuStep === 'shape' ? (
+            <div className={styles.shapesGrid}>
+              {SHAPES.map(s => (
+                <button
+                  key={s.id}
+                  className={`${styles.shapeBtn} ${selectedShape === s.id ? styles.selectedShapeBtn : ''}`}
+                  onClick={() => {
+                    setSelectedShape(s.id);
+                    setShapesMenuStep('size');
+                  }}
+                >
+                  <span className={styles.shapeIcon}>{s.label}</span>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className={styles.sizePickerRow}>
+              <button
+                className={styles.sizeBackBtn}
+                onClick={() => setShapesMenuStep('shape')}
+              >
+                ←
+              </button>
+              {SHAPE_SIZES.map(sz => (
+                <button
+                  key={sz.id}
+                  className={`${styles.sizeBtn} ${shapeSize === sz.size ? styles.selectedSizeBtn : ''}`}
+                  onClick={() => {
+                    setShapeSize(sz.size);
+                    setActiveMode('stamp');
+                    setShowShapesMenu(false);
+                    setShapesMenuStep('shape');
+                  }}
+                >
+                  <span
+                    className={styles.sizePreview}
+                    style={{ color: selectedColor === '#FFFFFF' ? '#999' : selectedColor }}
+                  >
+                    {SHAPES.find(s => s.id === selectedShape)?.label || '●'}
+                  </span>
+                  <span className={styles.sizeLabel}>{sz.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </motion.div>
+      )}
+
+      {/* Stamp mode indicator */}
+      {activeMode === 'stamp' && selectedShape && (
+        <div className={styles.stampIndicator}>
+          <span className={styles.stampShape} style={{ color: selectedColor === '#FFFFFF' ? '#999' : selectedColor }}>
+            {SHAPES.find(s => s.id === selectedShape)?.label}
+          </span>
+          <button
+            className={styles.stampExitBtn}
+            onClick={() => { setActiveMode('draw'); setSelectedShape(null); }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Canvas area */}
       <div className={styles.canvasWrapper}>
         <canvas
@@ -616,19 +789,44 @@ function DrawingBoard({ game, onClose }) {
           />
           <button
             className={`${styles.colorBtn} ${styles.eraserBtn} ${selectedColor === '#FFFFFF' ? styles.selectedColor : ''}`}
-            onClick={() => setSelectedColor('#FFFFFF')}
+            onClick={() => { setSelectedColor('#FFFFFF'); setActiveMode('draw'); setSelectedShape(null); setShowShapesMenu(false); }}
           >
             <span className={styles.eraserIcon}>✏️</span>
           </button>
         </div>
+
+        {/* Shapes button */}
+        <button
+          className={`${styles.shapesToggleBtn} ${activeMode === 'stamp' ? styles.shapesActive : ''} ${showShapesMenu ? styles.shapesOpen : ''}`}
+          onClick={() => {
+            if (activeMode === 'stamp' && !showShapesMenu) {
+              // Exit stamp mode
+              setActiveMode('draw');
+              setSelectedShape(null);
+              setShowShapesMenu(false);
+            } else {
+              setShowShapesMenu(!showShapesMenu);
+              setShapesMenuStep('shape');
+            }
+          }}
+        >
+          {activeMode === 'stamp' && selectedShape
+            ? SHAPES.find(s => s.id === selectedShape)?.label || '◆'
+            : '◆'}
+        </button>
 
         {/* Brush sizes */}
         <div className={styles.brushSizes}>
           {BRUSH_SIZES.map(b => (
             <button
               key={b.id}
-              className={`${styles.brushBtn} ${brushSize === b.size ? styles.selectedBrush : ''}`}
-              onClick={() => setBrushSize(b.size)}
+              className={`${styles.brushBtn} ${brushSize === b.size && activeMode === 'draw' ? styles.selectedBrush : ''}`}
+              onClick={() => {
+                setBrushSize(b.size);
+                setActiveMode('draw');
+                setSelectedShape(null);
+                setShowShapesMenu(false);
+              }}
             >
               <span
                 className={styles.brushDot}
