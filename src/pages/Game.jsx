@@ -16,6 +16,7 @@ import TimedQuestion from '../components/game/TimedQuestion';
 import MemoryQuestion from '../components/game/MemoryQuestion';
 import MemoryCardGame from '../components/game/MemoryCardGame';
 import DrawingBoard from '../components/game/DrawingBoard';
+import StoryDraw from '../components/game/StoryDraw';
 import MazeGame from '../components/game/MazeGame';
 import BrickBreaker from '../components/game/BrickBreaker';
 import TempleRun from '../components/game/TempleRun';
@@ -130,6 +131,16 @@ function Game() {
   if (game.gameType === 'drawingBoard') {
     return (
       <DrawingBoard
+        game={game}
+        onClose={() => navigate(`/category/${game.categoryId}`)}
+      />
+    );
+  }
+
+  // Story Draw - self-contained, bypasses question-based flow
+  if (game.gameType === 'storyDraw') {
+    return (
+      <StoryDraw
         game={game}
         onClose={() => navigate(`/category/${game.categoryId}`)}
       />

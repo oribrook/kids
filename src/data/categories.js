@@ -229,6 +229,18 @@ export const categories = [
     games: ['drawing-board'],
   },
 
+  // Hebrew Toddler - Story Draw (ציור סיפור)
+  {
+    id: 'toddler-story-draw',
+    topicId: 'hebrew-toddler',
+    name: 'ציור סיפור',
+    description: 'צרו סיפור עם צורות ודמויות!',
+    icon: '🖌️',
+    color: '#9B59B6',
+    backgroundColor: '#F5EEF8',
+    games: ['story-draw'],
+  },
+
   // Hebrew Toddler - Maze (מבוך)
   {
     id: 'toddler-maze',

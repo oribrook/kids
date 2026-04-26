@@ -145,6 +145,9 @@ import audioObjectsEn4 from './audioObjectsEn4';
 // Hebrew Toddler - Category: לוח ציור (toddler-drawing)
 import drawingBoard from './drawingBoard';
 
+// Hebrew Toddler - Category: ציור סיפור (toddler-story-draw)
+import storyDraw from './storyDraw';
+
 // Hebrew Toddler - Category: מבוך (toddler-maze)
 import mazeGame from './mazeGame';
 import mazeGame2 from './mazeGame2';
@@ -318,6 +321,8 @@ export const games = {
   'audio-objects-en-4': audioObjectsEn4,
   // Hebrew Toddler - Category: לוח ציור
   'drawing-board': drawingBoard,
+  // Hebrew Toddler - Category: ציור סיפור
+  'story-draw': storyDraw,
   // Hebrew Toddler - Category: מבוך
   'maze-game': mazeGame,
   'maze-game-2': mazeGame2,
