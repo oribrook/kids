@@ -21,6 +21,7 @@ import MazeGame from '../components/game/MazeGame';
 import BrickBreaker from '../components/game/BrickBreaker';
 import TempleRun from '../components/game/TempleRun';
 import BalloonPop from '../components/game/BalloonPop';
+import FastBalloon from '../components/game/FastBalloon';
 import SimonSays from '../components/game/SimonSays';
 
 import SortGame from '../components/game/SortGame';
@@ -37,6 +38,7 @@ const STANDALONE_GAMES = {
   brickBreaker: BrickBreaker,
   templeRun: TempleRun,
   balloonPop: BalloonPop,
+  fastBalloon: FastBalloon,
   simonSays: SimonSays,
   sortGame: SortGame,
 };

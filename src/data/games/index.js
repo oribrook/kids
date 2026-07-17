@@ -162,6 +162,9 @@ import templeRun from './templeRun';
 // Hebrew Toddler - Category: פוצצו בלונים! (balloon-pop)
 import balloonPop from './balloonPop';
 
+// Hebrew Toddler - Category: בלון מהיר! (fast-balloon)
+import fastBalloon from './fastBalloon';
+
 // Hebrew Toddler - Category: שמעון אומר (simon-says)
 import simonSays from './simonSays';
 
@@ -333,6 +336,8 @@ export const games = {
   'temple-run': templeRun,
   // Hebrew Toddler - Category: פוצצו בלונים!
   'balloon-pop': balloonPop,
+  // Hebrew Toddler - Category: בלון מהיר!
+  'fast-balloon': fastBalloon,
   // Hebrew Toddler - Category: שמעון אומר
   'simon-says': simonSays,
 

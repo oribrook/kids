@@ -145,6 +145,160 @@ export function playThud() {
   } catch { /* ignore */ }
 }
 
+/** Jump: quick rising "boing" blip. */
+export function playJump() {
+  const ac = getCtx();
+  if (!ac) return;
+  try {
+    const t = ac.currentTime;
+    const osc = ac.createOscillator();
+    const gain = ac.createGain();
+    osc.connect(gain);
+    gain.connect(ac.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(300, t);
+    osc.frequency.exponentialRampToValueAtTime(720, t + 0.14);
+    gain.gain.setValueAtTime(0.25, t);
+    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.18);
+    osc.start(t);
+    osc.stop(t + 0.19);
+  } catch { /* ignore */ }
+}
+
+/** Slide/roll: fast downward filtered swoosh. */
+export function playSlide() {
+  const ac = getCtx();
+  if (!ac) return;
+  try {
+    const t = ac.currentTime;
+    const len = Math.floor(ac.sampleRate * 0.18);
+    const buf = ac.createBuffer(1, len, ac.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) {
+      const env = Math.sin((i / len) * Math.PI);
+      data[i] = (Math.random() * 2 - 1) * env;
+    }
+    const src = ac.createBufferSource();
+    const filter = ac.createBiquadFilter();
+    const gain = ac.createGain();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1800, t);
+    filter.frequency.exponentialRampToValueAtTime(300, t + 0.18);
+    filter.Q.value = 1.1;
+    src.buffer = buf;
+    src.connect(filter);
+    filter.connect(gain);
+    gain.connect(ac.destination);
+    gain.gain.setValueAtTime(0.2, t);
+    src.start(t);
+  } catch { /* ignore */ }
+}
+
+/** Extra life gained: warm 3-note ascending heart chime. */
+export function playHeart() {
+  const ac = getCtx();
+  if (!ac) return;
+  try {
+    const t = ac.currentTime;
+    [659.25, 830.61, 987.77].forEach((freq, i) => {
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const start = t + i * 0.09;
+      gain.gain.setValueAtTime(0.26, start);
+      gain.gain.exponentialRampToValueAtTime(0.01, start + 0.4);
+      osc.start(start);
+      osc.stop(start + 0.42);
+    });
+  } catch { /* ignore */ }
+}
+
+/** Explosion (bomb / smash): noise burst + low pitch drop. */
+export function playBoom() {
+  const ac = getCtx();
+  if (!ac) return;
+  try {
+    const t = ac.currentTime;
+    // Low descending body
+    const osc = ac.createOscillator();
+    const gain = ac.createGain();
+    osc.connect(gain);
+    gain.connect(ac.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(140, t);
+    osc.frequency.exponentialRampToValueAtTime(40, t + 0.3);
+    gain.gain.setValueAtTime(0.4, t);
+    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.32);
+    osc.start(t);
+    osc.stop(t + 0.33);
+    // Noise crack
+    const len = Math.floor(ac.sampleRate * 0.22);
+    const buf = ac.createBuffer(1, len, ac.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2);
+    const src = ac.createBufferSource();
+    const filter = ac.createBiquadFilter();
+    const nGain = ac.createGain();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(2600, t);
+    filter.frequency.exponentialRampToValueAtTime(350, t + 0.2);
+    src.buffer = buf;
+    src.connect(filter);
+    filter.connect(nGain);
+    nGain.connect(ac.destination);
+    nGain.gain.setValueAtTime(0.35, t);
+    src.start(t);
+  } catch { /* ignore */ }
+}
+
+/** Level-up / speed-up: short triumphant fanfare. */
+export function playLevelUp() {
+  const ac = getCtx();
+  if (!ac) return;
+  try {
+    const t = ac.currentTime;
+    const notes = [523.25, 659.25, 783.99, 1046.5, 1318.51];
+    notes.forEach((freq, i) => {
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.type = 'square';
+      osc.frequency.value = freq;
+      const start = t + i * 0.07;
+      gain.gain.setValueAtTime(0.12, start);
+      gain.gain.exponentialRampToValueAtTime(0.01, start + 0.3);
+      osc.start(start);
+      osc.stop(start + 0.31);
+    });
+  } catch { /* ignore */ }
+}
+
+/** Game over: gentle descending "wah" - sad but not scary. */
+export function playGameOver() {
+  const ac = getCtx();
+  if (!ac) return;
+  try {
+    const t = ac.currentTime;
+    [523.25, 440, 349.23].forEach((freq, i) => {
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.type = 'triangle';
+      osc.frequency.value = freq;
+      const start = t + i * 0.18;
+      gain.gain.setValueAtTime(0.22, start);
+      gain.gain.exponentialRampToValueAtTime(0.01, start + 0.4);
+      osc.start(start);
+      osc.stop(start + 0.42);
+    });
+  } catch { /* ignore */ }
+}
+
 /** Soft whoosh for lane change / jump. */
 export function playWhoosh() {
   const ac = getCtx();

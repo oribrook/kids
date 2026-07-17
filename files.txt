@@ -1880,16 +1880,26 @@ PSEUDO-3D SYSTEM:
 
 GAME MECHANICS:
     - 3 lanes. Tap another screen-third → move one lane toward it.
-      Tap your own lane → jump (parabolic arc, whoosh sound).
+      Tap your own lane → jump. SWIPE DOWN → slide/roll (~0.7s, squashed
+      bunny + dust). Swipe down while airborne = fast-fall into a slide.
     - Diamonds 💎 → +1, ding SFX + sparkle particles + floating "+1"
-    - Rocks 🪨 → -1 life, thud + voice, red flash + camera shake
+    - EVERY 5 DIAMONDS → +1 life (up to 3): heart chime + "+❤️" floater +
+      pink particle burst (DIAMONDS_PER_LIFE const)
+    - Rocks 🪨 → -1 life; a HIGH jump (jumpY < -34) clears rocks
     - Barriers 🚧 (span all lanes, striped) → must jump over
-    - PICKUPS (6% spawn): 🛡️ shield absorbs one hit (glow ring around bunny),
-      🧲 magnet pulls diamonds into your lane for 5s, 🥕 golden carrot = +5
-      HUD shows active shield/magnet (with seconds countdown)
-    - ~49% diamonds / ~34% rocks / 13% barriers / 6% pickups (anti-overlap kept)
+    - Birds 🦉 (level 2+, head height, wing-flap bob) → must SLIDE under
+      (or switch lane); jumping does NOT help
+    - PICKUPS (7% spawn): 🛡️ shield absorbs one hit, 🧲 magnet pulls diamonds
+      5s, 🥕 golden carrot = +5, 🚀 ROCKET = 4s invincible turbo (1.55x speed,
+      smashes rocks/barriers/birds with playBoom + 💥, rainbow trail, gold glow)
+      HUD shows active shield/magnet/rocket (with seconds countdown)
+    - Spawn rolls: 11% barrier / 8% bird (L2+) / 7% pickups / ~48% diamonds /
+      ~26% rocks (anti-overlap kept). Diamond RUNS: 30% chance a diamond
+      starts a 3-in-a-row chain in the same lane (gs.pendingRun)
+    - 3-2-1 countdown on start (canvas-drawn number + beeps, then GO tone);
+      taps ignored and nothing spawns during countdown
     - Lives: 3 hearts. Last heart pulses. 0 hearts → game over (gs.over guard
-      prevents double score recording)
+      prevents double score recording). playGameOver jingle + voice praise
     - Scoring: 40+ diamonds = 3★, 20+ = 2★, 5+ = 1★; score = stars × 16
 
 LEVEL PROGRESSION (5 levels, every 10 diamonds):
@@ -1900,20 +1910,28 @@ LEVEL PROGRESSION (5 levels, every 10 diamonds):
     Speed lines appear at the screen edges from level 3.
 
 VISUALS (all canvas-drawn/pre-rendered, no external assets):
-    - Bunny sprite: run-cycle hop bob, tilts while changing lanes, squash-stretch
-      on landing + dust puffs, grows slightly while jumping (closer to camera),
-      shrinking ground shadow while airborne
-    - Perspective road with converging lane-divider stripes flowing toward camera
-    - Distant mountains + sky object per level, side props (trees/cacti/etc)
-      scroll past along the road edges, scaled by distance
-    - Particle system: collect sparkles, dust, shield-break burst
-    - Floating score texts drawn on canvas
+    - CURVED ROAD: gs.curve drifts toward a random target every ~5-9s;
+      bendAt(curve, w, p) shifts x by (1-p)^2 → vanishing point swings
+      sideways, road drawn as a 12-segment curved ribbon; mountains/sky/props/
+      items all follow the bend with parallax factors (OutRun-style S-curves)
+    - Fog band at the horizon (white gradient) for depth
+    - Ground shadow ellipses under ALL items (strong 3D depth cue)
+    - Per-level ambient atmosphere (makeAmbient): clouds drift (L1-2),
+      snowfall (L3), twinkling stars (L4), rising embers (L5)
+    - Sky object has a soft radial glow; CSS vignette overlay adds depth
+    - Bunny sprite: run-cycle hop bob, tilts while changing lanes, squash-
+      stretch on landing + dust puffs, slide pose (1.22x wide, 0.52 squash,
+      wobble tilt), rocket gold glow + rainbow trail particles
+    - Speed lines at level 3+ and during rocket turbo
+    - Particle system: collect sparkles, dust, shield-break, smash bursts
+    - Floating score texts + countdown number drawn on canvas
 
-CONTROLS:
+CONTROLS (mobile-first):
     Whole screen divided into 3 vertical thirds = lanes:
     - Tap left/right third → move one lane toward it (never skips lanes)
     - Tap own third → jump
-    onTouchStart (mobile) + onMouseDown (desktop), 100ms debounce
+    - Swipe DOWN (55px+ within 450ms) → slide (swipeRef in onTouchMove)
+    onTouchStart/onTouchMove (mobile) + onMouseDown tap (desktop), 100ms debounce
 
 ./src/data/games/templeRun.js
     Game data for Temple Run:
@@ -1935,7 +1953,8 @@ CONTROLS:
     - Level progression with themed scenery (mountains, sky object, side props)
     - Red flash overlay on hit, level-up flash overlay
     - Game over screen with diamond count, stars, play-again/back buttons
-    - SFX via utils/soundManager (playDing/playSparkle/playThud/playWhoosh)
+    - SFX via utils/soundManager (playDing/playSparkle/playThud/playWhoosh/
+      playJump/playSlide/playHeart/playBoom/playLevelUp/playGameOver/playTone)
     - Voice via useAudio (playWrong on hit, playComplete at game over)
     - Uses useUser hook for addScore and recordGamePlayed (gs.over double-guard)
 
@@ -2105,6 +2124,67 @@ GAME TYPE: balloonPop
 CATEGORY ADDED:
     Category: balloon-pop (פוצצו בלונים!) under hebrew-toddler topic
     Color: #FF6B6B (coral red), Background: #FFE4E4
+
+GAME TYPE: fastBalloon (בלון מהיר!)
+    - Self-contained component, registered in Game.jsx STANDALONE_GAMES map
+    - ENDLESS balloon game with lives - NO TIMER. The original balloon-pop
+      stays untouched; this is a separate, harder sibling game.
+    - Starts SLOWER than balloon-pop (spawn 1500ms, float 7-9s), then speeds
+      up every 15 seconds FOREVER: spawnMs ×0.85 / durations ×0.88 per level
+      (floors: 260ms / 1.3s - by then it is physically impossible → the game
+      always ends eventually). Speed-up = "!מהר יותר 🚀" flash + playLevelUp.
+    - LIVES: 3 hearts. Lose a heart when:
+      💣 tapping a BOMB balloon (dark balloon, red dashed ring + 💣 icon):
+         playBoom + screen shake + red flash + 10-shard orange/red boom burst
+      🎈 every 5 MISSED balloons (poppable balloons that float away untapped):
+         5-dot progress indicator in the HUD fills red, then resets + 💔
+    - GAIN a heart (up to 3): every 5 popped balloons (POPS_PER_LIFE) or
+      popping a 💗 heart balloon → playHeart + "+❤️" floater
+    - Bombs only appear after the first 12s (calm intro), 12% of spawns.
+      Escaped bombs do NOT count as misses (ignoring them is correct!).
+    - Specials: ⭐ golden +5 points (7%), 🌈 rainbow pops everything AND
+      safely clears bombs (3%), 💗 heart +1 life (4%)
+    - Combo (3+ pops within 1.5s) + milestone flash every 10 - kept from
+      balloon-pop. Background day → sunset (speed 3+) → night (speed 5+).
+    - MISS DETECTION: activeRef Map (id → type) is the source of truth;
+      spawn timeout checks activeRef.has(id) - if still there, the balloon
+      escaped → registerMiss. Refs (livesRef/missRef/popCountRef/scoreRef/
+      overRef) drive all game logic to avoid stale-closure bugs; state
+      mirrors exist only for rendering.
+    - Game over: playGameOver + voice praise, fireworks, score + top speed
+      reached (⚡N) + stars: 50+=3, 25+=2, else 1; score = stars × 16
+    - Phases: waiting (legend explains bombs/misses/lives) → playing → ended
+
+./src/data/games/fastBalloon.js
+    Game definition:
+    - id: 'fast-balloon'
+    - categoryId: 'fast-balloon'
+    - gameType: 'fastBalloon'
+    - icon: '⚡'
+
+./src/components/game/FastBalloon.jsx
+    Self-contained endless balloon game component.
+    Key features:
+    - speedConfig(lvl) exponential difficulty table (no cap)
+    - rollBalloonType(elapsedSec) - bombs gated behind BOMBS_AFTER_SEC
+    - SVG balloon per type incl. bomb (dark + red dashed stroke + 💣)
+    - Framer Motion float animation; AnimatePresence pop exit
+    - handlePop: bomb → loseLife, rainbow → clear-all via activeRef count,
+      golden/heart/normal → addPoints + addPops (life every 5 pops)
+    - Elapsed-seconds interval drives speedLevelRef → spawner re-created
+      per level, playLevelUp + speed flash on each ramp
+    - useUser for score/recordGamePlayed, soundManager SFX, useAudio voice
+
+./src/components/game/FastBalloon.module.css
+    Styles for Fast Balloon (based on BalloonPop styles) plus:
+    - .speedBadge (⚡N), .statusGroup (hearts + miss dots)
+    - .missDot / .missDotOn (5-dot escaped-balloons indicator)
+    - .shake screen shake on bomb, .hurtFlash red flash, .speedFlash
+    - .bgDay/.bgSunset/.bgNight by speed level, boom shards, purple startBtn
+
+CATEGORY ADDED:
+    Category: fast-balloon (בלון מהיר!) under hebrew-toddler topic
+    Color: #A855F7 (purple), Background: #F3E8FF, Icon: ⚡
 
 GAME TYPE: simonSays
     - Self-contained component, bypasses the question-based GameContext flow
@@ -2301,7 +2381,13 @@ AUDIO (public/audio/which-letters-*.mp3, 11 files):
     - playDing() - diamond/coin collect (two-note B5→E6)
     - playSparkle() - special pickups / milestones (ascending arpeggio)
     - playThud() - obstacle hit (low descending square)
-    - playWhoosh() - lane change / jump (band-passed noise sweep)
+    - playWhoosh() - lane change (band-passed noise sweep)
+    - playJump() - jump (rising sine "boing")
+    - playSlide() - slide/roll (downward filtered swoosh)
+    - playHeart() - extra life gained (warm 3-note ascending chime)
+    - playBoom() - explosion: bomb tap / rocket smash (noise + low saw drop)
+    - playLevelUp() - level/speed up (5-note square fanfare)
+    - playGameOver() - game over (gentle descending triangle, not scary)
 
 ./src/utils/canvasPolyfills.js
     ctx.roundRect polyfill (Safari <16 / Chrome <99). Without it BrickBreaker's

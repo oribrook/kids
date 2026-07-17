@@ -289,6 +289,18 @@ export const categories = [
     games: ['balloon-pop'],
   },
 
+  // Hebrew Toddler - Fast Balloon (בלון מהיר!)
+  {
+    id: 'fast-balloon',
+    topicId: 'hebrew-toddler',
+    name: 'בלון מהיר!',
+    description: 'פוצצו הכל - אבל אל תגעו בפצצות!',
+    icon: '⚡',
+    color: '#A855F7',
+    backgroundColor: '#F3E8FF',
+    games: ['fast-balloon'],
+  },
+
   // Hebrew Toddler - Simon Says (שמעון אומר)
   {
     id: 'simon-says',
