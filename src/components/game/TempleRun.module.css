@@ -82,6 +82,25 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
+/* Active powerup indicators (shield / magnet) */
+.powerups {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+}
+
+/* Last heart pulses as a warning */
+.lastLife {
+  display: inline-block;
+  animation: lifePulse 0.7s ease-in-out infinite;
+}
+
+@keyframes lifePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
 /* Canvas */
 .canvas {
   display: block;

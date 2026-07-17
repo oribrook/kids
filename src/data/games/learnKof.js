@@ -3,6 +3,8 @@
 // Type: Standard selection - introduction to the letter ק with various question types
 // Teaches children to recognize the letter, its shape, and words that start with it
 
+import { wordLettersQuestionFor } from '../wordLettersBank';
+
 const learnKof = {
   id: 'learn-kof',
   categoryId: 'letters-ayin-resh',
@@ -176,6 +178,8 @@ const learnKof = {
         ],
         correctCount: 4, // Number of correct answers to find
       },
+      // Question 11: Which letters appear in the word? (image + audio, no written word)
+      wordLettersQuestionFor('ק', 'lk-e11'),
     ],
   },
 };

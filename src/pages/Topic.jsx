@@ -20,8 +20,14 @@ function Topic() {
     );
   }
 
-  const handleCategoryClick = (categoryId) => {
-    navigate(`/category/${categoryId}`);
+  const handleCategoryClick = (category) => {
+    // Single-game categories (all the toddler arcade games) skip the middle
+    // page and open the game directly
+    if (category.games?.length === 1) {
+      navigate(`/game/${category.games[0]}`);
+    } else {
+      navigate(`/category/${category.id}`);
+    }
   };
 
   const handleBack = () => {
@@ -71,13 +77,16 @@ function Topic() {
               key={category.id}
               className={styles.categoryCard}
               style={{ backgroundColor: category.backgroundColor }}
-              onClick={() => handleCategoryClick(category.id)}
+              onClick={() => handleCategoryClick(category)}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ scale: 1.05, y: -5 }}
               whileTap={{ scale: 0.95 }}
             >
+              {category.icon && (
+                <span className={styles.categoryIcon}>{category.icon}</span>
+              )}
               <h2 className={styles.categoryName}>{category.name}</h2>
               <p className={styles.categoryDescription}>{category.description}</p>
               <div

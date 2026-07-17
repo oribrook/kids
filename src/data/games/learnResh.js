@@ -3,6 +3,8 @@
 // Type: Standard selection - introduction to the letter ר with various question types
 // Teaches children to recognize the letter, its shape, and words that start with it
 
+import { wordLettersQuestionFor } from '../wordLettersBank';
+
 const learnResh = {
   id: 'learn-resh',
   categoryId: 'letters-ayin-resh',
@@ -175,6 +177,8 @@ const learnResh = {
         ],
         correctCount: 5,
       },
+      // Question 11: Which letters appear in the word? (image + audio, no written word)
+      wordLettersQuestionFor('ר', 'lr-e11'),
     ],
   },
 };

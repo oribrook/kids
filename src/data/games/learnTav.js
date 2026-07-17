@@ -3,6 +3,8 @@
 // Type: Standard selection - introduction to the letter ת with various question types
 // Teaches children to recognize the letter, its shape, and words that start with it
 
+import { wordLettersQuestionFor } from '../wordLettersBank';
+
 const learnTav = {
   id: 'learn-tav',
   categoryId: 'letters-shin-tav',
@@ -175,6 +177,8 @@ const learnTav = {
         ],
         correctCount: 4,
       },
+      // Question 11: Which letters appear in the word? (image + audio, no written word)
+      wordLettersQuestionFor('ת', 'lt-e11'),
     ],
   },
 };

@@ -5,7 +5,7 @@ import { useGame } from '../context/GameContext';
 import { useUser } from '../context/UserContext';
 import { useAudio } from '../hooks/useAudio';
 import { getGameById, getQuestionsForDifficulty } from '../data/games';
-import { getCategoryById } from '../data/categories';
+import { getCategoryById, getTopicForCategory } from '../data/categories';
 import { shuffleArray } from '../utils/shuffle';
 import { ProgressBar, ScoreDisplay, AudioButton, Button, Mascot } from '../components/common';
 import GameComplete from '../components/game/GameComplete';
@@ -27,13 +27,27 @@ import SortGame from '../components/game/SortGame';
 import HiddenLetterInstruction from '../components/game/HiddenLetterInstruction';
 import styles from './Game.module.css';
 
+// Standalone games - self-contained components that bypass the question-based
+// GameContext flow. Adding a new standalone game = one line here.
+const STANDALONE_GAMES = {
+  memoryCard: MemoryCardGame,
+  drawingBoard: DrawingBoard,
+  storyDraw: StoryDraw,
+  mazeGame: MazeGame,
+  brickBreaker: BrickBreaker,
+  templeRun: TempleRun,
+  balloonPop: BalloonPop,
+  simonSays: SimonSays,
+  sortGame: SortGame,
+};
+
 function Game() {
   const { gameId } = useParams();
   const navigate = useNavigate();
   const game = getGameById(gameId);
   const category = game ? getCategoryById(game.categoryId) : null;
 
-  const { gameState, startGame, submitAnswer, getCurrentQuestion, getProgress, getStars } = useGame();
+  const { gameState, startGame, endGame, submitAnswer, getCurrentQuestion, getStars } = useGame();
   const { addScore, recordGamePlayed } = useUser();
   const { playCorrect, playWrong, playInstruction, playComplete } = useAudio();
 
@@ -56,7 +70,6 @@ function Game() {
   const prevIsCompleteRef = useRef(true);
 
   const currentQuestion = getCurrentQuestion();
-  const progress = getProgress();
 
   // Shuffle options for current question (memoized per question id)
   const shuffledQuestion = useMemo(() => {
@@ -84,6 +97,25 @@ function Game() {
     }
   }, [game, questions, startGame]);
 
+  // Reset game session state on unmount so the NEXT game never sees a stale
+  // isComplete=true (previously caused the old completion screen to flash/stick)
+  useEffect(() => {
+    return () => {
+      endGame();
+    };
+  }, [endGame]);
+
+  // Where to go when exiting this game. Single-game categories skip their
+  // useless middle page (Category with one card) and go straight to the topic.
+  const exitPath = useMemo(() => {
+    if (!game || !category) return '/home';
+    if ((category.games?.length || 0) <= 1) {
+      const topic = getTopicForCategory(category.id);
+      if (topic) return `/topic/${topic.id}`;
+    }
+    return `/category/${game.categoryId}`;
+  }, [game, category]);
+
   // Handle game completion - play audio only when isComplete transitions from false to true
   useEffect(() => {
     if (gameState.isComplete && !prevIsCompleteRef.current) {
@@ -108,6 +140,22 @@ function Game() {
     }
   }, [currentQuestion?.id, gameState.isComplete, playInstruction]);
 
+  // Handle time up for timed games (must stay above the early returns - hooks rule)
+  const handleTimeUp = useCallback(() => {
+    if (showFeedback) return;
+    setShowFeedback(true);
+    setIsCorrect(false);
+    playWrong();
+
+    // Auto-advance after delay
+    setTimeout(() => {
+      submitAnswer(false);
+      setSelectedAnswer(null);
+      setShowFeedback(false);
+      setIsCorrect(null);
+    }, 1500);
+  }, [showFeedback, playWrong, submitAnswer]);
+
   if (!game || !category) {
     return (
       <div className={styles.notFound}>
@@ -117,93 +165,13 @@ function Game() {
     );
   }
 
-  // Memory card game - self-contained, bypasses question-based flow
-  if (game.gameType === 'memoryCard') {
+  // Standalone games - self-contained, bypass the question-based flow
+  const StandaloneGame = STANDALONE_GAMES[game.gameType];
+  if (StandaloneGame) {
     return (
-      <MemoryCardGame
+      <StandaloneGame
         game={game}
-        onClose={() => navigate(`/category/${game.categoryId}`)}
-      />
-    );
-  }
-
-  // Drawing board - self-contained, bypasses question-based flow
-  if (game.gameType === 'drawingBoard') {
-    return (
-      <DrawingBoard
-        game={game}
-        onClose={() => navigate(`/category/${game.categoryId}`)}
-      />
-    );
-  }
-
-  // Story Draw - self-contained, bypasses question-based flow
-  if (game.gameType === 'storyDraw') {
-    return (
-      <StoryDraw
-        game={game}
-        onClose={() => navigate(`/category/${game.categoryId}`)}
-      />
-    );
-  }
-
-  // Maze game - self-contained, bypasses question-based flow
-  if (game.gameType === 'mazeGame') {
-    return (
-      <MazeGame
-        game={game}
-        onClose={() => navigate(`/category/${game.categoryId}`)}
-      />
-    );
-  }
-
-  // Brick Breaker - self-contained, bypasses question-based flow
-  if (game.gameType === 'brickBreaker') {
-    return (
-      <BrickBreaker
-        game={game}
-        onClose={() => navigate(`/category/${game.categoryId}`)}
-      />
-    );
-  }
-
-  // Temple Run - self-contained, bypasses question-based flow
-  if (game.gameType === 'templeRun') {
-    return (
-      <TempleRun
-        game={game}
-        onClose={() => navigate(`/category/${game.categoryId}`)}
-      />
-    );
-  }
-
-  // Balloon Pop - self-contained, bypasses question-based flow
-  if (game.gameType === 'balloonPop') {
-    return (
-      <BalloonPop
-        game={game}
-        onClose={() => navigate(`/category/${game.categoryId}`)}
-      />
-    );
-  }
-
-  // Simon Says - self-contained, bypasses question-based flow
-  if (game.gameType === 'simonSays') {
-    return (
-      <SimonSays
-        game={game}
-        onClose={() => navigate(`/category/${game.categoryId}`)}
-      />
-    );
-  }
-
-
-  // Sort Game - self-contained, bypasses question-based flow
-  if (game.gameType === 'sortGame') {
-    return (
-      <SortGame
-        game={game}
-        onClose={() => navigate(`/category/${game.categoryId}`)}
+        onClose={() => navigate(exitPath)}
       />
     );
   }
@@ -247,7 +215,7 @@ function Game() {
   };
 
   const handleClose = () => {
-    navigate(`/category/${game.categoryId}`);
+    navigate(exitPath);
   };
 
   const handlePlayInstruction = () => {
@@ -344,27 +312,16 @@ function Game() {
   };
 
   const handlePlayAgain = () => {
-    navigate(`/category/${game.categoryId}`);
+    navigate(exitPath);
   };
 
-  // Handle time up for timed games (must be before early return to follow hooks rules)
-  const handleTimeUp = useCallback(() => {
-    if (showFeedback) return;
-    setShowFeedback(true);
-    setIsCorrect(false);
-    playWrong();
-
-    // Auto-advance after delay
-    setTimeout(() => {
-      submitAnswer(false);
-      setSelectedAnswer(null);
-      setShowFeedback(false);
-      setIsCorrect(null);
-    }, 1500);
-  }, [showFeedback, playWrong, submitAnswer]);
+  // The context session must belong to THIS game. It resets on unmount, but the
+  // very first render still happens before startGame runs - never show another
+  // game's (or an empty) session state.
+  const isCurrentGameSession = gameState.currentGame?.id === game.id;
 
   // Show completion screen
-  if (gameState.isComplete) {
+  if (gameState.isComplete && isCurrentGameSession) {
     return (
       <GameComplete
         score={gameState.score}

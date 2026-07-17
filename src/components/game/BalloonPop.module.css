@@ -6,11 +6,41 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 50%, #B2EBF2 100%);
   overflow: hidden;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
+  transition: background 1.5s ease;
+}
+
+/* Background evolves with game intensity: day -> sunset -> night */
+.bgDay {
+  background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 50%, #B2EBF2 100%);
+}
+
+.bgSunset {
+  background: linear-gradient(180deg, #FF9A8B 0%, #FFC3A0 55%, #FFDDE1 100%);
+}
+
+.bgNight {
+  background: linear-gradient(180deg, #1a2a6c 0%, #2C3E50 55%, #4CA1AF 100%);
+}
+
+.bgNight .cloud {
+  opacity: 0.12;
+}
+
+.nightStar {
+  position: absolute;
+  color: #FFF;
+  font-size: 18px;
+  pointer-events: none;
+  animation: starTwinkle 2s ease-in-out infinite;
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); }
 }
 
 .topBar {
@@ -64,6 +94,136 @@
   font-size: 18px;
   font-weight: bold;
   color: #333;
+}
+
+.timerUrgent {
+  background: rgba(255, 80, 80, 0.75);
+  color: #FFF;
+  animation: timerPulse 0.6s ease-in-out infinite;
+}
+
+@keyframes timerPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+/* Pop particle burst */
+.burst {
+  position: fixed;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.shard {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: shardFly 0.6s ease-out forwards;
+}
+
+@keyframes shardFly {
+  from { transform: translate(0, 0) scale(1); opacity: 1; }
+  to { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
+}
+
+/* Floating score text */
+.floatText {
+  position: fixed;
+  font-size: 26px;
+  font-weight: bold;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+  animation: floatUp 0.8s ease-out forwards;
+  pointer-events: none;
+  z-index: 16;
+  transform: translateX(-50%);
+}
+
+@keyframes floatUp {
+  from { margin-top: 0; opacity: 1; }
+  to { margin-top: -70px; opacity: 0; }
+}
+
+/* Combo flash */
+.comboFlash {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 34px;
+  font-weight: bold;
+  color: #FFD700;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  direction: rtl;
+  animation: comboPop 0.8s ease-out forwards;
+  pointer-events: none;
+  z-index: 17;
+}
+
+@keyframes comboPop {
+  0% { transform: translateX(-50%) scale(0.4); opacity: 0; }
+  25% { transform: translateX(-50%) scale(1.2); opacity: 1; }
+  70% { transform: translateX(-50%) scale(1); opacity: 1; }
+  100% { transform: translateX(-50%) scale(1); opacity: 0; }
+}
+
+/* Milestone flash (every 10 pops) */
+.milestoneFlash {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 52px;
+  font-weight: bold;
+  color: #FFF;
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.5);
+  animation: comboPop 0.9s ease-out forwards;
+  pointer-events: none;
+  z-index: 17;
+}
+
+/* Rainbow balloon full-screen flash */
+.rainbowFlash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(255, 107, 107, 0.35), rgba(255, 217, 61, 0.35),
+    rgba(107, 203, 119, 0.35), rgba(77, 150, 255, 0.35), rgba(168, 85, 247, 0.35));
+  animation: rainbowFade 0.5s ease-out forwards;
+  pointer-events: none;
+  z-index: 14;
+}
+
+@keyframes rainbowFade {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Special balloons legend on start screen */
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 17px;
+  direction: rtl;
+  text-align: center;
+}
+
+/* End screen fireworks */
+.fireworks {
+  display: flex;
+  gap: 24px;
+  font-size: 54px;
+}
+
+.fireworks span {
+  animation: fireworkBurst 1.6s ease-in-out infinite;
+}
+
+@keyframes fireworkBurst {
+  0%, 100% { transform: scale(0.7); opacity: 0.4; }
+  50% { transform: scale(1.25); opacity: 1; }
 }
 
 .balloon {

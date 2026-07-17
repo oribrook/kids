@@ -4,6 +4,7 @@ import { GameProvider } from './context/GameContext';
 import { BackgroundMusicProvider } from './context/BackgroundMusicContext';
 import { Onboarding, Home, Language, Topic, Category, Game } from './pages';
 import { MusicToggle, ContactButton } from './components/common';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import { usePageTracking } from './hooks/usePageTracking';
 import './index.css';
 
@@ -89,15 +90,17 @@ function AppRoutes() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <BackgroundMusicProvider>
-        <UserProvider>
-          <GameProvider>
-            <AppRoutes />
-          </GameProvider>
-        </UserProvider>
-      </BackgroundMusicProvider>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <BackgroundMusicProvider>
+          <UserProvider>
+            <GameProvider>
+              <AppRoutes />
+            </GameProvider>
+          </UserProvider>
+        </BackgroundMusicProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

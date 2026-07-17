@@ -3,6 +3,8 @@
 // Type: Standard selection - introduction to the letter ל with various question types
 // Teaches children to recognize the letter, its shape, and words that start with it
 
+import { wordLettersQuestionFor } from '../wordLettersBank';
+
 const learnLamed = {
   id: 'learn-lamed',
   categoryId: 'letters-kaf-samech',
@@ -175,6 +177,8 @@ const learnLamed = {
         ],
         correctCount: 4, // Number of correct answers to find
       },
+      // Question 11: Which letters appear in the word? (image + audio, no written word)
+      wordLettersQuestionFor('ל', 'll-e11'),
     ],
   },
 };

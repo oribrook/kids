@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useUser } from '../../context/UserContext';
 import { useAudio } from '../../hooks/useAudio';
+import { playTone } from '../../utils/soundManager';
 import styles from './SimonSays.module.css';
 
 const COLORS = [
@@ -12,25 +13,6 @@ const COLORS = [
 
 // Simple tone frequencies for each button
 const TONES = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
-
-function playTone(freq, duration = 300) {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.value = freq;
-    osc.type = 'sine';
-    gain.gain.setValueAtTime(0.3, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration / 1000);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + duration / 1000);
-    setTimeout(() => ctx.close(), duration + 100);
-  } catch (e) {
-    // Silently fail if audio not supported
-  }
-}
 
 function SimonSays({ game, onClose }) {
   const [phase, setPhase] = useState('waiting'); // waiting | showing | playerTurn | ended

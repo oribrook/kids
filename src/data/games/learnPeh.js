@@ -3,6 +3,8 @@
 // Type: Standard selection - introduction to the letter פ with various question types
 // Teaches children to recognize the letter, its shape, and words that start with it
 
+import { wordLettersQuestionFor } from '../wordLettersBank';
+
 const learnPeh = {
   id: 'learn-peh',
   categoryId: 'letters-ayin-resh',
@@ -175,6 +177,8 @@ const learnPeh = {
         ],
         correctCount: 4, // Number of correct answers to find
       },
+      // Question 11: Which letters appear in the word? (image + audio, no written word)
+      wordLettersQuestionFor('פ', 'lp-e11'),
     ],
   },
 };

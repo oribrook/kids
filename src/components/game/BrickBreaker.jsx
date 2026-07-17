@@ -27,6 +27,10 @@ function BrickBreaker({ game, onClose }) {
   const [stars, setStars] = useState(0);
   const [isPortrait, setIsPortrait] = useState(false);
 
+  // Phase mirror for callbacks that must not re-create on phase change
+  const phaseRef = useRef('waiting');
+  useEffect(() => { phaseRef.current = phase; }, [phase]);
+
   const { addScore, recordGamePlayed } = useUser();
   const { playCorrect, playComplete } = useAudio();
 
@@ -106,6 +110,9 @@ function BrickBreaker({ game, onClose }) {
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    // Never wipe a finished game - rotating the phone after winning used to
+    // reset the win screen back to 'waiting' (looked like a stuck/lost game)
+    if (phaseRef.current === 'won') return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     // Re-init game state on resize
@@ -242,7 +249,7 @@ function BrickBreaker({ game, onClose }) {
 
         // Check win
         if (gs.bricksLeft <= 0) {
-          handleWin(gs.score);
+          handleWin(gs);
         }
         break; // one brick per frame
       }
@@ -250,8 +257,10 @@ function BrickBreaker({ game, onClose }) {
   }, [speedIdx]);
 
   // Handle win
-  const handleWin = useCallback((finalScore) => {
-    const gameStars = finalScore >= TOTAL_BRICKS ? 3 : finalScore >= 10 ? 2 : 1;
+  const handleWin = useCallback((gs) => {
+    if (gs.won) return; // guard against double-fire from the game loop
+    gs.won = true;
+    const gameStars = gs.score >= TOTAL_BRICKS ? 3 : gs.score >= 10 ? 2 : 1;
     setStars(gameStars);
     setPhase('won');
     playComplete();
@@ -344,13 +353,17 @@ function BrickBreaker({ game, onClose }) {
   const handlePlayAgain = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    // Refresh canvas dims (they may be stale after rotating during the win screen)
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     gameStateRef.current = initGameState(canvas);
     setScore(0);
     setPhase('waiting');
   }, [initGameState]);
 
-  // Show rotate overlay in portrait
-  if (isPortrait) {
+  // Show rotate overlay in portrait - but never hide a finished game behind it
+  // (the win overlay stays reachable in any orientation)
+  if (isPortrait && phase !== 'won') {
     return (
       <div className={styles.rotateOverlay}>
         <div className={styles.rotateIcon}>📱</div>

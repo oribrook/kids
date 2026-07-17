@@ -3,6 +3,8 @@
 // Type: Standard selection - introduction to the letter מ with various question types
 // Teaches children to recognize the letter, its shape, and words that start with it
 
+import { wordLettersQuestionFor } from '../wordLettersBank';
+
 const learnMem = {
   id: 'learn-mem',
   categoryId: 'letters-kaf-samech',
@@ -175,6 +177,8 @@ const learnMem = {
         ],
         correctCount: 4, // Number of correct answers to find
       },
+      // Question 11: Which letters appear in the word? (image + audio, no written word)
+      wordLettersQuestionFor('מ', 'lm-e11'),
     ],
   },
 };

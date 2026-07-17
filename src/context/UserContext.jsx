@@ -4,6 +4,11 @@ const UserContext = createContext(null);
 
 const STORAGE_KEY = 'kidsGameUser';
 
+// Cap play-history size. Without a cap gamesPlayed grows forever and the
+// localStorage write can eventually throw (quota) - an uncaught throw inside
+// the save effect unmounts the whole app (blank screen).
+const MAX_GAME_RECORDS = 200;
+
 const defaultUser = {
   name: '',
   hasCompletedOnboarding: false,
@@ -14,12 +19,22 @@ const defaultUser = {
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : defaultUser;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? { ...defaultUser, ...JSON.parse(saved) } : defaultUser;
+    } catch {
+      // Corrupt JSON / storage unavailable (e.g. private mode) - start fresh
+      return defaultUser;
+    }
   });
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    } catch (e) {
+      // Storage full or unavailable - never crash the app over persistence
+      console.warn('Failed to persist user data:', e);
+    }
   }, [user]);
 
   const updateUser = (updates) => {
@@ -35,7 +50,8 @@ export function UserProvider({ children }) {
   };
 
   const addScore = (points) => {
-    updateUser({ totalScore: user.totalScore + points });
+    // Functional update - avoids stale-closure double-count bugs
+    setUser(prev => ({ ...prev, totalScore: prev.totalScore + points }));
   };
 
   const recordGamePlayed = (gameId, score, stars) => {
@@ -45,9 +61,10 @@ export function UserProvider({ children }) {
       stars,
       playedAt: new Date().toISOString(),
     };
-    updateUser({
-      gamesPlayed: [...user.gamesPlayed, gameRecord],
-    });
+    setUser(prev => ({
+      ...prev,
+      gamesPlayed: [...prev.gamesPlayed, gameRecord].slice(-MAX_GAME_RECORDS),
+    }));
   };
 
   const resetUser = () => {

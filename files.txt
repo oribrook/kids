@@ -166,8 +166,11 @@ ENTRY POINTS
     - name: User's name from onboarding
     - totalScore: Accumulated score across all games
     - hasCompletedOnboarding: Flag for redirect logic
-    - gamesPlayed: Array of game play records
-    - Persists to localStorage
+    - gamesPlayed: Array of game play records - CAPPED at last 200 records
+    - Persists to localStorage with try/catch on read AND write
+      (a storage-quota throw inside the save effect used to unmount the whole
+      app → blank screen; corrupt JSON on read now falls back to defaults)
+    - addScore/recordGamePlayed use functional setState (no stale closures)
 
 ./src/context/GameContext.jsx
     Game session state management:
@@ -1107,8 +1110,11 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
     Category selection for a topic:
     - Route: /topic/:topicId
     - Header with back button (→ parent language) and topic info
-    - Category cards grid (אבגדה, וזחטי, etc.)
+    - Category cards grid (אבגדה, וזחטי, etc.) WITH category icon rendered
+      on each card (uses existing .categoryIcon class from Home.module.css)
     - Clicking category navigates to /category/:categoryId
+    - SINGLE-GAME categories (all toddler arcade games) navigate STRAIGHT to
+      /game/:gameId - skips the pointless middle page with one card
     - Reuses Home.module.css styles
 
 ./src/pages/Category.jsx
@@ -1122,6 +1128,14 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
 ./src/pages/Game.jsx
     Main game player:
     - Route: /game/:gameId
+    - STANDALONE_GAMES registry map (gameType → component) replaces the old
+      9-branch if-chain. Adding a standalone game = one line in the map.
+    - endGame() called on unmount so the next game never sees stale session
+      state (fixed: previous game's completion screen flashing/sticking)
+    - GameComplete only renders when the context session belongs to THIS game
+      (gameState.currentGame?.id === game.id)
+    - exitPath: single-game categories exit to the parent TOPIC instead of the
+      one-card category page
     - Progress bar with step indicators
     - Score display with multiplier
     - Renders appropriate question component based on game type
@@ -1842,54 +1856,64 @@ CATEGORY ADDED:
 OVERVIEW:
     Game type: templeRun - standalone canvas-based endless runner for toddlers.
     Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → temple-run (רוץ שפנפן!)
-    3-lane runner: bunny runs forward, collect diamonds, avoid obstacles.
+    PSEUDO-3D 3-lane runner (OutRun style): road drawn as a trapezoid converging
+    to a vanishing point at the horizon; items spawn tiny at the horizon and
+    scale up as they approach the bunny. No WebGL - plain 2D canvas math.
     Portrait orientation (natural phone holding).
-    3 lives (hearts). After 3 obstacle hits → game over with score/stars.
-    5 speed levels - every 10 diamonds triggers level up with background change.
+    3 lives (hearts). After 3 hits → game over with score/stars.
+    5 themed levels - every 10 diamonds triggers level up (speed + scenery).
 
 GAME TYPE: templeRun
-    - Self-contained component, bypasses the question-based GameContext flow
-    - Game.jsx detects gameType === 'templeRun' and renders <TempleRun>
+    - Self-contained component, registered in Game.jsx STANDALONE_GAMES map
     - No questions array needed - the component manages its own state via canvas
     - Uses requestAnimationFrame game loop with canvas rendering
 
+PSEUDO-3D SYSTEM:
+    - Items track progress p: 0 = horizon (far), 1 = bunny plane, >1 = passed
+    - syOf(p) = horizonY + (bunnyY - horizonY) * p^1.8 (accelerating approach)
+    - scaleOf(p) = 0.2 → 1.0 (items grow as they get closer)
+    - Road half-width is linear in screen-y (straight trapezoid edges);
+      lane X positions converge toward the vanishing point
+    - Collision is a p-window at the bunny plane (|p - 1| < 0.055) + lane match
+    - Sprites pre-rendered ONCE to offscreen canvases (incl. glow) and drawn
+      with drawImage - no per-frame shadowBlur (was the mobile FPS killer)
+
 GAME MECHANICS:
-    - 3 lanes (left, center, right). Bunny starts in center lane.
-    - Touch left/right button → bunny slides to that lane for 800ms, returns to center
-    - Touch up button → bunny jumps vertically (parabolic arc)
-    - Diamonds (💎 cyan with glow) and obstacles (🪨 dark rocks) spawn at top,
-      scroll downward toward the bunny
-    - Diamond collision → score +1, playCorrect() sound
-    - Obstacle collision → lives -1, playWrong() sound, red flash effect
-    - 55% diamonds / 45% obstacles spawn ratio
-    - Anti-overlap: won't spawn items too close in same lane
-    - Lives: 3 hearts (❤️). 0 hearts → game over
-    - Scoring: 40+ diamonds = 3★, 20+ = 2★, 5+ = 1★
-    - Score = stars × 16 (recorded via useUser.recordGamePlayed)
+    - 3 lanes. Tap another screen-third → move one lane toward it.
+      Tap your own lane → jump (parabolic arc, whoosh sound).
+    - Diamonds 💎 → +1, ding SFX + sparkle particles + floating "+1"
+    - Rocks 🪨 → -1 life, thud + voice, red flash + camera shake
+    - Barriers 🚧 (span all lanes, striped) → must jump over
+    - PICKUPS (6% spawn): 🛡️ shield absorbs one hit (glow ring around bunny),
+      🧲 magnet pulls diamonds into your lane for 5s, 🥕 golden carrot = +5
+      HUD shows active shield/magnet (with seconds countdown)
+    - ~49% diamonds / ~34% rocks / 13% barriers / 6% pickups (anti-overlap kept)
+    - Lives: 3 hearts. Last heart pulses. 0 hearts → game over (gs.over guard
+      prevents double score recording)
+    - Scoring: 40+ diamonds = 3★, 20+ = 2★, 5+ = 1★; score = stars × 16
 
 LEVEL PROGRESSION (5 levels, every 10 diamonds):
-    Level 1: 🌳 Forest - green grass, blue sky, brown road (speed 2.5)
-    Level 2: 🏜️ Desert - sandy yellow theme (speed 3.1)
-    Level 3: 🧊 Ice - blue/white icy theme (speed 3.7)
-    Level 4: 🚀 Space - purple/dark theme (speed 4.3)
-    Level 5: 🌋 Lava - red/dark theme (speed 4.9)
-    Level up shows brief "!שלב X" flash overlay
+    Level 1: 🌳 Forest / 2: 🏜️ Desert / 3: 🧊 Ice / 4: 🚀 Space / 5: 🌋 Lava
+    Each level changes: sky gradient, road color, mountains color, sky object
+    (☀️/❄️/🪐/🔥), side-prop emoji set. Speed 2.5 → 4.9, spawn rate up.
+    Level up: sparkle sound + "!שלב X" flash overlay.
+    Speed lines appear at the screen edges from level 3.
 
-VISUALS (all canvas-drawn, no external assets):
-    - Bunny: white circle body, pink ears, black dot eyes with shine,
-      pink nose, pink cheeks. Shadow on ground during jump.
-    - Diamonds: cyan diamond shape with white inner shine and glow
-    - Obstacles: dark gray rock/mountain polygonal shape
-    - Road: colored path with white edge lines and dashed lane dividers
-      that scroll downward (simulating forward movement)
-    - Background gradient changes per level
+VISUALS (all canvas-drawn/pre-rendered, no external assets):
+    - Bunny sprite: run-cycle hop bob, tilts while changing lanes, squash-stretch
+      on landing + dust puffs, grows slightly while jumping (closer to camera),
+      shrinking ground shadow while airborne
+    - Perspective road with converging lane-divider stripes flowing toward camera
+    - Distant mountains + sky object per level, side props (trees/cacti/etc)
+      scroll past along the road edges, scaled by distance
+    - Particle system: collect sparkles, dust, shield-break burst
+    - Floating score texts drawn on canvas
 
 CONTROLS:
-    Bottom 18% of screen divided into 3 touch buttons:
-    - ➡️ (left side) → move right lane
-    - ⬆️ (center) → jump up
-    - ⬅️ (right side) → move left lane
-    Buttons use onTouchStart (mobile) and onMouseDown (desktop)
+    Whole screen divided into 3 vertical thirds = lanes:
+    - Tap left/right third → move one lane toward it (never skips lanes)
+    - Tap own third → jump
+    onTouchStart (mobile) + onMouseDown (desktop), 100ms debounce
 
 ./src/data/games/templeRun.js
     Game data for Temple Run:
@@ -1899,27 +1923,27 @@ CONTROLS:
     - questions: { easy: [] } (empty, standalone game)
 
 ./src/components/game/TempleRun.jsx
-    Self-contained endless runner game component.
-    Phases: waiting → playing → levelUp → gameOver
+    Self-contained pseudo-3D endless runner game component.
+    Phases: waiting → playing → gameOver
     Features:
     - Full-screen canvas rendering with requestAnimationFrame loop
-    - 3-lane touch controls (left/up/right buttons)
-    - Bunny auto-returns to center lane after 800ms
-    - Jump with parabolic physics (gravity simulation)
-    - Item spawning system with anti-overlap check
-    - Level progression with background/speed changes
-    - Red flash overlay on obstacle hit
-    - Level-up flash overlay with level number
+    - buildGeometry(): perspective helpers (syOf, scaleOf, halfWAt, laneXAt)
+    - makeSprites(): pre-renders diamond/rock/pickups/bunny to offscreen canvases
+    - Screen-thirds tap controls (tap lane to move, tap own lane to jump)
+    - Pickups: shield / magnet / golden carrot with HUD indicators
+    - Particle + floating-text systems, camera shake, dust puffs
+    - Level progression with themed scenery (mountains, sky object, side props)
+    - Red flash overlay on hit, level-up flash overlay
     - Game over screen with diamond count, stars, play-again/back buttons
-    - Start screen with instructions in Hebrew
-    - Uses useAudio hook for playCorrect/playWrong/playComplete
-    - Uses useUser hook for addScore and recordGamePlayed
+    - SFX via utils/soundManager (playDing/playSparkle/playThud/playWhoosh)
+    - Voice via useAudio (playWrong on hit, playComplete at game over)
+    - Uses useUser hook for addScore and recordGamePlayed (gs.over double-guard)
 
 ./src/components/game/TempleRun.module.css
     Styles for Temple Run:
     - Fixed full-viewport container
-    - HUD bar with close button, score (diamonds + hearts + level)
-    - Control buttons at bottom (3 equal columns, 18vh height)
+    - HUD bar with close button, score (diamonds + hearts + level + powerups)
+    - .powerups (active shield/magnet), .lastLife pulse animation
     - Start overlay with bouncing bunny emoji animation
     - Game over overlay with stars and buttons
     - Level up overlay with pop animation
@@ -1982,6 +2006,14 @@ GAME TYPE: drawingBoard
     - Brush sizes: thin (3), medium (8), thick (16), extra thick (28)
     - Background color picker (🎨): 6 pastel options
     - Undo (↩️) up to 30 steps, Clear (🗑️) fills with background color
+    - Shape stamping: ◆ button opens shape picker, tap a shape → enters stamp mode
+      - 6 shapes: circle, square, triangle, star, heart, diamond
+      - Shape size derived from brushSize × 3 (no separate size step)
+      - Stamp mode: tap canvas to place shape at touch point using selected color
+      - Purple indicator bar shows active shape; ✕ to exit stamp mode
+      - Clicking any brush size or eraser exits stamp mode back to free-draw
+      - drawShapeOnCanvas() helper renders shapes via canvas 2D API (arc, fillRect, bezier paths)
+      - Heart uses translate+scale with normalized bezier path for correct rendering
 
     Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → toddler-drawing (לוח ציור)
 
@@ -1989,36 +2021,52 @@ GAME TYPE: drawingBoard
     Self-contained drawing board component.
     Key features:
     - Canvas with touch + mouse support (crosshair cursor)
-    - Hidden <input type="color"> triggered by rainbow button click
+    - HSL color wheel modal for custom color picking
     - recentColors state with FIFO logic (addToRecentColors)
     - saveDrawing/loadDrawing/deleteDrawing for gallery management
     - saveToHistory for undo stack (ImageData snapshots, max 30)
     - Device pixel ratio aware (HiDPI support)
     - Resize handler preserves current drawing
+    - Shape stamp mode: activeMode state ('draw'|'stamp'), selectedShape, size = brushSize × 3
+    - drawShapeOnCanvas() top-level helper for rendering 6 shape types on canvas
+    - startDrawing checks activeMode; in stamp mode places shape instead of stroking
 
 ./src/components/game/DrawingBoard.module.css
     Styles for Drawing Board:
     - Full-viewport RTL container
-    - Hidden color input (opacity 0, pointer-events none)
     - Color picker button: conic-gradient rainbow background with "+" overlay
     - Eraser button: white with border + pencil icon
     - Gallery overlay: fixed backdrop, centered modal with rounded corners
     - Gallery grid: 3 columns (2 on mobile), thumbnails with 4:3 aspect ratio
+    - Shapes menu: animated panel with shape grid and size picker row
+    - Shapes toggle button: purple highlight when stamp mode active
+    - Stamp indicator: gradient bar with shape preview and exit button
     - Mobile responsive: smaller buttons at 480px and 360px breakpoints
 
 DATA FILES:
     ./src/data/games/drawingBoard.js
 
 GAME TYPE: balloonPop
-    - Self-contained component, bypasses the question-based GameContext flow
-    - Game.jsx detects gameType === 'balloonPop' and renders <BalloonPop>
+    - Self-contained component, registered in Game.jsx STANDALONE_GAMES map
     - No questions array needed - the component manages its own state
-    - 30-second timed game: colorful SVG balloons float upward, tap to pop
-    - Balloons spawn every 800ms with random color, size, speed, and wobble
-    - SVG-rendered balloons (ellipse + shine + string) in 8 colors
-    - Score: count of popped balloons. Stars: 25+=3, 15+=2, else 1
-    - Pop effect animation (💥 emoji scales up and fades)
-    - Sky background with drifting cloud decorations
+    - 90-SECOND timed game with 3 intensity phases:
+      0-30s calm (spawn 800ms) → 30-60s faster (600ms) → 60-90s frenzy (430ms)
+      Balloon float speed also ramps up per phase
+    - Background evolves with the phases: day → sunset → night (with twinkling
+      stars, clouds dimmed) - CSS gradient transition 1.5s
+    - SPECIAL BALLOONS (probability rolls):
+      ⭐ Golden (8%): +5 points, smaller & faster, gold + star icon
+      🌈 Rainbow (4%): pops ALL balloons on screen + full-screen rainbow flash
+      💗 Heart (5%): +1 point AND +5 seconds to the timer
+    - Pop "juice": 6-shard colored particle burst + floating "+1"/"+5" text
+    - COMBO: 3+ pops within 1.5s chains show "קומבו xN!" flash (sparkle at x5s)
+    - MILESTONE: every 10 pops → big "N! 🎉" flash + sparkle (handles +5 jumps)
+    - Timer pulses red in the last 10 seconds
+    - SFX via utils/soundManager: playPop per pop (synthesized, no Audio element
+      churn), playSparkle for specials/milestones. Voice praise only at end.
+    - Start screen legend explains the special balloons
+    - End screen: animated fireworks 🎆 + score + stars
+    - Score: popped count. Stars: 60+=3, 35+=2, else 1
     - Phases: waiting (start screen) → playing (timer + balloons) → ended (score)
 
     Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → balloon-pop (פוצצו בלונים!)
@@ -2033,16 +2081,24 @@ GAME TYPE: balloonPop
 ./src/components/game/BalloonPop.jsx
     Self-contained balloon pop game component.
     Key features:
-    - SVG balloon rendering with random colors and wobble animation
-    - Timer countdown (30s), spawner interval (800ms)
-    - Touch + click support for popping
-    - Auto-cleanup of off-screen balloons
-    - useUser for score/recordGamePlayed, useAudio for sound effects
+    - SVG balloon rendering per type (normal/golden/rainbow gradient/heart)
+    - Framer Motion float animation with wobble; AnimatePresence pop exit
+    - INTENSITY config table; spawner interval re-created when intensity changes
+    - effects state: particle bursts + floating score texts (positioned from the
+      tapped balloon's bounding rect)
+    - comboRef time-window tracking; milestone detection via prevScoreRef decades
+    - Timer countdown with heart-balloon +5s (capped at 99)
+    - useUser for score/recordGamePlayed, soundManager for SFX,
+      useAudio playComplete for the end voice
 
 ./src/components/game/BalloonPop.module.css
     Styles for Balloon Pop:
-    - Sky gradient background (#87CEEB → #E0F7FA → #B2EBF2)
-    - Balloon positioning and pop animation
+    - .bgDay / .bgSunset / .bgNight background phases (transition 1.5s)
+    - .nightStar twinkle, .timerUrgent pulse
+    - .burst/.shard particle fly-out (CSS vars --dx/--dy per shard)
+    - .floatText rise+fade, .comboFlash / .milestoneFlash pop animation
+    - .rainbowFlash full-screen fade, .legend start-screen list
+    - .fireworks end-screen loop animation
     - Cloud drift animation (20s linear infinite)
     - Start/end overlays with gradient buttons
 
@@ -2056,7 +2112,9 @@ GAME TYPE: simonSays
     - No questions array needed - the component manages its own state
     - Classic color sequence memory game with 4 colored buttons
     - Computer shows a growing sequence of colors, player repeats it
-    - Audio tones via Web Audio API (C4, E4, G4, C5 frequencies)
+    - Audio tones via utils/soundManager playTone (C4, E4, G4, C5) - uses the
+      app-wide SHARED AudioContext (old per-tone `new AudioContext()` leaked
+      contexts and killed audio on iOS which caps ~4-6 live contexts)
     - Buttons flash/glow when active (showing or player pressing)
     - Stars: 8+ rounds=3, 4+=2, 1+=1
     - Phases: waiting → showing (computer plays) → playerTurn → ended
@@ -2186,5 +2244,103 @@ GAME TYPE: sortGame
 CATEGORY ADDED:
     Category: sort-game (סדרו בסדר!) under hebrew-toddler topic
     Color: #764BA2 (purple), Background: #F3E5F5
+
+--------------------------------------------------------------------------------
+            WORD-LETTERS QUESTIONS ("אילו אותיות מופיעות במילה?")
+--------------------------------------------------------------------------------
+
+OVERVIEW:
+    Closing question (Q11) of every Hebrew letter game from ל to ת (11 games:
+    lamed, mem, nun, samech, ayin, peh, tsade, kof, resh, shin, tav).
+    A word IMAGE is shown (no written word - the kid hears the word in the
+    instruction audio) and the kid must find the 3 letters that appear in the
+    word, out of 9 letter options (any order). Reuses the existing engine:
+    multiSelect + questionImage + 9-option grid. No new components.
+
+WORD RULES:
+    - The target letter appears SOMEWHERE in the word (not necessarily first)
+      e.g. דבורה is the word for letter ר
+    - The 3 correct letters are the "easiest" letters of the word
+    - Distractors NEVER appear anywhere in the word (a kid is never marked
+      wrong for picking a letter that is actually in the word)
+
+WORDS USED (letter → word → correct letters):
+    ל → כלב (word-kelev) → כ,ל,ב        מ → גמל (word-gamal) → ג,מ,ל
+    נ → בננה (word-banana) → ב,נ,ה      ס → סלט (word-salat) → ס,ל,ט
+    ע → עכביש (word-akavish) → ע,כ,ב    פ → פיל (word-pil) → פ,י,ל
+    צ → ציפור (word-tsipor) → צ,י,פ     ק → קפה (word-kafe) → ק,פ,ה
+    ר → דבורה (word-dvora) → ד,ב,ר      ש → שולחן (word-shulchan) → ש,ל,ח
+    ת → תפוח (word-tapuach) → ת,פ,ו
+
+./src/data/wordLettersBank.js
+    - LETTER_ICON: Hebrew letter → letter-X icon key map
+    - buildWordLettersQuestion({id, word, image, audio, letters, distractors}):
+      builds the multiSelect question object (3 correct + 6 distractors)
+    - WORD_LETTERS: per-letter word configs (see table above)
+    - wordLettersQuestionFor(letter, id): convenience builder used by the
+      11 game files as the last entry in their easy questions array
+
+AUDIO (public/audio/which-letters-*.mp3, 11 files):
+    Hebrew TTS (he-IL-HilaNeural, with nikud):
+    "אֵילוּ אוֹתִיּוֹת מוֹפִיעוֹת בַּמִּלָּה <word>?"
+    Files: which-letters-kelev/gamal/banana/salat/akavish/pil/tsipor/kafe/
+    dvora/shulchan/tapuach.mp3
+
+--------------------------------------------------------------------------------
+                    SHARED UTILS (src/utils/)
+--------------------------------------------------------------------------------
+
+./src/utils/soundManager.js
+    Lightweight SFX manager on the Web Audio API. ONE shared AudioContext for
+    the whole app (iOS caps live contexts at ~4-6). Synthesizes short effects
+    with oscillators/noise - zero audio assets, no per-event `new Audio()`
+    churn (HTMLMediaElement pile-up froze iOS Safari after several games).
+    Exports:
+    - playTone(freq, ms, {type, volume}) - Simon Says button tones
+    - playPop() - balloon pop (thump + noise burst, randomized pitch)
+    - playDing() - diamond/coin collect (two-note B5→E6)
+    - playSparkle() - special pickups / milestones (ascending arpeggio)
+    - playThud() - obstacle hit (low descending square)
+    - playWhoosh() - lane change / jump (band-passed noise sweep)
+
+./src/utils/canvasPolyfills.js
+    ctx.roundRect polyfill (Safari <16 / Chrome <99). Without it BrickBreaker's
+    draw loop throws every frame on older iPhones → blank canvas. Imported once
+    in main.jsx.
+
+./src/components/common/ErrorBoundary.jsx
+    App-wide error boundary (wraps everything in App.jsx). Any uncaught render
+    error used to unmount the WHOLE React tree leaving a dead screen showing
+    only the page background color. Now shows a friendly Hebrew screen with a
+    "חזרה הביתה" button (full reload → clean state).
+
+--------------------------------------------------------------------------------
+            MOBILE "STUCK SCREEN AFTER GAME ENDS" - BUG FIXES
+--------------------------------------------------------------------------------
+
+Reported: on mobile, after finishing games, the screen would get stuck showing
+nothing but the page background. Four root causes were found and ALL fixed:
+
+1. Stale GameContext session: finishing game A left isComplete=true in the
+   context; opening game B first rendered A's completion screen (flash on slow
+   phones, stuck if the start effect failed).
+   FIX: Game.jsx calls endGame() on unmount + renders GameComplete only for
+   the current game's session.
+
+2. Uncaught errors unmounting the app (blank background screen).
+   FIX: ErrorBoundary + try/catch around all localStorage access in
+   UserContext + gamesPlayed capped at 200 (quota protection - DrawingBoard
+   gallery shares the same localStorage quota).
+
+3. iOS audio resource exhaustion: new Audio() per pop/collect + SimonSays
+   creating an AudioContext per tone.
+   FIX: soundManager with one shared AudioContext + synthesized SFX.
+
+4. BrickBreaker rotation trap: winning in landscape then rotating to portrait
+   swapped the win screen for the dark "סובבו את המסך" overlay; rotating back
+   reset the game to 'waiting' (progress lost - looked broken).
+   FIX: win overlay shows in ANY orientation; resize never wipes a finished
+   game (phaseRef guard); play-again refreshes canvas dims. Also gs.won /
+   gs.over guards in BrickBreaker/TempleRun prevent double score recording.
 
 ================================================================================

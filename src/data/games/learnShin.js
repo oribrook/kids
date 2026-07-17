@@ -3,6 +3,8 @@
 // Type: Standard selection - introduction to the letter ש with various question types
 // Teaches children to recognize the letter, its shape, and words that start with it
 
+import { wordLettersQuestionFor } from '../wordLettersBank';
+
 const learnShin = {
   id: 'learn-shin',
   categoryId: 'letters-shin-tav',
@@ -175,6 +177,8 @@ const learnShin = {
         ],
         correctCount: 5,
       },
+      // Question 11: Which letters appear in the word? (image + audio, no written word)
+      wordLettersQuestionFor('ש', 'ls-e11'),
     ],
   },
 };
