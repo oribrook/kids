@@ -2367,12 +2367,16 @@ GAME TYPE: photoWord (התמונה שלי!)
 
 ./src/data/games/photoWords.js
     - photoWordsList: [{id, letters, displayLetters (with nikud), fullName,
-      image, nameAudio}] - played in list order. Currently 8 words:
-      kedem (קֶדֶם), carmel (כַּרְמֶל), kelev (כֶּלֶב) = real photos, then the
-      easy words dag (דָּג), lev (לֵב), sus (סוּס), tik (תִּיק), kadur (כַּדּוּר).
+      image, nameAudio}] - played in list order. Currently 10 words:
+      kedem (קֶדֶם), carmel (כַּרְמֶל) = real photos, then kelev (כֶּלֶב),
+      dag (דָּג), lev (לֵב), gezer (גֶּזֶר), gamal (גָּמָל), namer (נָמֵר),
+      dvash (דְּבַשׁ), regel (רֶגֶל).
+    - WORD RULE: a word must NOT contain א ה ו י. Here those letters are
+      silent / vowel carriers, so a kid sounding the word out cannot tell
+      they belong there. סוּס / תִּיק / כַּדּוּר were removed for this reason.
     - letters = plain letters used for matching tiles (final forms allowed,
       e.g. ם). displayLetters = same letters WITH nikud, shown in the slots.
-      Repeated letters are fine (סוּס gets two ס tiles).
+      Repeated letters are fine (the word simply gets two tiles of it).
     - Game definition: id 'photo-words', gameType 'photoWord', icon 📸
     TO ADD A NEW PHOTO/WORD:
     1. Photo → public/images/photos/<id>.jpg (675x900, 3:4, ~40KB JPEG)
@@ -2404,11 +2408,11 @@ CATEGORY ADDED:
 AUDIO ADDED (public/audio/):
     - photo-intro.mp3 - "מי מסתתר בתמונה? בחרו את האותיות לפי הסדר!"
     - photo-name-<id>.mp3 for every word: kedem, carmel, kelev, dag, lev,
-      sus, tik, kadur (edge-tts he-IL-HilaNeural, ~10KB each)
+      gezer, gamal, namer, dvash, regel (edge-tts he-IL-HilaNeural, ~10KB)
 
 IMAGES ADDED (public/images/photos/, all 675x900):
     - kedem.jpg, carmel.jpg - real photos, resized
-    - kelev.jpg, dag.jpg, lev.jpg, sus.jpg, tik.jpg, kadur.jpg - generated
+    - kelev, dag, lev, gezer, gamal, namer, dvash, regel (.jpg) - generated
       cartoon cards built from the existing public/images/word-*.png art
 
 --------------------------------------------------------------------------------

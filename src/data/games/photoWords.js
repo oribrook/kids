@@ -3,6 +3,8 @@
 // name's letters in order - each correct letter clears part of the blur.
 // To add a new photo: add an entry to photoWordsList + photo in
 // public/images/photos/ + name audio in public/audio/ (edge-tts, with nikud).
+// RULE: words must NOT contain א ה ו י - those letters are silent/vowel
+// carriers here and confuse a kid who is sounding the word out.
 
 export const photoWordsList = [
   {
@@ -46,28 +48,44 @@ export const photoWordsList = [
     nameAudio: '/audio/photo-name-lev.mp3',
   },
   {
-    id: 'sus',
-    letters: ['ס', 'ו', 'ס'],
-    displayLetters: ['ס', 'וּ', 'ס'],
-    fullName: 'סוּס',
-    image: '/images/photos/sus.jpg',
-    nameAudio: '/audio/photo-name-sus.mp3',
+    id: 'gezer',
+    letters: ['ג', 'ז', 'ר'],
+    displayLetters: ['גֶּ', 'זֶ', 'ר'],
+    fullName: 'גֶּזֶר',
+    image: '/images/photos/gezer.jpg',
+    nameAudio: '/audio/photo-name-gezer.mp3',
   },
   {
-    id: 'tik',
-    letters: ['ת', 'י', 'ק'],
-    displayLetters: ['תִּ', 'י', 'ק'],
-    fullName: 'תִּיק',
-    image: '/images/photos/tik.jpg',
-    nameAudio: '/audio/photo-name-tik.mp3',
+    id: 'gamal',
+    letters: ['ג', 'מ', 'ל'],
+    displayLetters: ['גָּ', 'מָ', 'ל'],
+    fullName: 'גָּמָל',
+    image: '/images/photos/gamal.jpg',
+    nameAudio: '/audio/photo-name-gamal.mp3',
   },
   {
-    id: 'kadur',
-    letters: ['כ', 'ד', 'ו', 'ר'],
-    displayLetters: ['כַּ', 'דּ', 'וּ', 'ר'],
-    fullName: 'כַּדּוּר',
-    image: '/images/photos/kadur.jpg',
-    nameAudio: '/audio/photo-name-kadur.mp3',
+    id: 'namer',
+    letters: ['נ', 'מ', 'ר'],
+    displayLetters: ['נָ', 'מֵ', 'ר'],
+    fullName: 'נָמֵר',
+    image: '/images/photos/namer.jpg',
+    nameAudio: '/audio/photo-name-namer.mp3',
+  },
+  {
+    id: 'dvash',
+    letters: ['ד', 'ב', 'ש'],
+    displayLetters: ['דְּ', 'בַ', 'שׁ'],
+    fullName: 'דְּבַשׁ',
+    image: '/images/photos/dvash.jpg',
+    nameAudio: '/audio/photo-name-dvash.mp3',
+  },
+  {
+    id: 'regel',
+    letters: ['ר', 'ג', 'ל'],
+    displayLetters: ['רֶ', 'גֶ', 'ל'],
+    fullName: 'רֶגֶל',
+    image: '/images/photos/regel.jpg',
+    nameAudio: '/audio/photo-name-regel.mp3',
   },
 ];
 
