@@ -1736,6 +1736,8 @@ GAME TYPE: memoryCard
     - hebrewLettersSofit: Array of 5 final-form letters (םןץףך)
       Names use "X סוֹפִית" pattern (e.g., "נוּן סוֹפִית")
     - hebrewLettersAll: Combined array of all 27 letters
+    - letterAudioByChar: lookup map char -> audio path, e.g. 'א' ->
+      '/audio/letters/he/alef.mp3' (used by PhotoWordGame)
 
 ./src/data/games/memoryHebrewLetters.js
     Game data for Hebrew letters memory card game:
@@ -2345,6 +2347,10 @@ GAME TYPE: photoWord (התמונה שלי!)
     - AUDIO: the word's name audio auto-plays when a word starts; 🔊 button in
       the top bar + a "🔊 שמעו" button next to the instruction replay it.
       On the intro screen the top-bar 🔊 plays the intro instruction instead.
+      Every CORRECT letter plays that letter's name (letterAudioByChar from
+      hebrewLetterBank, e.g. ל → lamed.mp3), replacing the generic praise
+      voice. Final forms work too (ם → mem-sofit.mp3). playCorrect() is only
+      the fallback if a letter has no audio file.
     - Input mode TOGGLE: tap (👆 לחיצה) or drag (✋ גרירה, framer-motion drag
       with dragSnapToOrigin, drop target = the photo card). Persisted in
       localStorage key 'photoWordInputMode'. Toggle on intro screen + top bar.

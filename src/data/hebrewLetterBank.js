@@ -39,4 +39,9 @@ export const hebrewLettersSofit = [
 // All Hebrew letters including final forms
 export const hebrewLettersAll = [...hebrewLetters, ...hebrewLettersSofit];
 
+// Quick lookup: 'א' -> '/audio/letters/he/alef.mp3'
+export const letterAudioByChar = Object.fromEntries(
+  hebrewLettersAll.map(l => [l.char, l.audio])
+);
+
 export default hebrewLetters;

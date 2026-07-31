@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useUser } from '../../context/UserContext';
 import { useAudio } from '../../hooks/useAudio';
 import { photoWordsList } from '../../data/games/photoWords';
+import { letterAudioByChar } from '../../data/hebrewLetterBank';
 import { shuffleArray } from '../../utils/shuffle';
 import styles from './PhotoWordGame.module.css';
 
@@ -101,7 +102,9 @@ function PhotoWordGame({ game, onClose }) {
 
     const expected = word.letters[placedCount];
     if (tile.letter === expected) {
-      playCorrect();
+      const letterAudio = letterAudioByChar[tile.letter];
+      if (letterAudio) playInstruction(letterAudio);
+      else playCorrect();
       const newPlaced = [...placedIds, tile.id];
       setPlacedIds(newPlaced);
 
