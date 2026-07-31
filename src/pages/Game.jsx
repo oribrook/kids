@@ -25,6 +25,7 @@ import FastBalloon from '../components/game/FastBalloon';
 import SimonSays from '../components/game/SimonSays';
 
 import SortGame from '../components/game/SortGame';
+import PhotoWordGame from '../components/game/PhotoWordGame';
 import HiddenLetterInstruction from '../components/game/HiddenLetterInstruction';
 import styles from './Game.module.css';
 
@@ -41,6 +42,7 @@ const STANDALONE_GAMES = {
   fastBalloon: FastBalloon,
   simonSays: SimonSays,
   sortGame: SortGame,
+  photoWord: PhotoWordGame,
 };
 
 function Game() {

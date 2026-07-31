@@ -326,6 +326,18 @@ export const categories = [
     games: ['sort-game'],
   },
 
+  // Hebrew Toddler - Photo Words (התמונה שלי!)
+  {
+    id: 'photo-words',
+    topicId: 'hebrew-toddler',
+    name: 'התמונה שלי!',
+    description: 'מי מסתתר בתמונה?',
+    icon: '📸',
+    color: '#00B894',
+    backgroundColor: '#E0F7F4',
+    games: ['photo-words'],
+  },
+
   // Hebrew Memory Games categories
   {
     id: 'memory-hebrew-letters',

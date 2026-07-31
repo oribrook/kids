@@ -1,0 +1,462 @@
+/* PhotoWordGame - blurred photo revealed by picking the name letters in order */
+
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(180deg, #43cea2 0%, #185a9d 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.topBar {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 20;
+}
+
+.closeBtn,
+.soundBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.closeBtn:active,
+.soundBtn:active {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Mode toggle (tap / drag) */
+.modeToggle {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  padding: 4px;
+  direction: rtl;
+}
+
+.modeBtn {
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modeBtnActive {
+  background: white;
+  color: #185a9d;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.modeToggleBig .modeBtn {
+  font-size: 20px;
+  padding: 12px 24px;
+}
+
+/* Game area */
+.gameArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 60px 12px 12px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.instructionRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  direction: rtl;
+}
+
+.nameAudioBtn {
+  border: none;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #185a9d;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 8px 14px;
+  cursor: pointer;
+  direction: rtl;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.nameAudioBtn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.instruction {
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+  direction: rtl;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Photo card = drop target (photo + slots) */
+.photoCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 24px;
+  padding: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+.photoFrame {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  width: min(60vw, 42vh, 320px);
+  aspect-ratio: 3 / 4;
+  background: #dfe6e9;
+}
+
+/* Each strip shows one vertical slice of the same photo.
+   The child <img> is full-frame wide and shifted, so slices line up seamlessly. */
+.strip {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.stripDivider::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 3px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.35);
+  z-index: 2;
+  transition: opacity 0.5s ease;
+}
+
+.stripRevealed.stripDivider::after {
+  opacity: 0;
+}
+
+.stripRevealed {
+  animation: stripPop 0.5s ease;
+}
+
+@keyframes stripPop {
+  0% { filter: brightness(1); }
+  40% { filter: brightness(1.5); }
+  100% { filter: brightness(1); }
+}
+
+.stripPhoto {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  max-width: none; /* beats the global img { max-width: 100% } */
+  object-fit: cover;
+  /* scaled up so the blur's soft edges stay outside the frame */
+  transform: scale(1.2);
+  transition: filter 0.7s ease;
+  pointer-events: none;
+}
+
+/* Letter slots */
+.slotsRow {
+  display: flex;
+  gap: 10px;
+  direction: rtl;
+}
+
+.slot {
+  width: 58px;
+  height: 66px;
+  border-radius: 14px;
+  border: 3px dashed #b2bec3;
+  background: #f6f8f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slotNext {
+  border-color: #43cea2;
+  animation: slotPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes slotPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(67, 206, 162, 0); }
+  50% { transform: scale(1.08); box-shadow: 0 0 14px rgba(67, 206, 162, 0.7); }
+}
+
+.slotFilled {
+  border: 3px solid #43cea2;
+  background: #e8faf4;
+}
+
+.slotLetter {
+  font-size: 38px;
+  font-weight: bold;
+  color: #185a9d;
+  line-height: 1.5;
+  padding-bottom: 6px;
+}
+
+/* Letter tiles */
+.tilesArea {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  direction: rtl;
+  width: 100%;
+  max-width: 440px;
+  padding: 0 4px;
+}
+
+.tile {
+  aspect-ratio: 1;
+  min-height: 52px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff 0%, #ffeaa7 100%);
+  color: #2d3436;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  position: relative;
+}
+
+.tileUsed {
+  opacity: 0.15;
+  box-shadow: none;
+  cursor: default;
+}
+
+.tileShake {
+  animation: tileShake 0.45s ease;
+  background: linear-gradient(180deg, #ffffff 0%, #fab1a0 100%);
+}
+
+@keyframes tileShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px) rotate(-4deg); }
+  40% { transform: translateX(8px) rotate(4deg); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+.dragHint {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+  direction: rtl;
+  font-weight: bold;
+}
+
+/* Intro overlay */
+.introOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px;
+  text-align: center;
+  z-index: 15;
+}
+
+.introIcon {
+  font-size: 72px;
+  animation: introBounce 2s ease-in-out infinite;
+}
+
+@keyframes introBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+.introTitle {
+  font-size: 34px;
+  font-weight: bold;
+  color: white;
+  direction: rtl;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.introSubtext {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  direction: rtl;
+  line-height: 1.6;
+}
+
+.startBtn {
+  border: none;
+  border-radius: 30px;
+  background: #FFD700;
+  color: #2d3436;
+  font-size: 26px;
+  font-weight: bold;
+  padding: 14px 48px;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #c9a900;
+}
+
+.startBtn:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #c9a900;
+}
+
+/* Celebration overlay */
+.celebrateOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(24, 90, 157, 0.92) 0%, rgba(67, 206, 162, 0.92) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  z-index: 30;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  top: -20px;
+  border-radius: 3px;
+  animation-name: confettiFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes confettiFall {
+  0% { transform: translateY(-5vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; }
+}
+
+.celebratePhotoWrap {
+  border-radius: 20px;
+  padding: 10px;
+  background: white;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+}
+
+.celebratePhoto {
+  width: min(55vw, 36vh, 280px);
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+}
+
+.celebrateName {
+  font-size: 52px;
+  font-weight: bold;
+  color: #FFD700;
+  direction: rtl;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+  line-height: 1.4;
+}
+
+.celebrateStars {
+  font-size: 34px;
+  letter-spacing: 6px;
+}
+
+.celebrateButtons {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.endBtn {
+  border: none;
+  border-radius: 26px;
+  background: #FFD700;
+  color: #2d3436;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 12px 28px;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #c9a900;
+  direction: rtl;
+}
+
+.endBtn:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #c9a900;
+}
+
+.endBtnSecondary {
+  border: 3px solid rgba(255, 255, 255, 0.7);
+  border-radius: 26px;
+  background: transparent;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 12px 24px;
+  cursor: pointer;
+  direction: rtl;
+}
+
+/* Small screens */
+@media (max-width: 380px) {
+  .slot {
+    width: 50px;
+    height: 58px;
+  }
+
+  .slotLetter {
+    font-size: 32px;
+  }
+
+  .tile {
+    font-size: 26px;
+    min-height: 46px;
+  }
+
+  .instruction {
+    font-size: 19px;
+  }
+}

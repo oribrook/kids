@@ -236,6 +236,7 @@ ENTRY POINTS
     - simon-says: "שמעון אומר" - Color sequence memory game
     - jigsaw-puzzle: "פאזל" - Emoji jigsaw puzzles (2x2 and 3x3)
     - sort-game: "סדרו בסדר!" - Sort numbers/Hebrew letters by order
+    - photo-words: "התמונה שלי!" - Blurred family photo revealed by spelling the name
 
     Arabic:
     - arabic-alef-jim: "أبتثج" - Letters أ through ج
@@ -2324,6 +2325,85 @@ GAME TYPE: sortGame
 CATEGORY ADDED:
     Category: sort-game (סדרו בסדר!) under hebrew-toddler topic
     Color: #764BA2 (purple), Background: #F3E5F5
+
+GAME TYPE: photoWord (התמונה שלי!)
+    - Self-contained component (STANDALONE_GAMES), gameType === 'photoWord'
+    - A BLURRED photo hides a word. The child picks the word's letters
+      IN ORDER from 12 letter tiles (word letters + random distractors).
+      Each correct letter: letter lands in its slot (displayed WITH NIKUD,
+      e.g. קֶ דֶ ם) and ONE VERTICAL STRIP of the photo becomes fully sharp.
+    - STRIP REVEAL: the photo is split into N vertical strips (N = number of
+      letters), cleared RIGHT-TO-LEFT, one strip per correct letter. A white
+      3px divider marks the boundary to the still-blurred part and fades away
+      once that strip is revealed. So before the last letter the photo is
+      still partly blurred; the last letter clears it completely.
+      Implementation: each strip is an absolutely-positioned div (overflow
+      hidden) holding a copy of the same <img> at FULL FRAME width, shifted by
+      right: -i*100%, so the slices line up seamlessly. The img needs
+      max-width:none (beats the global img{max-width:100%}) and scale(1.2)
+      so the blur's soft edges stay outside the frame.
+    - AUDIO: the word's name audio auto-plays when a word starts; 🔊 button in
+      the top bar + a "🔊 שמעו" button next to the instruction replay it.
+      On the intro screen the top-bar 🔊 plays the intro instruction instead.
+    - Input mode TOGGLE: tap (👆 לחיצה) or drag (✋ גרירה, framer-motion drag
+      with dragSnapToOrigin, drop target = the photo card). Persisted in
+      localStorage key 'photoWordInputMode'. Toggle on intro screen + top bar.
+    - Mistake: NOTHING changes - wrong voice sound + tile shake only.
+    - Word complete: photo fully revealed, celebration overlay with confetti,
+      the name audio ("קֶדֶם!") then a complete voice, stars (0 wrong=3,
+      ≤2 wrong=2, else 1), score = stars*16 per word.
+    - Multi-photo ready: photoWordsList array; "next photo" button appears
+      automatically when more entries exist.
+    - NOTE: score/recordGamePlayed only fire on the LAST word of the list.
+      With 8 words most sessions end before that, so no score is recorded.
+
+    Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → photo-words (התמונה שלי!)
+
+./src/data/games/photoWords.js
+    - photoWordsList: [{id, letters, displayLetters (with nikud), fullName,
+      image, nameAudio}] - played in list order. Currently 8 words:
+      kedem (קֶדֶם), carmel (כַּרְמֶל), kelev (כֶּלֶב) = real photos, then the
+      easy words dag (דָּג), lev (לֵב), sus (סוּס), tik (תִּיק), kadur (כַּדּוּר).
+    - letters = plain letters used for matching tiles (final forms allowed,
+      e.g. ם). displayLetters = same letters WITH nikud, shown in the slots.
+      Repeated letters are fine (סוּס gets two ס tiles).
+    - Game definition: id 'photo-words', gameType 'photoWord', icon 📸
+    TO ADD A NEW PHOTO/WORD:
+    1. Photo → public/images/photos/<id>.jpg (675x900, 3:4, ~40KB JPEG)
+       Real photo: resize with generated/2676/resize_carmel.ps1
+       Object word: generated/2676/make_word_photos.ps1 builds a cartoon
+       "photo card" (sky + grass + white card) from public/images/word-<x>.png
+    2. Name audio → edge-tts he-IL-HilaNeural, text WITH nikud ("כַּרְמֶל"),
+       → public/audio/photo-name-<id>.mp3
+       WARNING: a negative rate ("-10%") breaks the edge-tts CLI - use "+0%".
+    3. Add entry to photoWordsList
+
+./src/components/game/PhotoWordGame.jsx
+    Self-contained photo-word game component (phases: intro/playing/celebrate).
+    buildTiles() = name letters + shuffled distractors (TILE_COUNT 12).
+    tryPlace() shared by tap click and drag drop. useUser for score,
+    useAudio for voices. Next empty slot pulses as a hint.
+
+./src/components/game/PhotoWordGame.module.css
+    Teal-blue gradient (#43cea2 → #185a9d), white photo card with slots row,
+    yellow letter tiles grid (6 cols), shake keyframe for wrong tile,
+    confettiFall keyframe, intro + celebrate overlays.
+    .strip / .stripPhoto / .stripDivider / .stripRevealed = the strip reveal
+    (see GAME TYPE above). .nameAudioBtn = the "🔊 שמעו" replay button.
+
+CATEGORY ADDED:
+    Category: photo-words (התמונה שלי!) under hebrew-toddler topic
+    Color: #00B894 (teal), Background: #E0F7F4
+
+AUDIO ADDED (public/audio/):
+    - photo-intro.mp3 - "מי מסתתר בתמונה? בחרו את האותיות לפי הסדר!"
+    - photo-name-<id>.mp3 for every word: kedem, carmel, kelev, dag, lev,
+      sus, tik, kadur (edge-tts he-IL-HilaNeural, ~10KB each)
+
+IMAGES ADDED (public/images/photos/, all 675x900):
+    - kedem.jpg, carmel.jpg - real photos, resized
+    - kelev.jpg, dag.jpg, lev.jpg, sus.jpg, tik.jpg, kadur.jpg - generated
+      cartoon cards built from the existing public/images/word-*.png art
 
 --------------------------------------------------------------------------------
             WORD-LETTERS QUESTIONS ("אילו אותיות מופיעות במילה?")

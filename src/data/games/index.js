@@ -172,6 +172,9 @@ import simonSays from './simonSays';
 // Hebrew Toddler - Category: סדרו בסדר! (sort-game)
 import sortGame from './sortGame';
 
+// Hebrew Toddler - Category: התמונה שלי! (photo-words)
+import photoWords from './photoWords';
+
 // Numbers - Category: 12345 (numbers-12345)
 import learnOne from './learnOne';
 import learnTwo from './learnTwo';
@@ -343,6 +346,8 @@ export const games = {
 
   // Hebrew Toddler - Category: סדרו בסדר!
   'sort-game': sortGame,
+  // Hebrew Toddler - Category: התמונה שלי!
+  'photo-words': photoWords,
   // Numbers - Category: 12345
   'learn-one': learnOne,
   'learn-two': learnTwo,
