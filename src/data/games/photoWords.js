@@ -87,6 +87,46 @@ export const photoWordsList = [
     image: '/images/photos/regel.jpg',
     nameAudio: '/audio/photo-name-regel.mp3',
   },
+  {
+    id: 'ner',
+    letters: ['נ', 'ר'],
+    displayLetters: ['נֵ', 'ר'],
+    fullName: 'נֵר',
+    image: '/images/word-ner.png',
+    nameAudio: '/audio/word-ner.mp3',
+  },
+  {
+    id: 'etz',
+    letters: ['ע', 'ץ'],
+    displayLetters: ['עֵ', 'ץ'],
+    fullName: 'עֵץ',
+    image: '/images/word-etz.png',
+    nameAudio: '/audio/word-etz.mp3',
+  },
+  {
+    id: 'degel',
+    letters: ['ד', 'ג', 'ל'],
+    displayLetters: ['דֶּ', 'גֶ', 'ל'],
+    fullName: 'דֶּגֶל',
+    image: '/images/word-degel.png',
+    nameAudio: '/audio/word-degel.mp3',
+  },
+  {
+    id: 'delet',
+    letters: ['ד', 'ל', 'ת'],
+    displayLetters: ['דֶּ', 'לֶ', 'ת'],
+    fullName: 'דֶּלֶת',
+    image: '/images/word-delet.png',
+    nameAudio: '/audio/word-delet.mp3',
+  },
+  {
+    id: 'geshem',
+    letters: ['ג', 'ש', 'ם'],
+    displayLetters: ['גֶּ', 'שֶׁ', 'ם'],
+    fullName: 'גֶּשֶׁם',
+    image: '/images/word-geshem.png',
+    nameAudio: '/audio/word-geshem.mp3',
+  },
 ];
 
 const photoWords = {

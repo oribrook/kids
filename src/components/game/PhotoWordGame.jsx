@@ -22,6 +22,14 @@ function buildTiles(letters) {
   return shuffleArray([...letters, ...distractors].map((letter, i) => ({ id: `t${i}`, letter })));
 }
 
+function reshuffleDifferent(prev) {
+  for (let i = 0; i < 10; i++) {
+    const next = shuffleArray(prev);
+    if (next.some((t, idx) => t.id !== prev[idx].id)) return next;
+  }
+  return prev;
+}
+
 function makeConfetti() {
   return Array.from({ length: 28 }, (_, i) => ({
     id: i,
@@ -124,11 +132,14 @@ function PhotoWordGame({ game, onClose }) {
         setTimeout(() => playComplete(), 2600);
       }
     } else {
-      // Mistake: nothing changes - just sound + a little shake
+      // Mistake: sound + a little shake, then reshuffle the tiles
       playWrong();
       setWrongCount(c => c + 1);
       setShakeId(tile.id);
-      setTimeout(() => setShakeId(null), 500);
+      setTimeout(() => {
+        setShakeId(null);
+        setTiles(prev => reshuffleDifferent(prev));
+      }, 500);
     }
   };
 

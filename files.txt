@@ -2354,7 +2354,9 @@ GAME TYPE: photoWord (התמונה שלי!)
     - Input mode TOGGLE: tap (👆 לחיצה) or drag (✋ גרירה, framer-motion drag
       with dragSnapToOrigin, drop target = the photo card). Persisted in
       localStorage key 'photoWordInputMode'. Toggle on intro screen + top bar.
-    - Mistake: NOTHING changes - wrong voice sound + tile shake only.
+    - Mistake: wrong voice sound + tile shake, then ALL tiles reshuffle to a
+      new random order (reshuffleDifferent - retries shuffle if order is
+      unchanged), so a kid can't just try tiles one by one in place.
     - Word complete: photo fully revealed, celebration overlay with confetti,
       the name audio ("קֶדֶם!") then a complete voice, stars (0 wrong=3,
       ≤2 wrong=2, else 1), score = stars*16 per word.
@@ -2367,10 +2369,13 @@ GAME TYPE: photoWord (התמונה שלי!)
 
 ./src/data/games/photoWords.js
     - photoWordsList: [{id, letters, displayLetters (with nikud), fullName,
-      image, nameAudio}] - played in list order. Currently 10 words:
+      image, nameAudio}] - played in list order. Currently 15 words:
       kedem (קֶדֶם), carmel (כַּרְמֶל) = real photos, then kelev (כֶּלֶב),
       dag (דָּג), lev (לֵב), gezer (גֶּזֶר), gamal (גָּמָל), namer (נָמֵר),
-      dvash (דְּבַשׁ), regel (רֶגֶל).
+      dvash (דְּבַשׁ), regel (רֶגֶל), ner (נֵר), etz (עֵץ), degel (דֶּגֶל),
+      delet (דֶּלֶת), geshem (גֶּשֶׁם).
+    - The last 5 words reuse existing assets: image /images/word-<x>.png and
+      nameAudio /audio/word-<x>.mp3 (no new files were added for them).
     - WORD RULE: a word must NOT contain א ה ו י. Here those letters are
       silent / vowel carriers, so a kid sounding the word out cannot tell
       they belong there. סוּס / תִּיק / כַּדּוּר were removed for this reason.
@@ -2520,3 +2525,6 @@ nothing but the page background. Four root causes were found and ALL fixed:
    gs.over guards in BrickBreaker/TempleRun prevent double score recording.
 
 ================================================================================
+
+## Analytics
+- index.html has the hits page-view snippet (data-site="kids-game") -> https://bbot.genericgs.com/t/stats. See ttd/hits/files.txt
