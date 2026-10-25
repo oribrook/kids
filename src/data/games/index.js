@@ -204,6 +204,9 @@ import learnEightyNinety from './learnEightyNinety';
 import learnHundred from './learnHundred';
 import quizTwentyHundred from './quizTwentyHundred';
 
+// Numbers - Category: חיבור וחיסור (math-plus-minus)
+import mathGame from './mathGame';
+
 // All games registry
 export const games = {
   // Category: אבגדה
@@ -373,6 +376,8 @@ export const games = {
   'learn-eighty-ninety': learnEightyNinety,
   'learn-hundred': learnHundred,
   'quiz-twenty-hundred': quizTwentyHundred,
+  // Numbers - Category: חיבור וחיסור
+  'math-plus-minus': mathGame,
 };
 
 /**

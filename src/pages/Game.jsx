@@ -26,6 +26,7 @@ import SimonSays from '../components/game/SimonSays';
 
 import SortGame from '../components/game/SortGame';
 import PhotoWordGame from '../components/game/PhotoWordGame';
+import MathGame from '../components/game/MathGame';
 import HiddenLetterInstruction from '../components/game/HiddenLetterInstruction';
 import styles from './Game.module.css';
 
@@ -43,6 +44,7 @@ const STANDALONE_GAMES = {
   simonSays: SimonSays,
   sortGame: SortGame,
   photoWord: PhotoWordGame,
+  mathGame: MathGame,
 };
 
 function Game() {

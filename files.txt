@@ -225,6 +225,9 @@ ENTRY POINTS
     - numbers-67890: "67890" - Numbers 6 to 10
     - numbers-10-20: "10-20" - Numbers 10 to 20
     - numbers-20-100: "20-100" - Numbers 20 to 100
+    Numbers - משחקי חשבון:
+    - math-plus-minus: "חיבור וחיסור" - x+y / x−y questions, 3 levels
+      (see GAME TYPE: mathGame)
 
     Hebrew Toddler (לגיל הרך):
     - toddler-audio: "מה שומעים?" - Audio object recognition (4 levels)
@@ -2419,6 +2422,45 @@ IMAGES ADDED (public/images/photos/, all 675x900):
     - kedem.jpg, carmel.jpg - real photos, resized
     - kelev, dag, lev, gezer, gamal, namer, dvash, regel (.jpg) - generated
       cartoon cards built from the existing public/images/word-*.png art
+
+GAME TYPE: mathGame (חיבור וחיסור)
+    - Self-contained component (STANDALONE_GAMES), gameType === 'mathGame'
+    - Start screen: pick a level, then 10 random questions "x + y = ?" or
+      "x − y = ?" (50/50 per question, no duplicate question in a round)
+    - LEVELS (y values): מתחיל 🐣 y=1|2, בינוני 🐥 y=2|3, קשה 🐔 y=3|4
+    - RANGE RULE: the result is always 0..30, and x is also kept in 0..30
+      (plus: x = 0..30-y, minus: x = y..30)
+    - 4 answer options (2x2 grid): the answer + 3 wrong ones = the "other
+      operation" result (mixing + and −) when it is in 0..30, then numbers
+      close to the answer (±1/±2, then ±3/±4). All options in 0..30.
+    - Wrong pick: playWrong + option shakes, turns red and is locked; the kid
+      tries again on the same question. Correct: playCorrect, "?" box shows
+      the answer in green, next question after 1.2s.
+    - Stars by total wrong picks: ≤1 = 3★, ≤4 = 2★, else 1★; score = stars × 16
+    - Equation + options use direction: ltr (math stays left-to-right in RTL app)
+    - Phases: waiting (level select) → playing → ended
+
+    Hierarchy: numbers → numbers-math (משחקי חשבון) → math-plus-minus
+
+./src/data/games/mathGame.js
+    - id/categoryId: 'math-plus-minus', gameType: 'mathGame', icon ➕
+    - levels: [{id, label, emoji, yValues}], maxResult: 30, questionsPerRound: 10
+      (change level rules / range / round size here)
+
+./src/components/game/MathGame.jsx
+    makeQuestion() / makeOptions() / makeRound() build the random questions.
+    useUser for score/recordGamePlayed, useAudio for voices, shared
+    utils/shuffle for option order. Pending next-question timer is cleared
+    on unmount.
+
+./src/components/game/MathGame.module.css
+    Blue gradient (#56CCF2 → #2F80ED), white equation card, dashed yellow
+    "?" box, 2x2 option buttons (.optionWrong / .optionRight), level buttons,
+    start + end overlays, smaller sizes for narrow / short screens.
+
+CATEGORY ADDED:
+    Category: math-plus-minus (חיבור וחיסור) under numbers-math topic
+    Color: #3498DB (blue), Background: #EBF5FB, Icon: ➕
 
 --------------------------------------------------------------------------------
             WORD-LETTERS QUESTIONS ("אילו אותיות מופיעות במילה?")

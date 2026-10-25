@@ -544,6 +544,17 @@ export const categories = [
     backgroundColor: '#E8F8F5',
     games: ['learn-twenty-thirty', 'learn-forty-fifty', 'learn-sixty-seventy', 'learn-eighty-ninety', 'learn-hundred', 'quiz-twenty-hundred'],
   },
+  // Numbers - משחקי חשבון categories
+  {
+    id: 'math-plus-minus',
+    topicId: 'numbers-math',
+    name: 'חיבור וחיסור',
+    description: 'תרגילים עד 30',
+    icon: '➕',
+    color: '#3498DB',
+    backgroundColor: '#EBF5FB',
+    games: ['math-plus-minus'],
+  },
 ];
 
 // =============================================================================
