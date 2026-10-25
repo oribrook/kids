@@ -5,38 +5,34 @@ import { shuffleArray } from '../../utils/shuffle';
 import styles from './MathGame.module.css';
 
 const NEXT_QUESTION_DELAY_MS = 1200;
-const NEAR_OFFSETS = [-2, -1, 1, 2];
-const FAR_OFFSETS = [-4, -3, 3, 4];
+const WRONG_FEEDBACK_MS = 700;
+const OFFSETS = [-4, -3, -2, -1, 1, 2, 3, 4];
 
 function randInt(min, max) {
   return min + Math.floor(Math.random() * (max - min + 1));
 }
 
 // 3 wrong options: the "other operation" result (mixing + and −) when valid,
-// then numbers close to the answer. All options stay in 0..maxResult.
-function makeOptions(answer, swappedResult, maxResult) {
-  const isValid = (n) => n >= 0 && n <= maxResult && n !== answer;
-  const wrong = isValid(swappedResult) ? [swappedResult] : [];
-  for (const offset of [...shuffleArray(NEAR_OFFSETS), ...shuffleArray(FAR_OFFSETS)]) {
-    if (wrong.length === 3) break;
-    const n = answer + offset;
-    if (isValid(n) && !wrong.includes(n)) wrong.push(n);
-  }
-  return shuffleArray([answer, ...wrong]);
+// then random numbers close to the answer. All options stay in 0..maxResult.
+// Numbers in `exclude` (already picked wrong) come back only if nothing else is left.
+function makeOptions(answer, swappedResult, maxResult, exclude = []) {
+  const candidates = [swappedResult, ...shuffleArray(OFFSETS).map(d => answer + d)]
+    .filter((n, i, arr) => n >= 0 && n <= maxResult && n !== answer && arr.indexOf(n) === i);
+  const fresh = candidates.filter(n => !exclude.includes(n));
+  const used = candidates.filter(n => exclude.includes(n));
+  return shuffleArray([answer, ...[...fresh, ...used].slice(0, 3)]);
 }
 
 function makeQuestion(yValues, maxResult) {
   const y = yValues[randInt(0, yValues.length - 1)];
   const isPlus = Math.random() < 0.5;
   const x = isPlus ? randInt(0, maxResult - y) : randInt(y, maxResult);
-  const answer = isPlus ? x + y : x - y;
-  const swappedResult = isPlus ? x - y : x + y;
   return {
     x,
     y,
     op: isPlus ? '+' : '−',
-    answer,
-    options: makeOptions(answer, swappedResult, maxResult),
+    answer: isPlus ? x + y : x - y,
+    swappedResult: isPlus ? x - y : x + y,
   };
 }
 
@@ -71,7 +67,9 @@ function MathGame({ game, onClose }) {
   const [levelId, setLevelId] = useState(levels[0].id);
   const [questions, setQuestions] = useState([]);
   const [qIndex, setQIndex] = useState(0);
+  const [options, setOptions] = useState([]);
   const [wrongPicks, setWrongPicks] = useState([]);
+  const [flashWrong, setFlashWrong] = useState(null);
   const [solved, setSolved] = useState(false);
   const [mistakes, setMistakes] = useState(0);
   const [stars, setStars] = useState(0);
@@ -85,22 +83,36 @@ function MathGame({ game, onClose }) {
   const level = levels.find(l => l.id === levelId) || levels[0];
   const question = questions[qIndex];
 
-  const startGame = () => {
-    setQuestions(makeRound(level.yValues, questionsPerRound, maxResult));
-    setQIndex(0);
+  const showQuestion = (q) => {
+    setOptions(makeOptions(q.answer, q.swappedResult, maxResult));
     setWrongPicks([]);
+    setFlashWrong(null);
     setSolved(false);
+  };
+
+  const startGame = () => {
+    const round = makeRound(level.yValues, questionsPerRound, maxResult);
+    setQuestions(round);
+    setQIndex(0);
     setMistakes(0);
+    showQuestion(round[0]);
     setPhase('playing');
   };
 
   const handlePick = (value) => {
-    if (solved || wrongPicks.includes(value)) return;
+    if (solved || flashWrong !== null) return;
 
+    // Wrong: flash red, then a new set of 4 options in new positions
     if (value !== question.answer) {
       playWrong();
-      setWrongPicks(prev => [...prev, value]);
+      setFlashWrong(value);
       setMistakes(prev => prev + 1);
+      timerRef.current = setTimeout(() => {
+        const exclude = [...wrongPicks, value];
+        setWrongPicks(exclude);
+        setOptions(makeOptions(question.answer, question.swappedResult, maxResult, exclude));
+        setFlashWrong(null);
+      }, WRONG_FEEDBACK_MS);
       return;
     }
 
@@ -116,9 +128,8 @@ function MathGame({ game, onClose }) {
         addScore(gameStars * 16);
         recordGamePlayed(game.id, gameStars * 16, gameStars);
       } else {
-        setQIndex(i => i + 1);
-        setWrongPicks([]);
-        setSolved(false);
+        setQIndex(qIndex + 1);
+        showQuestion(questions[qIndex + 1]);
       }
     }, NEXT_QUESTION_DELAY_MS);
   };
@@ -151,13 +162,13 @@ function MathGame({ game, onClose }) {
             </span>
           </div>
 
-          <div className={styles.options}>
-            {question.options.map(value => {
-              const isWrong = wrongPicks.includes(value);
+          <div key={`${qIndex}-${wrongPicks.length}`} className={styles.options}>
+            {options.map(value => {
+              const isWrong = flashWrong === value;
               const isRight = solved && value === question.answer;
               return (
                 <button
-                  key={`${qIndex}-${value}`}
+                  key={value}
                   className={`${styles.option} ${isWrong ? styles.optionWrong : ''} ${isRight ? styles.optionRight : ''}`}
                   onClick={() => handlePick(value)}
                 >

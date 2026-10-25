@@ -2431,11 +2431,17 @@ GAME TYPE: mathGame (חיבור וחיסור)
     - RANGE RULE: the result is always 0..30, and x is also kept in 0..30
       (plus: x = 0..30-y, minus: x = y..30)
     - 4 answer options (2x2 grid): the answer + 3 wrong ones = the "other
-      operation" result (mixing + and −) when it is in 0..30, then numbers
-      close to the answer (±1/±2, then ±3/±4). All options in 0..30.
-    - Wrong pick: playWrong + option shakes, turns red and is locked; the kid
-      tries again on the same question. Correct: playCorrect, "?" box shows
-      the answer in green, next question after 1.2s.
+      operation" result (mixing + and −) when it is in 0..30, then random
+      numbers from answer ±1..±4. All options in 0..30.
+    - Wrong pick (ANTI-GUESS): playWrong + the option shakes red for 0.7s,
+      then a NEW set of 4 options is generated (new numbers, new random
+      positions, pop-in animation), so tapping options one by one does not
+      work. Numbers already picked wrong in this question are not shown
+      again (only if no other numbers are left). The "other operation"
+      result stays in the new set (unless it was picked), so the answer is
+      not the only number that stays between sets.
+    - Correct: playCorrect, "?" box shows the answer in green, next question
+      after 1.2s.
     - Stars by total wrong picks: ≤1 = 3★, ≤4 = 2★, else 1★; score = stars × 16
     - Equation + options use direction: ltr (math stays left-to-right in RTL app)
     - Phases: waiting (level select) → playing → ended
@@ -2448,14 +2454,17 @@ GAME TYPE: mathGame (חיבור וחיסור)
       (change level rules / range / round size here)
 
 ./src/components/game/MathGame.jsx
-    makeQuestion() / makeOptions() / makeRound() build the random questions.
+    makeQuestion() / makeRound() build the random questions. makeOptions(
+    answer, swappedResult, maxResult, exclude) builds a 4-option set - used
+    for the first set (showQuestion) and after every wrong pick.
     useUser for score/recordGamePlayed, useAudio for voices, shared
     utils/shuffle for option order. Pending next-question timer is cleared
     on unmount.
 
 ./src/components/game/MathGame.module.css
     Blue gradient (#56CCF2 → #2F80ED), white equation card, dashed yellow
-    "?" box, 2x2 option buttons (.optionWrong / .optionRight), level buttons,
+    "?" box, 2x2 option buttons (.optionWrong = short red flash,
+    .optionRight), .options pop-in on every new set, level buttons,
     start + end overlays, smaller sizes for narrow / short screens.
 
 CATEGORY ADDED:
