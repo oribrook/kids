@@ -44,16 +44,16 @@ function WelcomeScreen({ onNext }) {
           transition={{ delay: 0.8, duration: 0.5 }}
         >
           <div className={styles.feature}>
+            <span className={styles.featureIcon}>🔤</span>
+            <span>אותיות</span>
+          </div>
+          <div className={styles.feature}>
             <span className={styles.featureIcon}>🔢</span>
-            <span>ספירה</span>
+            <span>מספרים</span>
           </div>
           <div className={styles.feature}>
-            <span className={styles.featureIcon}>🎨</span>
-            <span>צבעים</span>
-          </div>
-          <div className={styles.feature}>
-            <span className={styles.featureIcon}>🧩</span>
-            <span>חשיבה</span>
+            <span className={styles.featureIcon}>🎈</span>
+            <span>משחקים</span>
           </div>
         </motion.div>
 

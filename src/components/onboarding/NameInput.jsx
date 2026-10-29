@@ -55,7 +55,7 @@ function NameInput({ onNext, onSkip }) {
           <Button onClick={handleSubmit} variant="primary" size="large">
             המשך
           </Button>
-          <Button onClick={() => onSkip()} variant="ghost" size="medium">
+          <Button onClick={() => onSkip()} variant="ghost" size="large">
             דלג
           </Button>
         </motion.div>

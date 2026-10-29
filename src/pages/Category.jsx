@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getCategoryById, getTopicForCategory } from '../data/categories';
-import { getGamesByCategory, getQuestionsForDifficulty } from '../data/registry';
+import { getGamesByCategory } from '../data/registry';
 import { useUser } from '../context/UserContext';
 import { Button } from '../components/common';
 import styles from './Category.module.css';
@@ -74,8 +74,6 @@ function Category() {
         <div className={styles.games}>
           {games.map((game, index) => {
             const bestPlay = getBestScore(game.id);
-            const questions = getQuestionsForDifficulty(game);
-            const maxScore = questions.length * 16;
 
             return (
               <motion.div
@@ -89,6 +87,13 @@ function Category() {
                 whileTap={{ scale: 0.97 }}
               >
                 <div className={styles.gameIcon}>{game.icon}</div>
+                {bestPlay && (
+                  <div className={styles.starsDisplay}>
+                    {[1, 2, 3].map((s) => (
+                      <span key={s} className={s <= (bestPlay.stars || 0) ? styles.starFilled : styles.starEmpty}>⭐</span>
+                    ))}
+                  </div>
+                )}
                 <div
                   className={styles.playButton}
                   style={{ backgroundColor: category.color }}

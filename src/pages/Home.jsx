@@ -51,6 +51,9 @@ function Home() {
               whileHover={{ scale: 1.05, y: -5 }}
               whileTap={{ scale: 0.95 }}
             >
+              {language.icon && (
+                <span className={styles.categoryIcon}>{language.icon}</span>
+              )}
               <h2 className={styles.categoryName}>{language.name}</h2>
               <p className={styles.categoryDescription}>{language.description}</p>
               <div

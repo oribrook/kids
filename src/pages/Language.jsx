@@ -61,6 +61,9 @@ function Language() {
               whileHover={{ scale: 1.05, y: -5 }}
               whileTap={{ scale: 0.95 }}
             >
+              {topic.icon && (
+                <span className={styles.categoryIcon}>{topic.icon}</span>
+              )}
               <h2 className={styles.categoryName}>{topic.name}</h2>
               <p className={styles.categoryDescription}>{topic.description}</p>
               <div

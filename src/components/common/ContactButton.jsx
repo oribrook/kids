@@ -1,16 +1,35 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+
+const LONG_PRESS_MS = 1200;
 import styles from './ContactButton.module.css';
 
 export function ContactButton() {
   const [isOpen, setIsOpen] = useState(false);
+  const pressTimerRef = useRef(null);
+
+  const cancelPress = () => {
+    clearTimeout(pressTimerRef.current);
+    pressTimerRef.current = null;
+  };
+
+  const startPress = () => {
+    cancelPress();
+    pressTimerRef.current = setTimeout(() => setIsOpen(true), LONG_PRESS_MS);
+  };
+
+  useEffect(() => cancelPress, []);
 
   return (
     <>
       <button
         className={styles.floatingButton}
-        onClick={() => setIsOpen(true)}
-        aria-label="צרו קשר"
-        title="צרו קשר"
+        onPointerDown={startPress}
+        onPointerUp={cancelPress}
+        onPointerLeave={cancelPress}
+        onPointerCancel={cancelPress}
+        onContextMenu={(e) => e.preventDefault()}
+        aria-label="צרו קשר - לחיצה ארוכה"
+        title="לחיצה ארוכה - להורים"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />

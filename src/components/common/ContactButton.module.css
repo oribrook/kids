@@ -16,7 +16,9 @@
   box-shadow: var(--shadow-md);
   transition: transform var(--transition-normal), background-color var(--transition-normal);
   z-index: var(--z-modal);
-  animation: gentlePulse 3s ease-in-out infinite;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 
 .floatingButton:hover {
@@ -31,11 +33,6 @@
 .floatingButton svg {
   width: 24px;
   height: 24px;
-}
-
-@keyframes gentlePulse {
-  0%, 100% { box-shadow: var(--shadow-md); }
-  50% { box-shadow: 0 4px 20px rgba(78, 205, 196, 0.5); }
 }
 
 /* Backdrop */
