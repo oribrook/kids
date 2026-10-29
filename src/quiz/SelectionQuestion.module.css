@@ -68,7 +68,6 @@
   gap: 4px;
 }
 
-/* Speaker button below intro cards */
 /* Arabic word label below card */
 .arabicLabel {
   font-size: 2rem;
@@ -79,36 +78,6 @@
   margin-bottom: 2px;
   direction: rtl;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.speakerButton {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(46, 204, 113, 0.15);
-  color: #2ECC71;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  transition: background 0.2s, transform 0.1s;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.speakerButton:hover {
-  background: rgba(46, 204, 113, 0.3);
-}
-
-.speakerButton:active {
-  transform: scale(0.9);
-  background: rgba(46, 204, 113, 0.4);
-}
-
-.speakerIcon {
-  width: 18px;
-  height: 18px;
 }
 
 /* Checkmark overlay for correct multi-select items */
@@ -166,15 +135,5 @@
 
   .arabicLabel {
     font-size: 1.7rem;
-  }
-
-  .speakerButton {
-    width: 28px;
-    height: 28px;
-  }
-
-  .speakerIcon {
-    width: 15px;
-    height: 15px;
   }
 }

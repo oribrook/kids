@@ -6,3 +6,4 @@ export { default as ScoreDisplay } from './ScoreDisplay';
 export { default as Mascot } from './Mascot';
 export { default as MusicToggle } from './MusicToggle';
 export { default as ContactButton } from './ContactButton';
+export { default as SpeakerButton } from './SpeakerButton';

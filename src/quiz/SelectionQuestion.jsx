@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Card } from '../components/common';
+import { Card, SpeakerButton } from '../components/common';
 import styles from './SelectionQuestion.module.css';
 import { ItemIcons, MultiIconRenderer } from '../components/icons';
 
@@ -98,22 +98,8 @@ function SelectionQuestion({
                 {question.showLabels && option.label && (
                   <div className={styles.arabicLabel}>{option.label}</div>
                 )}
-                {/* Speaker icon to preview word audio */}
                 {option.optionAudio && onPlayOptionAudio && (
-                  <button
-                    className={styles.speakerButton}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onPlayOptionAudio(option.optionAudio);
-                    }}
-                    aria-label={`השמע ${option.label}`}
-                  >
-                    <svg viewBox="0 0 24 24" className={styles.speakerIcon} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
-                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-                      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-                    </svg>
-                  </button>
+                  <SpeakerButton audio={option.optionAudio} label={option.label} onPlay={onPlayOptionAudio} />
                 )}
               </motion.div>
             );
@@ -198,22 +184,8 @@ function SelectionQuestion({
                   <span className={styles.placeholder}>{option.label}</span>
                 )}
               </Card>
-              {/* Speaker icon to preview word audio */}
               {hasOptionAudio && (
-                <button
-                  className={styles.speakerButton}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onPlayOptionAudio(option.optionAudio);
-                  }}
-                  aria-label={`השמע ${option.label}`}
-                >
-                  <svg viewBox="0 0 24 24" className={styles.speakerIcon} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
-                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-                  </svg>
-                </button>
+                <SpeakerButton audio={option.optionAudio} label={option.label} onPlay={onPlayOptionAudio} />
               )}
             </motion.div>
           );
