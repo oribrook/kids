@@ -125,10 +125,9 @@ import learnCholam from './learnCholam';
 import learnShuruk from './learnShuruk';
 
 // Hebrew Memory Games - Category: אותיות (memory-hebrew-letters)
-import memoryHebrewLetters from './memoryHebrewLetters';
+import { memoryHebrewLetters, memoryObjects } from '../../games/memory-cards/games';
 
 // Hebrew Memory Games - Category: מילים (memory-objects)
-import memoryObjects from './memoryObjects';
 
 // Hebrew Toddler - Category: מה שומעים? (toddler-audio)
 import audioObjects from './audioObjects';
@@ -143,37 +142,35 @@ import audioObjectsEn3 from './audioObjectsEn3';
 import audioObjectsEn4 from './audioObjectsEn4';
 
 // Hebrew Toddler - Category: לוח ציור (toddler-drawing)
-import drawingBoard from './drawingBoard';
+import drawingBoard from '../../games/drawing-board/game';
 
 // Hebrew Toddler - Category: ציור סיפור (toddler-story-draw)
-import storyDraw from './storyDraw';
+import storyDraw from '../../games/story-draw/game';
 
 // Hebrew Toddler - Category: מבוך (toddler-maze)
-import mazeGame from './mazeGame';
-import mazeGame2 from './mazeGame2';
-import mazeGame3 from './mazeGame3';
+import { mazeGame, mazeGame2, mazeGame3 } from '../../games/maze/games';
 
 // Hebrew Toddler - Category: שבירת לבנים (brick-breaker)
-import brickBreaker from './brickBreaker';
+import brickBreaker from '../../games/brick-breaker/game';
 
 // Hebrew Toddler - Category: רוץ שפנפן! (temple-run)
-import templeRun from './templeRun';
+import templeRun from '../../games/temple-run/game';
 
 // Hebrew Toddler - Category: פוצצו בלונים! (balloon-pop)
-import balloonPop from './balloonPop';
+import balloonPop from '../../games/balloon-pop/game';
 
 // Hebrew Toddler - Category: בלון מהיר! (fast-balloon)
-import fastBalloon from './fastBalloon';
+import fastBalloon from '../../games/fast-balloon/game';
 
 // Hebrew Toddler - Category: שמעון אומר (simon-says)
-import simonSays from './simonSays';
+import simonSays from '../../games/simon-says/game';
 
 
 // Hebrew Toddler - Category: סדרו בסדר! (sort-game)
-import sortGame from './sortGame';
+import sortGame from '../../games/sort/game';
 
 // Hebrew Toddler - Category: התמונה שלי! (photo-words)
-import photoWords from './photoWords';
+import photoWords from '../../games/photo-words/game';
 
 // Numbers - Category: 12345 (numbers-12345)
 import learnOne from './learnOne';
@@ -205,7 +202,7 @@ import learnHundred from './learnHundred';
 import quizTwentyHundred from './quizTwentyHundred';
 
 // Numbers - Category: חיבור וחיסור (math-plus-minus)
-import mathGame from './mathGame';
+import mathGame from '../../games/math/game';
 
 // All games registry
 export const games = {

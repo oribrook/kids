@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUser } from '../../context/UserContext';
 import { useAudio } from '../../hooks/useAudio';
-import { photoWordsList } from '../../data/games/photoWords';
+import { photoWordsList } from './game';
 import { letterAudioByChar } from '../../data/hebrewLetterBank';
 import { shuffleArray } from '../../utils/shuffle';
 import styles from './PhotoWordGame.module.css';

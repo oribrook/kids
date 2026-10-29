@@ -10,38 +10,9 @@ import { shuffleArray } from '../utils/shuffle';
 import { ProgressBar, ScoreDisplay, AudioButton, Button, Mascot } from '../components/common';
 import GameComplete from '../components/game/GameComplete';
 import SelectionQuestion from '../components/game/SelectionQuestion';
-import MemoryCardGame from '../components/game/MemoryCardGame';
-import DrawingBoard from '../components/game/DrawingBoard';
-import StoryDraw from '../components/game/StoryDraw';
-import MazeGame from '../components/game/MazeGame';
-import BrickBreaker from '../components/game/BrickBreaker';
-import TempleRun from '../components/game/TempleRun';
-import BalloonPop from '../components/game/BalloonPop';
-import FastBalloon from '../components/game/FastBalloon';
-import SimonSays from '../components/game/SimonSays';
-
-import SortGame from '../components/game/SortGame';
-import PhotoWordGame from '../components/game/PhotoWordGame';
-import MathGame from '../components/game/MathGame';
 import HiddenLetterInstruction from '../components/game/HiddenLetterInstruction';
+import { STANDALONE_GAMES } from '../games';
 import styles from './Game.module.css';
-
-// Standalone games - self-contained components that bypass the question-based
-// GameContext flow. Adding a new standalone game = one line here.
-const STANDALONE_GAMES = {
-  memoryCard: MemoryCardGame,
-  drawingBoard: DrawingBoard,
-  storyDraw: StoryDraw,
-  mazeGame: MazeGame,
-  brickBreaker: BrickBreaker,
-  templeRun: TempleRun,
-  balloonPop: BalloonPop,
-  fastBalloon: FastBalloon,
-  simonSays: SimonSays,
-  sortGame: SortGame,
-  photoWord: PhotoWordGame,
-  mathGame: MathGame,
-};
 
 function Game() {
   const { gameId } = useParams();

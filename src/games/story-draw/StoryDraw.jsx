@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import styles from './StoryDraw.module.css';
-import { STORY_SHAPES, SHAPE_CATEGORIES, getShapesByCategory } from '../../data/storyShapes';
+import { STORY_SHAPES, SHAPE_CATEGORIES, getShapesByCategory } from './storyShapes';
 
 const STORAGE_KEY_RECENT_COLORS = 'storyDraw_recentColors';
 const STORAGE_KEY_SAVED_DRAWINGS = 'storyDraw_savedDrawings';
