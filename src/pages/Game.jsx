@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGame } from '../context/GameContext';
@@ -9,11 +9,7 @@ import { getCategoryById, getTopicForCategory } from '../data/categories';
 import { shuffleArray } from '../utils/shuffle';
 import { ProgressBar, ScoreDisplay, AudioButton, Button, Mascot } from '../components/common';
 import GameComplete from '../components/game/GameComplete';
-import CountingQuestion from '../components/game/CountingQuestion';
 import SelectionQuestion from '../components/game/SelectionQuestion';
-import ShadowQuestion from '../components/game/ShadowQuestion';
-import TimedQuestion from '../components/game/TimedQuestion';
-import MemoryQuestion from '../components/game/MemoryQuestion';
 import MemoryCardGame from '../components/game/MemoryCardGame';
 import DrawingBoard from '../components/game/DrawingBoard';
 import StoryDraw from '../components/game/StoryDraw';
@@ -146,22 +142,6 @@ function Game() {
     }
   }, [currentQuestion?.id, gameState.isComplete, playInstruction]);
 
-  // Handle time up for timed games (must stay above the early returns - hooks rule)
-  const handleTimeUp = useCallback(() => {
-    if (showFeedback) return;
-    setShowFeedback(true);
-    setIsCorrect(false);
-    playWrong();
-
-    // Auto-advance after delay
-    setTimeout(() => {
-      submitAnswer(false);
-      setSelectedAnswer(null);
-      setShowFeedback(false);
-      setIsCorrect(null);
-    }, 1500);
-  }, [showFeedback, playWrong, submitAnswer]);
-
   if (!game || !category) {
     return (
       <div className={styles.notFound}>
@@ -182,25 +162,20 @@ function Game() {
     );
   }
 
-  const handleAnswer = (answerId, answerValue) => {
+  const handleAnswer = (answerId) => {
     if (showFeedback) return;
 
     setSelectedAnswer(answerId);
     setShowFeedback(true);
 
-    // Check if answer is correct based on game type
+    // Check if the selected option has isCorrect: true (supports multiple correct answers)
     let correct = false;
-    if (game.id === 'count-animals' || game.id === 'count-shapes') {
-      correct = answerValue === currentQuestion.correctAnswer;
+    const selectedOption = currentQuestion.options?.find(opt => opt.id === answerId);
+    if (selectedOption?.isCorrect) {
+      correct = true;
     } else {
-      // Check if the selected option has isCorrect: true (supports multiple correct answers)
-      const selectedOption = currentQuestion.options?.find(opt => opt.id === answerId);
-      if (selectedOption?.isCorrect) {
-        correct = true;
-      } else {
-        // Fallback to legacy correctAnswerId check
-        correct = answerId === currentQuestion.correctAnswerId;
-      }
+      // Fallback to legacy correctAnswerId check
+      correct = answerId === currentQuestion.correctAnswerId;
     }
 
     setIsCorrect(correct);
@@ -350,43 +325,15 @@ function Game() {
       onAnswer: handleAnswer,
     };
 
-    // Check game type first for special handling
-    if (game.gameType === 'timed') {
-      return (
-        <TimedQuestion
-          {...commonProps}
-          timeLimit={game.timeLimit || 10}
-          onTimeUp={handleTimeUp}
-        />
-      );
-    }
-
-    if (game.gameType === 'memory') {
-      return (
-        <MemoryQuestion
-          {...commonProps}
-          memoryTime={game.memoryTime || 3}
-        />
-      );
-    }
-
-    // Standard games - use specific question components
-    if (game.id === 'count-animals' || game.id === 'count-shapes' || game.id === 'speed-count') {
-      return <CountingQuestion {...commonProps} />;
-    } else if (game.id === 'shadow-match') {
-      return <ShadowQuestion {...commonProps} />;
-    } else {
-      // SelectionQuestion - pass multi-select props if needed
-      return (
-        <SelectionQuestion
-          {...commonProps}
-          multiSelectState={multiSelectState}
-          onMultiSelectAnswer={handleMultiSelectAnswer}
-          onIntroMultiSelectAnswer={handleIntroMultiSelectAnswer}
-          onPlayOptionAudio={playInstruction}
-        />
-      );
-    }
+    return (
+      <SelectionQuestion
+        {...commonProps}
+        multiSelectState={multiSelectState}
+        onMultiSelectAnswer={handleMultiSelectAnswer}
+        onIntroMultiSelectAnswer={handleIntroMultiSelectAnswer}
+        onPlayOptionAudio={playInstruction}
+      />
+    );
   };
 
   return (
