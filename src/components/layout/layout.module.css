@@ -1,0 +1,71 @@
+/* NavHeader (values = the former inline styles in Language.jsx / Topic.jsx) */
+.backButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.titleIcon {
+  font-size: 32px;
+}
+
+.titleText {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.spacer {
+  width: 40px;
+}
+
+/* PageDecorations (moved from Home.module.css) */
+.decorations {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.decoration {
+  position: absolute;
+  font-size: 32px;
+  opacity: 0.3;
+  animation: float 4s ease-in-out infinite;
+}
+
+.dec1 {
+  top: 15%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.dec2 {
+  top: 40%;
+  right: 8%;
+  animation-delay: 1s;
+}
+
+.dec3 {
+  bottom: 20%;
+  left: 15%;
+  animation-delay: 2s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@media (max-width: 480px) {
+  .decoration {
+    font-size: 24px;
+  }
+}

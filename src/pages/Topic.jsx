@@ -2,6 +2,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getTopicById, getCategoriesByTopic, getLanguageForTopic } from '../data/categories';
 import { Button } from '../components/common';
+import NavHeader from '../components/layout/NavHeader';
+import PageDecorations from '../components/layout/PageDecorations';
 import styles from './Home.module.css';
 
 function Topic() {
@@ -40,26 +42,12 @@ function Topic() {
 
   return (
     <div className={styles.container}>
-      {/* Header with back button */}
-      <header className={styles.header}>
-        <button
-          onClick={handleBack}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            cursor: 'pointer',
-            padding: '8px',
-          }}
-        >
-          →
-        </button>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '32px' }}>{topic.icon}</span>
-          <span style={{ fontSize: '20px', fontWeight: 'bold' }}>{topic.name}</span>
-        </div>
-        <div style={{ width: '40px' }} />
-      </header>
+      <NavHeader
+        className={styles.header}
+        icon={topic.icon}
+        title={topic.name}
+        onBack={handleBack}
+      />
 
       {/* Main content */}
       <main className={styles.main}>
@@ -104,12 +92,7 @@ function Topic() {
         )}
       </main>
 
-      {/* Decorative elements */}
-      <div className={styles.decorations}>
-        <div className={`${styles.decoration} ${styles.dec1}`}>✨</div>
-        <div className={`${styles.decoration} ${styles.dec2}`}>🌟</div>
-        <div className={`${styles.decoration} ${styles.dec3}`}>💫</div>
-      </div>
+      <PageDecorations />
     </div>
   );
 }

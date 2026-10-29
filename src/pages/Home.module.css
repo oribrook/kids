@@ -128,44 +128,6 @@
   height: 6px;
 }
 
-/* Decorations */
-.decorations {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.decoration {
-  position: absolute;
-  font-size: 32px;
-  opacity: 0.3;
-  animation: float 4s ease-in-out infinite;
-}
-
-.dec1 {
-  top: 15%;
-  left: 10%;
-  animation-delay: 0s;
-}
-
-.dec2 {
-  top: 40%;
-  right: 8%;
-  animation-delay: 1s;
-}
-
-.dec3 {
-  bottom: 20%;
-  left: 15%;
-  animation-delay: 2s;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-}
-
 /* Tablet */
 @media (max-width: 768px) {
   .container {
@@ -230,10 +192,6 @@
   .categoryIcon {
     font-size: 40px;
     margin-bottom: var(--space-md);
-  }
-
-  .decoration {
-    font-size: 24px;
   }
 }
 

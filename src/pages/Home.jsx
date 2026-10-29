@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useUser } from '../context/UserContext';
 import { Mascot, ScoreDisplay } from '../components/common';
+import PageDecorations from '../components/layout/PageDecorations';
 import { languages } from '../data/categories';
 import styles from './Home.module.css';
 
@@ -61,12 +62,7 @@ function Home() {
         </div>
       </main>
 
-      {/* Decorative elements */}
-      <div className={styles.decorations}>
-        <div className={`${styles.decoration} ${styles.dec1}`}>✨</div>
-        <div className={`${styles.decoration} ${styles.dec2}`}>🌟</div>
-        <div className={`${styles.decoration} ${styles.dec3}`}>💫</div>
-      </div>
+      <PageDecorations />
     </div>
   );
 }

@@ -2,6 +2,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getLanguageById, getTopicsByLanguage } from '../data/categories';
 import { Button } from '../components/common';
+import NavHeader from '../components/layout/NavHeader';
+import PageDecorations from '../components/layout/PageDecorations';
 import styles from './Home.module.css';
 
 function Language() {
@@ -29,26 +31,12 @@ function Language() {
 
   return (
     <div className={styles.container}>
-      {/* Header with back button */}
-      <header className={styles.header}>
-        <button
-          onClick={handleBack}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            cursor: 'pointer',
-            padding: '8px',
-          }}
-        >
-          →
-        </button>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '32px' }}>{language.icon}</span>
-          <span style={{ fontSize: '20px', fontWeight: 'bold' }}>{language.name}</span>
-        </div>
-        <div style={{ width: '40px' }} />
-      </header>
+      <NavHeader
+        className={styles.header}
+        icon={language.icon}
+        title={language.name}
+        onBack={handleBack}
+      />
 
       {/* Main content */}
       <main className={styles.main}>
@@ -90,12 +78,7 @@ function Language() {
         )}
       </main>
 
-      {/* Decorative elements */}
-      <div className={styles.decorations}>
-        <div className={`${styles.decoration} ${styles.dec1}`}>✨</div>
-        <div className={`${styles.decoration} ${styles.dec2}`}>🌟</div>
-        <div className={`${styles.decoration} ${styles.dec3}`}>💫</div>
-      </div>
+      <PageDecorations />
     </div>
   );
 }
