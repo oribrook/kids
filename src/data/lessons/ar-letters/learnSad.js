@@ -5,7 +5,7 @@
 // Words: صاروخ (rocket), صبار (cactus), صحن (plate), صوف (wool), صندوق (box),
 //        صقر (falcon), صابون (soap), صورة (picture), صنبور (faucet)
 
-import { generateCumulativeReview, arabicLetterOrder } from '../../banks/arabicWordBank';
+import { generateCumulativeReview } from '../../banks/arabicWordBank';
 
 const learnSadAr = {
   id: 'learn-sad-ar',

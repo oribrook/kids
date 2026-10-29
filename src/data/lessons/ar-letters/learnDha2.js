@@ -5,7 +5,7 @@
 // Words: ظرف (envelope), ظل (shadow), ظبي (gazelle), ظفر (nail), ظهر (back),
 //        ظلام (darkness), ظريف (cute), ظبية (doe), ظمأ (thirst)
 
-import { generateCumulativeReview, arabicLetterOrder } from '../../banks/arabicWordBank';
+import { generateCumulativeReview } from '../../banks/arabicWordBank';
 
 const learnDha2Ar = {
   id: 'learn-dha2-ar',

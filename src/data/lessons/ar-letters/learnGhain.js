@@ -5,7 +5,7 @@
 // Words: غزال (deer), غيمة (cloud), غراب (crow), غسالة (washer), غابة (forest),
 //        غطاء (lid), غنم (sheep), غصن (branch), غار (cave)
 
-import { generateCumulativeReview, arabicLetterOrder } from '../../banks/arabicWordBank';
+import { generateCumulativeReview } from '../../banks/arabicWordBank';
 
 const learnGhainAr = {
   id: 'learn-ghain-ar',

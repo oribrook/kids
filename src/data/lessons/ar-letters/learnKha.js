@@ -5,7 +5,7 @@
 // Words: خبز (bread), خيار (cucumber), خروف (sheep), خاتم (ring),
 //        خنفساء (beetle), خيمة (tent), خس (lettuce), خوخ (peach), خنزير (pig)
 
-import { generateCumulativeReview, arabicLetterOrder } from '../../banks/arabicWordBank';
+import { generateCumulativeReview } from '../../banks/arabicWordBank';
 
 const learnKhaAr = {
   id: 'learn-kha-ar',

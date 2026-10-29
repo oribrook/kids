@@ -5,7 +5,7 @@
 // Words: ضفدع (frog), ضوء (light), ضحك (laugh), ضيف (guest), ضباب (fog),
 //        ضمادة (bandage), ضبع (hyena), ضرس (tooth), ضب (lizard)
 
-import { generateCumulativeReview, arabicLetterOrder } from '../../banks/arabicWordBank';
+import { generateCumulativeReview } from '../../banks/arabicWordBank';
 
 const learnDadAr = {
   id: 'learn-dad-ar',

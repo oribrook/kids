@@ -5,7 +5,7 @@
 // Words: عين (eye), عنب (grapes), عسل (honey), عصفور (bird), عجلة (wheel),
 //        عنكبوت (spider), عربة (cart), عظم (bone), عقرب (scorpion)
 
-import { generateCumulativeReview, arabicLetterOrder } from '../../banks/arabicWordBank';
+import { generateCumulativeReview } from '../../banks/arabicWordBank';
 
 const learnAinAr = {
   id: 'learn-ain-ar',

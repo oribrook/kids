@@ -4,7 +4,7 @@
 // Instructions in Hebrew, word audio in Arabic (spoken/colloquial)
 // Words: ثلج (thalj/snow), ثعلب (thalab/fox), ثوم (thoom/garlic)
 
-import { generateCumulativeReview, arabicLetterOrder } from '../../banks/arabicWordBank';
+import { generateCumulativeReview } from '../../banks/arabicWordBank';
 
 const learnThaAr = {
   id: 'learn-tha-ar',

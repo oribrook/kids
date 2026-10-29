@@ -5,7 +5,7 @@
 // Instructions in Hebrew, word audio in Arabic (spoken/colloquial)
 // Reuses existing images where possible
 
-import { generateCumulativeReview, arabicLetterOrder } from '../../banks/arabicWordBank';
+import { generateCumulativeReview } from '../../banks/arabicWordBank';
 
 const learnAlefAr = {
   id: 'learn-alef-ar',

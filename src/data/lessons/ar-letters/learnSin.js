@@ -5,7 +5,7 @@
 // Words: سمكة (fish), سيارة (car), ساعة (clock), سلحفاة (turtle), سكين (knife),
 //        سلم (ladder), سرير (bed), سفينة (ship), سوق (market)
 
-import { generateCumulativeReview, arabicLetterOrder } from '../../banks/arabicWordBank';
+import { generateCumulativeReview } from '../../banks/arabicWordBank';
 
 const learnSinAr = {
   id: 'learn-sin-ar',

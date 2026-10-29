@@ -4,7 +4,7 @@
 // Instructions in Hebrew, word audio in Arabic (spoken/colloquial)
 // Words: تفاح (tuffah/apple), توت (toot/berries), تاج (taj/crown)
 
-import { generateCumulativeReview, arabicLetterOrder } from '../../banks/arabicWordBank';
+import { generateCumulativeReview } from '../../banks/arabicWordBank';
 
 const learnTaAr = {
   id: 'learn-ta-ar',

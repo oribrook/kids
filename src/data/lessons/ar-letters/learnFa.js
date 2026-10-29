@@ -5,7 +5,7 @@
 // Words: فيل (elephant), فراشة (butterfly), فأر (mouse), فراولة (strawberry),
 //        فستان (dress), فم (mouth), فلفل (pepper), فانوس (lantern), فنجان (cup)
 
-import { generateCumulativeReview, arabicLetterOrder } from '../../banks/arabicWordBank';
+import { generateCumulativeReview } from '../../banks/arabicWordBank';
 
 const learnFaAr = {
   id: 'learn-fa-ar',

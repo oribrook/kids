@@ -5,7 +5,7 @@
 // Words: شمس (sun), شجرة (tree), شوكولاتة (chocolate), شمعة (candle), شنطة (bag),
 //        شراب (drink/juice), شاي (tea), شبكة (net), شطيرة (sandwich)
 
-import { generateCumulativeReview, arabicLetterOrder } from '../../banks/arabicWordBank';
+import { generateCumulativeReview } from '../../banks/arabicWordBank';
 
 const learnShinAr = {
   id: 'learn-shin-ar',
