@@ -10,7 +10,7 @@ elements like scoring and progress tracking.
 
 TECH STACK
 ----------
-- React 18 with Vite
+- React 19 with Vite
 - React Router DOM for navigation
 - Framer Motion for animations
 - CSS Modules with CSS Custom Properties
@@ -39,11 +39,12 @@ ROOT FILES
 
 ./index.html
     Main HTML entry point. Sets up Hebrew RTL direction, includes meta tags
-    for mobile, and loads the React app.
+    for mobile, GA + hits snippets, and loads the React app.
 
 ./package.json
     NPM package configuration with dependencies (react, react-router-dom,
-    framer-motion) and scripts (dev, build, preview).
+    framer-motion, react-ga4) and scripts: dev, build, preview, lint,
+    dump:registry, check:assets (see DEV SCRIPTS).
 
 ./package-lock.json
     NPM dependency lock file for consistent installations.
@@ -52,13 +53,30 @@ ROOT FILES
     Vite configuration with React plugin setup.
 
 ./eslint.config.js
-    ESLint configuration for code quality and React best practices.
+    ESLint flat config: js recommended + react-hooks + react-refresh +
+    eslint-plugin-react (only react/jsx-uses-vars, so `motion` etc. are not
+    reported as unused). Lint is not part of the build. See LINT DEBT.
 
 ./README.md
-    Project readme with setup instructions.
+    Short project description, npm scripts, pointer to this file, deploy note.
 
 ./files.txt
-    This file - comprehensive project documentation.
+    This file - the project's source of truth (structure, conventions, every
+    game, how to add a game, known bugs).
+
+./scripts/dump-registry.mjs
+    Dev tool: loads src/data/registry.js through Vite SSR and writes the
+    resolved registry as JSON ({ allIds, byCategory }). Math.random is pinned
+    so questions generated at import time are deterministic. Diff two dumps
+    to prove a refactor changed nothing the user can see.
+    npm run dump:registry -- [/src/data/registry.js] [outFile]
+
+./scripts/check-assets.mjs
+    Dev tool: scans src for /audio, /images, /sounds paths and checks they
+    exist in public/; checks every id in categories.js exists in the
+    registry; lists orphan audio files (on disk, never referenced).
+    Exits 1 only for NEW problems (KNOWN_MISSING inside = the 9 known 404s,
+    see KNOWN BUGS).  npm run check:assets
 
 ================================================================================
                               PUBLIC FOLDER
@@ -68,8 +86,8 @@ ROOT FILES
     Netlify SPA routing config. Prevents 404 on page refresh.
 
 ./public/audio/README.md
-    Documentation listing all audio files for game instructions and
-    voice feedback. Includes TTS generation instructions.
+    Short naming note: folder meaning (root / ar / en / numbers / letters/he),
+    file-name patterns, TTS voices. The full per-game lists are in this file.
 
 ./public/audio/*.mp3
     Letter game instruction audio files (Hebrew TTS):
@@ -154,9 +172,6 @@ ENTRY POINTS
     - Animation delay utilities (.delay-1 through .delay-5)
     - Reduced motion support (@prefers-reduced-motion)
 
-./src/styles/theme.js
-    JavaScript theme object (for programmatic access to theme values).
-
 --------------------------------------------------------------------------------
                               CONTEXT (src/context/)
 --------------------------------------------------------------------------------
@@ -237,7 +252,6 @@ ENTRY POINTS
     - temple-run: "רוץ שפנפן!" - Endless runner game
     - balloon-pop: "פוצצו בלונים!" - Timed balloon popping game
     - simon-says: "שמעון אומר" - Color sequence memory game
-    - jigsaw-puzzle: "פאזל" - Emoji jigsaw puzzles (2x2 and 3x3)
     - sort-game: "סדרו בסדר!" - Sort numbers/Hebrew letters by order
     - photo-words: "התמונה שלי!" - Blurred family photo revealed by spelling the name
 
@@ -278,15 +292,37 @@ ENTRY POINTS
     - getTopicsByLanguage(langId), getCategoriesByTopic(topicId)
     - getTopicForCategory(catId), getLanguageForTopic(topicId) - parent navigation
 
-./src/data/games/index.js
-    Games registry and helper functions:
-    - games object with all letter game definitions
+./src/data/registry.js
+    THE game registry: games = { id -> game definition }, built from ordered
+    arrays (no duplicated string keys):
+      [...heLetters, ...enLetters, ...arLetters, ...heNikud,
+       ...standaloneGameDefs, ...audioObjects, ...numbers]
+    - each lesson group = src/data/lessons/<group>/index.js (default export =
+      array in Category-page order)
+    - standaloneGameDefs = src/games/defs.js (pure data, no React)
+    Imports only data (no React/CSS) so scripts/dump-registry.mjs can load it.
+    Helpers (same API as before):
     - getGameById(id) - Get single game
-    - getGamesByCategory(categoryId) - Filter games by category
+    - getGamesByCategory(categoryId) - Filter games by category (insertion
+      order = order inside the group array = order on the Category page)
     - getQuestionsForDifficulty(game) - Get easy questions for a game
     - getGameDisplayInfo(gameId) - Get game metadata for display
 
-./src/data/arabicWordBank.js
+./src/data/lessons/
+    Question-engine content (gameType 'standard' / none), grouped by language.
+    File names: learn<Name>.js / quiz<Range>.js - the FOLDER says the language,
+    no -ar / -en suffix in file names (game ids keep their suffixes).
+    he-letters/     22 letters + 5 quizzes (27)   he-nikud/  5 nikud lessons
+    en-letters/     learnA..learnZ (26)           numbers/   19 lessons + 2 quizzes
+    ar-letters/     learnAlef..learnYa (28; learnShin.js = the Arabic ش)
+    audio-objects/  audioObjectsHe1-4 (מה שומעים?), audioObjectsEn1-4 (What do we hear?)
+    Every group has index.js = ordered default-export array.
+
+./src/data/banks/
+    Shared content used by several games: hebrewLetterBank.js,
+    arabicWordBank.js, wordLettersBank.js (each documented below).
+
+./src/data/banks/arabicWordBank.js
     Central Arabic word bank for cumulative review questions.
     Maps each of 20 Arabic letters to their words (image, label, audio).
     150 total words sourced from the intro questions of all Arabic letter games.
@@ -312,7 +348,7 @@ ARABIC CUMULATIVE REVIEW QUESTIONS:
 
 LETTER GAMES - CATEGORY אבגדה (letters-alef-he):
 
-./src/data/games/learnAlef.js
+./src/data/lessons/he-letters/learnAlef.js
     "Learn the Letter Alef" game data (למדו את האות א):
     - 6 questions teaching children the Hebrew letter א
     - Q1: Introduction - "הינה האות א" - shows letter, ALL options correct
@@ -325,7 +361,7 @@ LETTER GAMES - CATEGORY אבגדה (letters-alef-he):
     - Uses SelectionQuestion with questionImage feature
     - Supports multiple correct answers via isCorrect flag on options
 
-./src/data/games/learnBet.js
+./src/data/lessons/he-letters/learnBet.js
     "Learn the Letter Bet" game data (למדו את האות ב):
     - 6 questions teaching children the Hebrew letter ב
     - Q1: Introduction - "זאת האות ב. המילה בית מתחילה באות ב"
@@ -340,7 +376,7 @@ LETTER GAMES - CATEGORY אבגדה (letters-alef-he):
     - Uses SelectionQuestion with questionImage feature
     - Introduces multi-select question type (select ALL correct answers)
 
-./src/data/games/learnGimel.js
+./src/data/lessons/he-letters/learnGimel.js
     "Learn the Letter Gimel" game data (למדו את האות ג):
     - 6 questions teaching children the Hebrew letter ג
     - Q1: Introduction - "זאת האות ג. המילה גמל מתחילה באות ג"
@@ -353,7 +389,7 @@ LETTER GAMES - CATEGORY אבגדה (letters-alef-he):
     - Easy difficulty only
     - Uses SelectionQuestion with questionImage feature
 
-./src/data/games/learnDalet.js
+./src/data/lessons/he-letters/learnDalet.js
     "Learn the Letter Dalet" game data (למדו את האות ד):
     - 6 questions teaching children the Hebrew letter ד
     - Q1: Introduction - "זאת האות ד. המילה דלת מתחילה באות ד"
@@ -368,7 +404,7 @@ LETTER GAMES - CATEGORY אבגדה (letters-alef-he):
     - Word images needed: word-delet.png, word-dag.png, word-dvora.png,
       word-degel.png, word-deshe.png, word-dinozaur.png, word-daf.png, word-dvash.png
 
-./src/data/games/learnHe.js
+./src/data/lessons/he-letters/learnHe.js
     "Learn the Letter He" game data (למדו את האות ה):
     - 6 questions teaching children the Hebrew letter ה
     - Q1: Introduction - "זוהי האות hey, המילים הבאות מתחילות באות hey"
@@ -383,7 +419,7 @@ LETTER GAMES - CATEGORY אבגדה (letters-alef-he):
     - Word images needed: word-hayeled.png, word-hatzipor.png, word-habayit.png,
       word-habanana.png, word-har.png, word-havdala.png
 
-./src/data/games/quizAlefHe.js
+./src/data/lessons/he-letters/quizAlefHe.js
     "Quiz Alef to He" game data (אבגדה - בוחן אותיות א-ה):
     - 15 questions testing knowledge of letters א, ב, ג, ד, ה
     - 3 question types per letter (pre-shuffled order):
@@ -396,7 +432,7 @@ LETTER GAMES - CATEGORY אבגדה (letters-alef-he):
 
 LETTER GAMES - CATEGORY וזחטי (letters-vav-yod):
 
-./src/data/games/learnVav.js
+./src/data/lessons/he-letters/learnVav.js
     "Learn the Letter Vav" game data (למדו את האות ו):
     - 8 questions teaching children the Hebrew letter ו
     - Q1: Introduction - "זוהי האות vav, המילים הבאות מתחילות באות vav"
@@ -425,7 +461,7 @@ LETTER GAMES - LAST QUESTION LOGIC:
                     NIKUD GAMES - CATEGORY בואו נתחיל (nikud-start)
 --------------------------------------------------------------------------------
 
-./src/data/games/learnTzeirei.js
+./src/data/lessons/he-nikud/learnTzeirei.js
     "Learn Tzeirei Nikud" game data (למדו את הניקוד צֵירֵי):
     - 3 questions teaching children the Tzeirei (צֵירֵי) vowel mark
     - Q1: Introduction - "הניקוד שנכיר עכשיו נקרא צֵירֵי"
@@ -442,7 +478,7 @@ LETTER GAMES - LAST QUESTION LOGIC:
       le-tzeirei.mp3, ke-tzeirei.mp3, me-tzeirei.mp3, se-tzeirei.mp3,
       re-tzeirei.mp3, word-starts-tzeirei.mp3, select-tzeirei.mp3
 
-./src/data/games/learnChirik.js
+./src/data/lessons/he-nikud/learnChirik.js
     "Learn Chirik Nikud" game data (למדו את הניקוד חִירִיק):
     - 3 questions teaching children the Chirik (חִירִיק) vowel mark
     - Q1: Introduction - "הניקוד שנכיר עכשיו נקרא חִירִיק"
@@ -457,7 +493,7 @@ LETTER GAMES - LAST QUESTION LOGIC:
       li-chirik.mp3, ki-chirik.mp3, mi-chirik.mp3, si-chirik.mp3,
       ri-chirik.mp3, word-starts-chirik.mp3, select-chirik.mp3
 
-./src/data/games/learnPatach.js
+./src/data/lessons/he-nikud/learnPatach.js
     "Learn Patach Nikud" game data (למדו את הניקוד פַּתָּח):
     - 3 questions teaching children the Patach (פַּתָּח) vowel mark
     - Q1: Introduction - "הניקוד שנכיר עכשיו נקרא פַּתָּח"
@@ -472,7 +508,7 @@ LETTER GAMES - LAST QUESTION LOGIC:
       la-patach.mp3, ka-patach.mp3, ma-patach.mp3, sa-patach.mp3,
       ra-patach.mp3, word-starts-patach.mp3, select-patach.mp3
 
-./src/data/games/learnCholam.js
+./src/data/lessons/he-nikud/learnCholam.js
     "Learn Cholam Nikud" game data (למדו את הניקוד חוֹלָם):
     - 3 questions teaching children the Cholam (חוֹלָם) vowel mark
     - Q1: Introduction - "הניקוד שנכיר עכשיו נקרא חוֹלָם"
@@ -509,7 +545,7 @@ OVERVIEW:
     Word labels: In Arabic (the letter names and word names stay Arabic)
     Audio files stored in: /public/audio/ar/
 
-./src/data/games/learnAlef-ar.js
+./src/data/lessons/ar-letters/learnAlef.js
     "Learn the Letter Alef" game data (למדו את האות أ):
     - 6 questions teaching children the Arabic letter أ
     - Instructions in Hebrew, word labels in Arabic
@@ -517,7 +553,7 @@ OVERVIEW:
     - Q2-Q6: Find letter, word association, multi-select
     - Images reused: word-rabbit.png, word-arye.png, word-ozen.png
 
-./src/data/games/learnBa-ar.js
+./src/data/lessons/ar-letters/learnBa.js
     "Learn the Letter Ba" game data (למדו את האות ب):
     - 6 questions teaching children the Arabic letter ب
     - Instructions in Hebrew, word labels in Arabic
@@ -526,7 +562,7 @@ OVERVIEW:
     - Q6: Multi-select marking أ and ب
     - Images: word-barvaz.png, word-bandora.png (new), word-bayit (SVG)
 
-./src/data/games/learnTa-ar.js
+./src/data/lessons/ar-letters/learnTa.js
     "Learn the Letter Ta" game data (למדו את האות ت):
     - 6 questions teaching children the Arabic letter ت
     - Instructions in Hebrew, word labels in Arabic
@@ -535,7 +571,7 @@ OVERVIEW:
     - Q6: Multi-select marking أ, ب, ت
     - Images: word-tapuach.png, word-tut.png, word-taj.png (new)
 
-./src/data/games/learnTha-ar.js
+./src/data/lessons/ar-letters/learnTha.js
     "Learn the Letter Tha" game data (למדו את האות ث):
     - 6 questions teaching children the Arabic letter ث
     - Instructions in Hebrew, word labels in Arabic
@@ -544,7 +580,7 @@ OVERVIEW:
     - Q6: Multi-select marking أ, ب, ت, ث
     - Images: word-snow.png (new), word-fox.png, word-thoom.png (new)
 
-./src/data/games/learnJim-ar.js
+./src/data/lessons/ar-letters/learnJim.js
     "Learn the Letter Jim" game data (למדו את האות ج):
     - 7 questions teaching children the Arabic letter ج
     - Instructions in Hebrew, word labels in Arabic
@@ -585,7 +621,7 @@ OVERVIEW:
     Color scheme: Green (#27AE60) for category, (#2ECC71) for letter icons
     Q1 of each letter has 9 word objects (more than first category's ~3-4)
 
-./src/data/games/learnHa-ar.js
+./src/data/lessons/ar-letters/learnHa.js
     "Learn the Letter Ha" game data (למדו את האות ح):
     - 6 questions teaching children the Arabic letter ح
     - Instructions in Hebrew, word labels in Arabic
@@ -595,7 +631,7 @@ OVERVIEW:
     - Images reused: word-sus, word-whale, word-chevel, word-naal, word-shablul
     - New images: word-halib, word-himar, word-hamama, word-hakiba
 
-./src/data/games/learnKha-ar.js
+./src/data/lessons/ar-letters/learnKha.js
     "Learn the Letter Kha" game data (למדו את האות خ):
     - 6 questions teaching children the Arabic letter خ
     - Instructions in Hebrew, word labels in Arabic
@@ -607,7 +643,7 @@ OVERVIEW:
       word-salat, word-pig
     - New images: word-kharoof, word-kheima, word-khoukh
 
-./src/data/games/learnDal-ar.js
+./src/data/lessons/ar-letters/learnDal.js
     "Learn the Letter Dal" game data (למדו את האות د):
     - 6 questions teaching children the Arabic letter د
     - Instructions in Hebrew, word labels in Arabic
@@ -620,7 +656,7 @@ OVERVIEW:
     - New images: word-dub, word-dolphin, word-daraja, word-dumya, word-dalw,
       word-dooda, word-deek
 
-./src/data/games/learnDhal-ar.js
+./src/data/lessons/ar-letters/learnDhal.js
     "Learn the Letter Dhal" game data (למדו את האות ذ):
     - 6 questions teaching children the Arabic letter ذ
     - Instructions in Hebrew, word labels in Arabic
@@ -632,7 +668,7 @@ OVERVIEW:
     - Images reused: word-zeev, word-zanav, word-insect
     - New images: word-dhura, word-dhahab, word-dhira, word-dhikra, word-dhaqn, word-dhaki
 
-./src/data/games/learnRa-ar.js
+./src/data/lessons/ar-letters/learnRa.js
     "Learn the Letter Ra" game data (למדו את האות ر):
     - 7 questions teaching children the Arabic letter ر
     - Instructions in Hebrew, word labels in Arabic
@@ -687,7 +723,7 @@ OVERVIEW:
     Color scheme: Red (#E74C3C) for category, Green (#2ECC71) for letter icons
     Q1 of each letter has 9 word objects
 
-./src/data/games/learnZay-ar.js
+./src/data/lessons/ar-letters/learnZay.js
     "Learn the Letter Zay" game data (למדו את האות ز):
     - 6 questions teaching children the Arabic letter ز
     - Instructions in Hebrew, word labels in Arabic
@@ -698,7 +734,7 @@ OVERVIEW:
     - New images: word-zarafa, word-zeitoun, word-zahra, word-zubda, word-zirr,
       word-zunbur, word-zalaja
 
-./src/data/games/learnSin-ar.js
+./src/data/lessons/ar-letters/learnSin.js
     "Learn the Letter Sin" game data (למדו את האות س):
     - 6 questions teaching children the Arabic letter س
     - Instructions in Hebrew, word labels in Arabic
@@ -709,7 +745,7 @@ OVERVIEW:
     - Images reused: word-dag, word-mita, word-sira
     - New images: word-sayara, word-saaa, word-sulhafa, word-sikkeen, word-sullam, word-souq
 
-./src/data/games/learnShinAr.js
+./src/data/lessons/ar-letters/learnShin.js
     "Learn the Letter Shin" game data (למדו את האות ش):
     - 6 questions teaching children the Arabic letter ش
     - Instructions in Hebrew, word labels in Arabic
@@ -720,7 +756,7 @@ OVERVIEW:
     - Images reused: word-sun, word-etz, word-ner, word-hakiba, word-reshet
     - New images: word-shokolata, word-sharab, word-shai, word-shateera
 
-./src/data/games/learnSad-ar.js
+./src/data/lessons/ar-letters/learnSad.js
     "Learn the Letter Sad" game data (למדו את האות ص):
     - 6 questions teaching children the Arabic letter ص
     - Instructions in Hebrew, word labels in Arabic
@@ -732,7 +768,7 @@ OVERVIEW:
     - New images: word-sabbar, word-sahn, word-soof, word-sundooq, word-saqr,
       word-soora, word-sunboor
 
-./src/data/games/learnDad-ar.js
+./src/data/lessons/ar-letters/learnDad.js
     "Learn the Letter Dad" game data (למדו את האות ض):
     - 7 questions teaching children the Arabic letter ض
     - Instructions in Hebrew, word labels in Arabic
@@ -790,7 +826,7 @@ OVERVIEW:
     Color scheme: Purple (#9B59B6) for category, Green (#2ECC71) for letter icons
     Q1 of each letter has 9 word objects
 
-./src/data/games/learnTa2-ar.js
+./src/data/lessons/ar-letters/learnTa2.js
     "Learn the Letter Ta'" game data (למדו את האות ط):
     - 6 questions teaching children the Arabic letter ط
     - Instructions in Hebrew, word labels in Arabic
@@ -800,7 +836,7 @@ OVERVIEW:
     - Images reused: word-tayas, word-bandora
     - New images: word-tabl, word-tifl, word-tawla, word-tabib, word-tawq, word-tayara, word-taheen
 
-./src/data/games/learnDha2-ar.js
+./src/data/lessons/ar-letters/learnDha2.js
     "Learn the Letter Dha'" game data (למדו את האות ظ):
     - 6 questions teaching children the Arabic letter ظ
     - Instructions in Hebrew, word labels in Arabic
@@ -812,7 +848,7 @@ OVERVIEW:
     - New images: word-dharf, word-dhill, word-dhabi, word-dhufr, word-dhahr,
       word-dhalam, word-dharif, word-dhabya, word-dhama
 
-./src/data/games/learnAin-ar.js
+./src/data/lessons/ar-letters/learnAin.js
     "Learn the Letter Ain" game data (למדו את האות ع):
     - 6 questions teaching children the Arabic letter ع
     - Instructions in Hebrew, word labels in Arabic
@@ -823,7 +859,7 @@ OVERVIEW:
     - Images reused: word-ayin-eye, word-tsipor, word-akavish
     - New images: word-inab, word-asal, word-ajala, word-araba, word-adhm, word-aqrab
 
-./src/data/games/learnGhain-ar.js
+./src/data/lessons/ar-letters/learnGhain.js
     "Learn the Letter Ghain" game data (למדו את האות غ):
     - 6 questions teaching children the Arabic letter غ
     - Instructions in Hebrew, word labels in Arabic
@@ -834,7 +870,7 @@ OVERVIEW:
     - New images: word-ghazal, word-ghayma, word-ghurab, word-ghassala, word-ghaba,
       word-ghitaa, word-ghanam, word-ghusn, word-ghar
 
-./src/data/games/learnFa-ar.js
+./src/data/lessons/ar-letters/learnFa.js
     "Learn the Letter Fa" game data (למדו את האות ف):
     - 7 questions teaching children the Arabic letter ف
     - Instructions in Hebrew, word labels in Arabic
@@ -894,7 +930,7 @@ OVERVIEW:
     Color scheme: Orange (#E67E22) for category, Green (#2ECC71) for letter icons
     Q1 of each letter has 9 word objects
 
-./src/data/games/learnQaf-ar.js
+./src/data/lessons/ar-letters/learnQaf.js
     "Learn the Letter Qaf" game data (למדו את האות ق):
     - 6 questions teaching children the Arabic letter ق
     - Instructions in Hebrew, word labels in Arabic
@@ -906,7 +942,7 @@ OVERVIEW:
       word-sira, word-kova, word-rainbow
     - New images: word-qufl
 
-./src/data/games/learnKaf-ar.js
+./src/data/lessons/ar-letters/learnKaf.js
     "Learn the Letter Kaf" game data (למדו את האות ك):
     - 6 questions teaching children the Arabic letter ك
     - Instructions in Hebrew, word labels in Arabic
@@ -918,7 +954,7 @@ OVERVIEW:
       word-kanguru, word-violin
     - New images: word-kursi, word-kumthra
 
-./src/data/games/learnLam-ar.js
+./src/data/lessons/ar-letters/learnLam.js
     "Learn the Letter Lam" game data (למדו את האות ل):
     - 6 questions teaching children the Arabic letter ل
     - Instructions in Hebrew, word labels in Arabic
@@ -929,7 +965,7 @@ OVERVIEW:
     - Images reused: word-limon, word-yogurt, word-fustan
     - New images: word-luaba, word-lisan, word-leil, word-lawha, word-lahm, word-lulu
 
-./src/data/games/learnMim-ar.js
+./src/data/lessons/ar-letters/learnMim.js
     "Learn the Letter Mim" game data (למדו את האות م):
     - 6 questions teaching children the Arabic letter م
     - Instructions in Hebrew, word labels in Arabic
@@ -940,7 +976,7 @@ OVERVIEW:
     - Images reused: word-banana, word-key, word-geshem
     - New images: word-maa, word-madrasa, word-malik, word-miknasa, word-miraa, word-miqass
 
-./src/data/games/learnNun-ar.js
+./src/data/lessons/ar-letters/learnNun.js
     "Learn the Letter Nun" game data (למדו את האות ن):
     - 7 questions teaching children the Arabic letter ن (last letter gets extra Q)
     - Instructions in Hebrew, word labels in Arabic
@@ -991,7 +1027,7 @@ OVERVIEW:
     Color scheme: Teal (#1ABC9C) for category, Green (#2ECC71) for letter icons
     Q1 of each letter has 9 word objects
 
-./src/data/games/learnHa2-ar.js
+./src/data/lessons/ar-letters/learnHa2.js
     "Learn the Letter Ha" game data (למדו את האות ه):
     - 6 questions teaching children the Arabic letter ه
     - Instructions in Hebrew, word labels in Arabic
@@ -1003,7 +1039,7 @@ OVERVIEW:
     - New images: word-haram, word-hadiya, word-hilal, word-hawaa, word-helicopter,
       word-hudhud, word-harisa
 
-./src/data/games/learnWaw-ar.js
+./src/data/lessons/ar-letters/learnWaw.js
     "Learn the Letter Waw" game data (למדו את האות و):
     - 6 questions teaching children the Arabic letter و
     - Instructions in Hebrew, word labels in Arabic
@@ -1015,7 +1051,7 @@ OVERVIEW:
     - New images: word-walad, word-wajh, word-wisada, word-wazza, word-wiaa,
       word-winsh, word-waquud
 
-./src/data/games/learnYa-ar.js
+./src/data/lessons/ar-letters/learnYa.js
     "Learn the Letter Ya" game data (למדו את האות ي):
     - 7 questions teaching children the Arabic letter ي (last letter gets extra Q)
     - Instructions in Hebrew, word labels in Arabic
@@ -1080,6 +1116,10 @@ ARABIC ALPHABET COMPLETION:
     - Uses getRandomItem() helper for variety in feedback
     - Handles autoplay errors gracefully
 
+./src/hooks/usePageTracking.js
+    Google Analytics (react-ga4, G-ZTZD4YV9NF): sends a pageview on every
+    route change. Called once in App.jsx.
+
 --------------------------------------------------------------------------------
                               PAGES (src/pages/)
 --------------------------------------------------------------------------------
@@ -1100,26 +1140,26 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
     - Header with user greeting and score
     - Language cards grid (עברית, English)
     - Clicking language navigates to /language/:languageId
-    - Floating decorations
+    - Floating decorations (components/layout/PageDecorations)
 
 ./src/pages/Language.jsx
     Topic selection for a language:
     - Route: /language/:languageId
-    - Header with back button (→ /home) and language info
+    - Header = components/layout/NavHeader (back → /home, icon, name)
     - Topic cards grid (אותיות, ניקוד for Hebrew)
     - Clicking topic navigates to /topic/:topicId
-    - Reuses Home.module.css styles
+    - Reuses Home.module.css styles; decorations = PageDecorations
 
 ./src/pages/Topic.jsx
     Category selection for a topic:
     - Route: /topic/:topicId
-    - Header with back button (→ parent language) and topic info
+    - Header = components/layout/NavHeader (back → parent language)
     - Category cards grid (אבגדה, וזחטי, etc.) WITH category icon rendered
       on each card (uses existing .categoryIcon class from Home.module.css)
     - Clicking category navigates to /category/:categoryId
     - SINGLE-GAME categories (all toddler arcade games) navigate STRAIGHT to
       /game/:gameId - skips the pointless middle page with one card
-    - Reuses Home.module.css styles
+    - Reuses Home.module.css styles; decorations = PageDecorations
 
 ./src/pages/Category.jsx
     Game list for selected category:
@@ -1132,8 +1172,8 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
 ./src/pages/Game.jsx
     Main game player:
     - Route: /game/:gameId
-    - STANDALONE_GAMES registry map (gameType → component) replaces the old
-      9-branch if-chain. Adding a standalone game = one line in the map.
+    - STANDALONE_GAMES map (gameType → component) comes from src/games/index.js;
+      if game.gameType is in it, that component renders alone (own flow)
     - endGame() called on unmount so the next game never sees stale session
       state (fixed: previous game's completion screen flashing/sticking)
     - GameComplete only renders when the context session belongs to THIS game
@@ -1142,7 +1182,8 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
       one-card category page
     - Progress bar with step indicators
     - Score display with multiplier
-    - Renders appropriate question component based on game type
+    - Otherwise renders the question engine: src/quiz/SelectionQuestion
+      (+ HiddenLetterInstruction for the text, GameComplete at the end)
     - Handles answer feedback with mascot
     - Audio button for instructions
     - Shows GameComplete when finished
@@ -1156,7 +1197,8 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
 ./src/pages/Category.module.css
 ./src/pages/Game.module.css
     CSS Modules for each page with mobile-responsive styles.
-    Note: Language.jsx and Topic.jsx reuse Home.module.css
+    Note: Language.jsx and Topic.jsx reuse Home.module.css (.header etc.);
+    the decoration rules moved to components/layout/layout.module.css
 
 --------------------------------------------------------------------------------
                     COMPONENTS - COMMON (src/components/common/)
@@ -1213,6 +1255,12 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
     and email (brook.ori@gmail.com). Big noticeable close button for easy
     dismissal by kids. Rendered in App.jsx with same !isInGame guard as MusicToggle.
 
+./src/components/common/SpeakerButton.jsx + SpeakerButton.module.css
+    Small round green 🔊 button shown under a card that has optionAudio
+    (intro cards and word-choice cards). Props: audio, label, onPlay.
+    Stops click propagation so the card is not selected. Used by
+    src/quiz/SelectionQuestion.jsx (was copy-pasted twice there).
+
 ./src/components/common/Button.module.css
 ./src/components/common/Card.module.css
 ./src/components/common/ProgressBar.module.css
@@ -1224,100 +1272,40 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
     CSS Modules for each common component with responsive styles.
 
 --------------------------------------------------------------------------------
-                    COMPONENTS - GAME (src/components/game/)
+                    QUIZ ENGINE (src/quiz/)
 --------------------------------------------------------------------------------
 
-./src/components/game/index.js
-    Game components barrel export.
+The question-based engine. Every lesson in src/data/lessons/ (gameType
+'standard' or no gameType) runs here: pages/Game.jsx drives GameContext and
+renders these three components.
 
-./src/components/game/CountingQuestion.jsx
-    Counting game question renderer:
-    - Displays animals/shapes as inline SVGs using CSS flexbox grid
-    - Items automatically centered both horizontally and vertically
-    - Layout uses flex-wrap for responsive item arrangement
-    - Number option cards for answers
-    - Supports animals: fish, butterfly, bird, dog, cat
-    - Supports shapes: circle, square, triangle, star, heart
-    NOTE: Uses flexbox (.animalsGrid) instead of absolute positioning
-    for automatic centering regardless of item count.
-
-./src/components/game/SelectionQuestion.jsx
-    Color/selection game question renderer with 120+ inline SVG icons:
-    - Displays items as inline SVGs, falls back to text label if icon not found
-    - Card options for selection
-    - Supports optional questionImage prop to display image above options
-    - Fruits: apple (red/green/yellow), banana, strawberry, grapes, orange
-    - Balls: red, blue, green, yellow, lightblue, purple, orange
-    - Flowers: pink, yellow, red, purple, generic flower
-    - Shapes: circle (red/blue/green/yellow/purple/orange/lightblue),
-      square (blue/green/black/orange), rectangle-green, triangle-orange,
-      star (yellow/orange), diamond-purple, heart (red/pink)
-    - Animals: cat, dog, mouse, bird, butterfly
-    - Match-pairs items: bone, carrot, cheese, fish-food, nest, doghouse,
-      fishbowl, cave, water, house
-    - Nature: sun, tree, cloud, honey, savanna, river, moon, rain, wind,
-      rainbow, snow, shell, leaf
-    - Tools: hammer, knife, brush, pen, scissors, ruler, spoon
-    - Food: bread, fruit
-    - Other: bag, hat, stone, bottle, cup, pool, fountain
-    - Hebrew Letters (22): alef, bet, gimel, dalet, he, vav, zayin, chet,
-      tet, yod, kaf, lamed, mem, nun, samech, ayin, peh, tsade, qof, resh,
-      shin, tav (teal background, white letter)
-    - Word Images: naalayim (shoes), bayit (house), shemesh (sun),
-      kelev (dog), tapuach (apple), banana, aba (dad), ima (mom),
-      mamtak (candy), sababa (thumbs up), avatiach (watermelon whole),
-      avatiach-slice (watermelon slice), kiseh (chair), avokado (avocado),
-      ochel (food plate)
-    - PNG Image Icons (in public/images/):
-      word-ozen.png (ear/אוזן), word-esh.png (fire/אש),
-      word-balon.png (balloon/בלון), word-bamba.png (Bamba snack/במבה),
-      word-barvaz.png (duck/ברווז), word-beigale.png (pretzel/בייגלה),
-      word-gamal.png (camel/גמל), word-kof.png (monkey/קוף),
-      word-mita.png (bed/מיטה)
-    - Supports multi-select mode via multiSelectState and onMultiSelectAnswer props
-      Shows checkmark overlay on correct selections in multi-select mode
-    - Speaker audio icon (🔊) below each card that has optionAudio prop
-      Lets users preview word pronunciation before selecting an answer
-      Applies to intro Q1 cards (isIntroMultiSelect) and standard word-choice cards
+./src/quiz/SelectionQuestion.jsx
+    Renders one question: optional question image + the option cards.
+    - Icons come from src/components/icons (ItemIcons[option.image],
+      ItemIcons[question.questionImage]); falls back to the text label when
+      no icon exists for the key
+    - MultiIconRenderer draws an icon N times (option.imageCount /
+      question.questionImageCount)
+    - Layouts: .options (flex), .optionsMultiSelect (4x2 grid, 3 columns on
+      mobile), .optionsGrid9 (3x3 - when a question has exactly 9 options)
+    - Modes: intro multi-select (isIntroMultiSelect - all correct, a click
+      plays the word audio, checkmark overlay), multi-select (multiSelect -
+      find ALL correct options; props multiSelectState / onMultiSelectAnswer),
+      standard single select (onAnswer)
+    - SpeakerButton under every card that has optionAudio (needs
+      onPlayOptionAudio from Game.jsx) - lets kids hear a word before choosing.
       Works across all languages (Hebrew, English, Arabic)
-      Requires onPlayOptionAudio prop passed from Game.jsx
-      Green circular button with SVG speaker icon, responsive on mobile
-    - showLabels support: When question.showLabels is true, displays the
-      option.label text below each card image (arabicLabel CSS class).
-      Used by cumulative review questions to show Arabic word text.
-      RTL direction, responsive font size (1rem desktop, 0.85rem mobile)
+    - showLabels: question.showLabels renders option.label under each card
+      (.arabicLabel - RTL, 2rem / 1.7rem mobile), used by the Arabic
+      cumulative review questions
 
-./src/components/game/ShadowQuestion.jsx
-    Shadow matching game question renderer:
-    - MainImages (13 colored items): cat, elephant, star, car, flower, dog,
-      giraffe, heart, plane, tree, horse, bird, house
-    - ShadowImages (37 shadow silhouettes): All #2D3436 color
-      Animals: cat, dog, rabbit, elephant, giraffe, lion, fox, wolf, horse,
-      donkey, zebra, camel, deer, bird, butterfly, bat, eagle
-      Shapes: star, circle, heart, diamond
-      Vehicles: car, plane, boat, helicopter
-      Nature: flower, tree, leaf, bush, mushroom, sun, snowflake, asterisk
-      Buildings: house, castle, tent, barn, tower
-    - Match colored item to correct shadow silhouette
+./src/quiz/HiddenLetterInstruction.jsx
+    Renders the instruction text. Hides the target letter / number behind a ⭐
+    (regex patterns for "מצאו את האות X", "בחרו את כל המספרים X ו-Y", ...);
+    tapping the star reveals it for 1 second. Intro questions (isIntro) are
+    shown as-is.
 
-./src/components/game/MemoryQuestion.jsx
-    Memory challenge game question renderer:
-    - Two phases: "memorize" (countdown) and "answer"
-    - ColorIcons: SVG circles in red, blue, green, yellow, purple, orange
-    - colorNameMap: Maps Hebrew color names and emojis to icon keys
-    - Shows items to memorize, then hides and asks questions
-    - Skip button "זכרתי!" to end memorization early
-    - Used for memory-colors game (hard difficulty only)
-
-./src/components/game/TimedQuestion.jsx
-    Timed challenge game question renderer:
-    - Countdown timer with visual progress bar
-    - Auto-wrong when time expires
-    - Shows emoji display to count
-    - Number selection options
-    - Used for speed-count game (hard difficulty only)
-
-./src/components/game/GameComplete.jsx
+./src/quiz/GameComplete.jsx
     Game completion celebration screen:
     - Excited mascot
     - Star rating (1-3 based on score percentage)
@@ -1325,12 +1313,65 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
     - Congratulation message
     - Play again / Home buttons
     - Confetti animation
+    Also used by src/games/memory-cards/MemoryCardGame.jsx.
 
-./src/components/game/CountingQuestion.module.css
-./src/components/game/SelectionQuestion.module.css
-./src/components/game/ShadowQuestion.module.css
-./src/components/game/GameComplete.module.css
-    CSS Modules for each game component with responsive styles.
+./src/quiz/SelectionQuestion.module.css
+./src/quiz/HiddenLetterInstruction.module.css
+./src/quiz/GameComplete.module.css
+    CSS Modules for the three components.
+
+--------------------------------------------------------------------------------
+                    ICONS (src/components/icons/)
+--------------------------------------------------------------------------------
+
+ItemIcons = dictionary key -> React component (inline SVG or <img> wrapper
+around /images/*.png). The key is the `image` / `questionImage` string in the
+lesson data. 471 keys, split by family (one file each), merged in index.js.
+
+./src/components/icons/index.js
+    export const ItemIcons = { ...objects, ...lettersHe, ...nikudHe,
+    ...lettersEn, ...lettersAr, ...wordsHe, ...wordsEn, ...wordsAr, ...numbers }
+    + re-export of MultiIconRenderer. Keys MUST be unique across the files.
+
+./src/components/icons/objects.jsx      generic SVGs still used by lessons
+                                        (apple-red, ball-*, flower, star, ...)
+./src/components/icons/lettersHe.jsx    letter-alef .. letter-tav (+ sofit),
+                                        teal background, white letter
+./src/components/icons/nikudHe.jsx      letter-X-tzeirei / -chirik / -patach /
+                                        -cholam / -shuruk + the "alef with
+                                        different nikud" comparison icons
+./src/components/icons/lettersEn.jsx    letter-A .. letter-Z
+./src/components/icons/lettersAr.jsx    letter-X-ar (28 letters, green #2ECC71)
+./src/components/icons/wordsHe.jsx      word-* for Hebrew lessons (mostly
+                                        <img src="/images/word-x.png">)
+./src/components/icons/wordsEn.jsx      word-* for English lessons
+./src/components/icons/wordsAr.jsx      word-* for Arabic lessons (PNG wrappers)
+./src/components/icons/numbers.jsx      number-1 .. number-100
+./src/components/icons/MultiIconRenderer.jsx
+    Renders IconComponent `count` times with small random offsets / rotation.
+./src/components/icons/icons.module.css
+    .itemSvg - the shared 100% x 100% + padding sizing used by the icons.
+
+    Adding an icon: add the key in the matching family file. For a PNG word
+    image the key is 'word-<name>' and the file public/images/word-<name>.png
+    (see HOW TO ACQUIRE IMAGES). 78 legacy keys (old color / shape / match
+    games) were deleted in the re-org because no lesson referenced them.
+
+--------------------------------------------------------------------------------
+                    LAYOUT (src/components/layout/)
+--------------------------------------------------------------------------------
+
+./src/components/layout/NavHeader.jsx
+    Back button (→) + icon + title, used by the Language and Topic pages.
+    Props: icon, title, onBack, className - the page passes its
+    Home.module.css .header class so the box / responsive rules stay the same.
+
+./src/components/layout/PageDecorations.jsx
+    The floating ✨🌟💫 background of Home / Language / Topic.
+
+./src/components/layout/layout.module.css
+    .backButton .titleRow .titleIcon .titleText .spacer (NavHeader) and
+    .decorations .decoration .dec1-3 + float keyframes (PageDecorations).
 
 --------------------------------------------------------------------------------
                  COMPONENTS - ONBOARDING (src/components/onboarding/)
@@ -1363,81 +1404,122 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
 ================================================================================
 
 kids-game/
-├── index.html              # HTML entry point
-├── package.json            # NPM configuration
-├── vite.config.js          # Vite configuration
-├── eslint.config.js        # ESLint configuration
-├── files.txt               # This documentation file
+├── index.html / package.json / vite.config.js / eslint.config.js / .gitignore
+├── README.md               # short description + npm scripts (details are here, in files.txt)
+├── files.txt               # this file - the project's source of truth
+├── scripts/
+│   ├── dump-registry.mjs   # npm run dump:registry - resolved registry as JSON
+│   └── check-assets.mjs    # npm run check:assets  - missing / orphan assets, category ids
 ├── public/
-│   ├── audio/
-│   │   ├── README.md       # Audio documentation + TTS instructions
-│   │   └── *.mp3           # Game instruction audio files
-│   ├── images/
-│   │   ├── word-ozen.png   # Ear icon (אוזן)
-│   │   └── word-esh.png    # Fire icon (אש)
-│   └── sounds/
-│       └── *.mp3           # Voice feedback audio (correct/wrong/complete/encourage)
+│   ├── _redirects          # Netlify SPA redirect
+│   ├── audio/              # Hebrew instructions + words (README.md = naming note)
+│   │   ├── ar/  en/  numbers/  letters/he/
+│   ├── images/             # word-*.png (+ photos/ for photo-words, apple.png, vav-two-ways.png, zayin-option-*.png)
+│   └── sounds/             # voice feedback (correct/wrong/complete/encourage) + background-music.mp3
 └── src/
-    ├── main.jsx            # React entry point
-    ├── App.jsx             # Main app with routes
-    ├── index.css           # CSS entry (imports styles/)
-    ├── styles/
-    │   ├── variables.css   # CSS custom properties
-    │   ├── base.css        # Global base styles
-    │   └── animations.css  # Keyframe animations
-    ├── context/
-    │   ├── UserContext.jsx # User state management
-    │   ├── GameContext.jsx # Game state management
-    │   └── BackgroundMusicContext.jsx # Background music state
+    ├── main.jsx / App.jsx / index.css
+    ├── styles/             variables.css  base.css  animations.css
+    ├── context/            UserContext  GameContext  BackgroundMusicContext
+    ├── hooks/              useAudio.js  usePageTracking.js
+    ├── utils/              shuffle.js  soundManager.js  canvasPolyfills.js
+    ├── components/
+    │   ├── common/         Button Card ProgressBar ScoreDisplay AudioButton Mascot MusicToggle
+    │   │                   ContactButton ErrorBoundary SpeakerButton (+css)  index.js
+    │   ├── layout/         NavHeader.jsx  PageDecorations.jsx  layout.module.css
+    │   ├── onboarding/     WelcomeScreen  NameInput (+css)  index.js
+    │   └── icons/          index.js (ItemIcons)  MultiIconRenderer.jsx  icons.module.css
+    │                       objects lettersHe nikudHe lettersEn lettersAr wordsHe wordsEn wordsAr numbers (.jsx)
+    ├── quiz/               question engine: SelectionQuestion  HiddenLetterInstruction  GameComplete (+css)
+    ├── games/              one folder per standalone game = component + css + def + private data
+    │   ├── index.js        STANDALONE_GAMES { gameType -> Component }
+    │   ├── defs.js         standaloneGameDefs [ordered defs] (pure data, used by data/registry.js)
+    │   ├── balloon-pop/    BalloonPop.jsx  BalloonPop.module.css  game.js
+    │   ├── brick-breaker/  BrickBreaker.jsx  .module.css  game.js
+    │   ├── drawing-board/  DrawingBoard.jsx  .module.css  game.js
+    │   ├── fast-balloon/   FastBalloon.jsx  .module.css  game.js
+    │   ├── math/           MathGame.jsx  .module.css  game.js
+    │   ├── maze/           MazeGame.jsx  .module.css  games.js  (mazeGame, mazeGame2, mazeGame3)
+    │   ├── memory-cards/   MemoryCardGame.jsx  .module.css  games.js  (memoryHebrewLetters, memoryObjects, objectItemPool)
+    │   ├── photo-words/    PhotoWordGame.jsx  .module.css  game.js  (photoWordsList + def)
+    │   ├── simon-says/     SimonSays.jsx  .module.css  game.js
+    │   ├── sort/           SortGame.jsx  .module.css  game.js
+    │   ├── story-draw/     StoryDraw.jsx  .module.css  game.js  storyShapes.js
+    │   └── temple-run/     TempleRun.jsx  .module.css  game.js
     ├── data/
-    │   ├── categories.js   # 3-level hierarchy (Language→Topic→Category)
-    │   └── games/
-    │       ├── index.js    # Games registry
-    │       ├── learnAlef.js    # Learn letter א
-    │       ├── learnBet.js     # Learn letter ב
-    │       ├── learnGimel.js   # Learn letter ג
-    │       ├── learnDalet.js   # Learn letter ד
-    │       ├── learnHe.js      # Learn letter ה
-    │       ├── quizAlefHe.js   # Quiz for א-ה
-    │       ├── learnVav.js     # Learn letter ו
-    │       ├── learnZayin.js   # Learn letter ז
-    │       ├── learnChet.js    # Learn letter ח
-    │       ├── learnTet.js     # Learn letter ט
-    │       └── learnTzeirei.js # Learn Tzeirei nikud (צֵירֵי)
-    ├── hooks/
-    │   └── useAudio.js     # Audio playback hook
-    ├── pages/
-    │   ├── index.js
-    │   ├── Onboarding.jsx
-    │   ├── Home.jsx        # Language selection
-    │   ├── Language.jsx    # Topic selection
-    │   ├── Topic.jsx       # Category selection
-    │   ├── Category.jsx
-    │   ├── Game.jsx
-    │   └── *.module.css
-    └── components/
-        ├── common/
-        │   ├── index.js
-        │   ├── Button.jsx
-        │   ├── Card.jsx
-        │   ├── ProgressBar.jsx
-        │   ├── ScoreDisplay.jsx
-        │   ├── AudioButton.jsx
-        │   ├── Mascot.jsx
-        │   ├── MusicToggle.jsx
-        │   └── *.module.css
-        ├── game/
-        │   ├── index.js
-        │   ├── CountingQuestion.jsx
-        │   ├── SelectionQuestion.jsx
-        │   ├── ShadowQuestion.jsx
-        │   ├── GameComplete.jsx
-        │   └── *.module.css
-        └── onboarding/
-            ├── index.js
-            ├── WelcomeScreen.jsx
-            ├── NameInput.jsx
-            └── *.module.css
+    │   ├── categories.js   Language -> Topic -> Category (+ games id lists) + helpers
+    │   ├── registry.js     games { id -> def } + getGameById / getGamesByCategory / ...
+    │   ├── banks/          hebrewLetterBank.js  arabicWordBank.js  wordLettersBank.js
+    │   └── lessons/        question-engine content; every group has index.js = ordered array
+    │       ├── he-letters/     learnAlef..learnTav + quizAlefHe..quizShinTav (27)
+    │       ├── he-nikud/       learnTzeirei learnChirik learnPatach learnCholam learnShuruk
+    │       ├── en-letters/     learnA..learnZ (26)
+    │       ├── ar-letters/     learnAlef..learnYa (28; learnShin.js = ش)
+    │       ├── numbers/        learnOne..learnHundred + quizTenTwenty quizTwentyHundred (21)
+    │       └── audio-objects/  audioObjectsHe1-4  audioObjectsEn1-4
+    └── pages/              Onboarding Home Language Topic Category Game (+css)  index.js
+
+NAMING CONVENTIONS
+------------------
+- Folders: kebab-case (photo-words/, he-letters/). Component files: PascalCase
+  .jsx + same-name .module.css. Data / util files: camelCase .js.
+- Lesson files: learn<Name>.js / quiz<Range>.js. The FOLDER says the language -
+  no -ar / -en suffix in file names. Import aliases only inside a group
+  index.js when needed.
+- Game ids (URL /game/<id> + localStorage gamesPlayed history): kebab-case,
+  existing -ar / -en suffixes stay (learn-ba-ar, learn-t-en). Never rename ids.
+- A standalone game folder owns everything only it uses (def, private data,
+  css). Content shared by several games lives in src/data/banks/.
+- Public asset paths are always static strings (/audio/..., /images/...,
+  /sounds/... - no string building), so scripts/check-assets.mjs can find them.
+- Game content strings (instructions, labels, audio paths) live in the lesson
+  file next to their audio path; UI chrome strings stay in pages / components.
+
+REGISTRY (src/data/registry.js)
+-------------------------------
+games = Object.fromEntries([...heLetters, ...enLetters, ...arLetters,
+...heNikud, ...standaloneGameDefs, ...audioObjects, ...numbers].map(g => [g.id, g]))
+- Each group array keeps the order the games appear on the Category page
+  (Category.jsx = getGamesByCategory = Object.values(games).filter(categoryId),
+  so insertion order is what the user sees). All games of one category sit in
+  one group array, so the order BETWEEN groups does not matter.
+- Explicit arrays instead of import.meta.glob on purpose: glob order is
+  alphabetical and would change the page order.
+- The registry imports only data. React components of standalone games are
+  mapped separately in src/games/index.js (STANDALONE_GAMES, used by Game.jsx).
+
+DEV SCRIPTS
+-----------
+npm run dump:registry -- [/src/data/registry.js] [out.json]
+    Resolved registry as JSON: { allIds (sorted), byCategory: { catId: [games] } }
+    = exactly what the Category pages render. Diff two dumps (before / after a
+    refactor) to prove nothing visible changed.
+npm run check:assets
+    Missing /audio /images /sounds paths, category ids missing from the
+    registry, orphan audio files. Exit 1 only on NEW problems vs KNOWN_MISSING.
+
+HOW TO ADD A GAME
+-----------------
+Lesson (question engine - letters, nikud, numbers, audio objects):
+  1. Create src/data/lessons/<group>/learnX.js (copy a sibling; fields id,
+     categoryId, name, description, icon, type, gameType: 'standard',
+     availableIn, questions: { easy: [...] }).
+  2. Add the import + append it to the array in src/data/lessons/<group>/index.js
+     (array order = order on the Category page).
+  3. Add the id to the category's `games` list in src/data/categories.js.
+  4. Icons: keys in src/components/icons/<family>.jsx; audio under public/audio/.
+  New group: new folder with index.js, then add it to `all` in src/data/registry.js.
+  (Hebrew letter lessons: see the detailed recipe HOW TO ADD A NEW LETTER GAME.)
+
+Standalone game (own component, no question engine):
+  1. New folder src/games/<kebab-name>/ with <Name>.jsx, <Name>.module.css and
+     game.js (def with a unique gameType and questions: { easy: [] }). Private
+     data (like storyShapes.js) lives in the same folder.
+  2. src/games/index.js: add gameType -> Component to STANDALONE_GAMES.
+  3. src/games/defs.js: import the def and append it to standaloneGameDefs.
+  4. src/data/categories.js: add the category (a single-game category opens the
+     game directly from the Topic page) and the id.
+  The component gets props { game, onClose } from pages/Game.jsx and records
+  its own score with useUser().addScore / recordGamePlayed.
 
 ================================================================================
                     HOW TO ACQUIRE IMAGES VIA CHROME DEVTOOLS
@@ -1571,7 +1653,7 @@ Example for letter ח (Chet):
 
 STEP 2: CREATE THE GAME FILE
 ----------------------------
-Create: src/data/games/learnX.js (X = letter name in English, e.g., learnChet.js)
+Create: src/data/lessons/he-letters/learnX.js (X = letter name in English, e.g., learnChet.js)
 
 Use learnZayin.js as template. Structure:
 
@@ -1666,13 +1748,11 @@ generating audio files.
 
 STEP 4: REGISTER THE GAME
 -------------------------
-1. Add import in src/data/games/index.js:
-   import learnX from './learnX';
+1. Add the import and append the game to the ordered array in
+   src/data/lessons/he-letters/index.js (position = order on the Category
+   page; a quiz goes right after its letters). registry.js picks it up.
 
-2. Add to games registry object:
-   'learn-x': learnX,
-
-3. Add game ID to category in src/data/categories.js:
+2. Add game ID to category in src/data/categories.js:
    games: ['learn-vav', 'learn-zayin', 'learn-chet', ...]
 
 --------------------------------------------------------------------------------
@@ -1710,7 +1790,7 @@ Quiz structure:
   2. What letter does word start with? (shows word image, 9 letter options)
   3. Which word starts with letter X? (4 word options)
 
-Quiz naming: quiz-X-Y.js (e.g., quiz-vav-yod.js)
+Quiz file: quizXY.js in he-letters/ (e.g., quizVavYod.js), game id quiz-x-y
 
 --------------------------------------------------------------------------------
                     MEMORY CARD GAME
@@ -1730,7 +1810,7 @@ GAME TYPE: memoryCard
     - Game.jsx detects gameType === 'memoryCard' and renders <MemoryCardGame>
     - No questions array needed - the component manages its own state
 
-./src/data/hebrewLetterBank.js
+./src/data/banks/hebrewLetterBank.js
     Centralized Hebrew letter data bank. Reusable across memory games, quizzes,
     instructions, and any future features.
     Exports:
@@ -1742,8 +1822,10 @@ GAME TYPE: memoryCard
     - letterAudioByChar: lookup map char -> audio path, e.g. 'א' ->
       '/audio/letters/he/alef.mp3' (used by PhotoWordGame)
 
-./src/data/games/memoryHebrewLetters.js
-    Game data for Hebrew letters memory card game:
+./src/games/memory-cards/games.js
+    Game data - named exports memoryHebrewLetters, memoryObjects (+ its
+    objectItemPool: ~50 {id, image, label, letter, audio} word cards).
+    memoryHebrewLetters:
     - id: 'memory-hebrew-letters'
     - categoryId: 'memory-hebrew-letters'
     - gameType: 'memoryCard'
@@ -1751,7 +1833,7 @@ GAME TYPE: memoryCard
     - itemPool: hebrewLettersAll (27 letters)
     - Randomly picks N/2 items from pool per game session
 
-./src/components/game/MemoryCardGame.jsx + .module.css
+./src/games/memory-cards/MemoryCardGame.jsx + .module.css
     Self-contained memory card game component.
     Phases: select-size → playing → complete
     Features:
@@ -1817,14 +1899,14 @@ GAME MECHANICS:
     - Stars: 15 bricks = 3★, 10+ = 2★, else 1★
     - Score = stars × 16 (recorded via useUser.recordGamePlayed)
 
-./src/data/games/brickBreaker.js
+./src/games/brick-breaker/game.js
     Game data for Brick Breaker:
     - id: 'brick-breaker'
     - categoryId: 'brick-breaker'
     - gameType: 'brickBreaker'
     - questions: { easy: [] } (empty, standalone game)
 
-./src/components/game/BrickBreaker.jsx
+./src/games/brick-breaker/BrickBreaker.jsx
     Self-contained brick breaker game component.
     Phases: waiting → playing → won
     Features:
@@ -1841,7 +1923,7 @@ GAME MECHANICS:
     - Uses useAudio hook for playComplete on win
     - Uses useUser hook for addScore and recordGamePlayed
 
-./src/components/game/BrickBreaker.module.css
+./src/games/brick-breaker/BrickBreaker.module.css
     Styles for Brick Breaker:
     - Fixed full-viewport container with dark gradient background
     - Rotate overlay for portrait mode (animated phone icon)
@@ -1939,14 +2021,14 @@ CONTROLS (mobile-first):
     - Swipe DOWN (55px+ within 450ms) → slide (swipeRef in onTouchMove)
     onTouchStart/onTouchMove (mobile) + onMouseDown tap (desktop), 100ms debounce
 
-./src/data/games/templeRun.js
+./src/games/temple-run/game.js
     Game data for Temple Run:
     - id: 'temple-run'
     - categoryId: 'temple-run'
     - gameType: 'templeRun'
     - questions: { easy: [] } (empty, standalone game)
 
-./src/components/game/TempleRun.jsx
+./src/games/temple-run/TempleRun.jsx
     Self-contained pseudo-3D endless runner game component.
     Phases: waiting → playing → gameOver
     Features:
@@ -1964,7 +2046,7 @@ CONTROLS (mobile-first):
     - Voice via useAudio (playWrong on hit, playComplete at game over)
     - Uses useUser hook for addScore and recordGamePlayed (gs.over double-guard)
 
-./src/components/game/TempleRun.module.css
+./src/games/temple-run/TempleRun.module.css
     Styles for Temple Run:
     - Fixed full-viewport container
     - HUD bar with close button, score (diamonds + hearts + level + powerups)
@@ -1997,7 +2079,7 @@ GAME TYPE: mazeGame
     - Green highlighted cells show visited path
     - Red line through cell centers with dot at current head position
 
-./src/components/game/MazeGame.jsx
+./src/games/maze/MazeGame.jsx
     Self-contained maze game component.
     Key functions:
     - generateMaze(): recursive backtracking maze generation
@@ -2006,13 +2088,13 @@ GAME TYPE: mazeGame
     - drawPath(): renders user path (highlighted cells + line + head dot)
     - pixelToCell(): converts touch/mouse coordinates to grid cell
 
-./src/components/game/MazeGame.module.css
+./src/games/maze/MazeGame.module.css
     Styles for Maze Game:
     - Full-viewport container with RTL direction
     - Win overlay: semi-transparent backdrop, centered card with animation
 
 DATA FILES:
-    ./src/data/games/mazeGame.js, mazeGame2.js, mazeGame3.js
+    ./src/games/maze/games.js (named exports mazeGame, mazeGame2, mazeGame3)
 
 GAME TYPE: drawingBoard
     - Self-contained component, bypasses the question-based GameContext flow
@@ -2042,7 +2124,7 @@ GAME TYPE: drawingBoard
 
     Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → toddler-drawing (לוח ציור)
 
-./src/components/game/DrawingBoard.jsx
+./src/games/drawing-board/DrawingBoard.jsx
     Self-contained drawing board component.
     Key features:
     - Canvas with touch + mouse support (crosshair cursor)
@@ -2056,7 +2138,7 @@ GAME TYPE: drawingBoard
     - drawShapeOnCanvas() top-level helper for rendering 6 shape types on canvas
     - startDrawing checks activeMode; in stamp mode places shape instead of stroking
 
-./src/components/game/DrawingBoard.module.css
+./src/games/drawing-board/DrawingBoard.module.css
     Styles for Drawing Board:
     - Full-viewport RTL container
     - Color picker button: conic-gradient rainbow background with "+" overlay
@@ -2069,7 +2151,7 @@ GAME TYPE: drawingBoard
     - Mobile responsive: smaller buttons at 480px and 360px breakpoints
 
 DATA FILES:
-    ./src/data/games/drawingBoard.js
+    ./src/games/drawing-board/game.js
 
 GAME TYPE: balloonPop
     - Self-contained component, registered in Game.jsx STANDALONE_GAMES map
@@ -2096,14 +2178,14 @@ GAME TYPE: balloonPop
 
     Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → balloon-pop (פוצצו בלונים!)
 
-./src/data/games/balloonPop.js
+./src/games/balloon-pop/game.js
     Game definition:
     - id: 'balloon-pop'
     - categoryId: 'balloon-pop'
     - gameType: 'balloonPop'
     - icon: '🎈'
 
-./src/components/game/BalloonPop.jsx
+./src/games/balloon-pop/BalloonPop.jsx
     Self-contained balloon pop game component.
     Key features:
     - SVG balloon rendering per type (normal/golden/rainbow gradient/heart)
@@ -2116,7 +2198,7 @@ GAME TYPE: balloonPop
     - useUser for score/recordGamePlayed, soundManager for SFX,
       useAudio playComplete for the end voice
 
-./src/components/game/BalloonPop.module.css
+./src/games/balloon-pop/BalloonPop.module.css
     Styles for Balloon Pop:
     - .bgDay / .bgSunset / .bgNight background phases (transition 1.5s)
     - .nightStar twinkle, .timerUrgent pulse
@@ -2161,14 +2243,14 @@ GAME TYPE: fastBalloon (בלון מהיר!)
       reached (⚡N) + stars: 50+=3, 25+=2, else 1; score = stars × 16
     - Phases: waiting (legend explains bombs/misses/lives) → playing → ended
 
-./src/data/games/fastBalloon.js
+./src/games/fast-balloon/game.js
     Game definition:
     - id: 'fast-balloon'
     - categoryId: 'fast-balloon'
     - gameType: 'fastBalloon'
     - icon: '⚡'
 
-./src/components/game/FastBalloon.jsx
+./src/games/fast-balloon/FastBalloon.jsx
     Self-contained endless balloon game component.
     Key features:
     - speedConfig(lvl) exponential difficulty table (no cap)
@@ -2181,7 +2263,7 @@ GAME TYPE: fastBalloon (בלון מהיר!)
       per level, playLevelUp + speed flash on each ramp
     - useUser for score/recordGamePlayed, soundManager SFX, useAudio voice
 
-./src/components/game/FastBalloon.module.css
+./src/games/fast-balloon/FastBalloon.module.css
     Styles for Fast Balloon (based on BalloonPop styles) plus:
     - .speedBadge (⚡N), .statusGroup (hearts + miss dots)
     - .missDot / .missDotOn (5-dot escaped-balloons indicator)
@@ -2207,14 +2289,14 @@ GAME TYPE: simonSays
 
     Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → simon-says (שמעון אומר)
 
-./src/data/games/simonSays.js
+./src/games/simon-says/game.js
     Game definition:
     - id: 'simon-says'
     - categoryId: 'simon-says'
     - gameType: 'simonSays'
     - icon: '🔴'
 
-./src/components/game/SimonSays.jsx
+./src/games/simon-says/SimonSays.jsx
     Self-contained Simon Says game component.
     Key features:
     - 4 colored buttons: Red (#FF6B6B), Blue (#4D96FF), Green (#6BCB77), Yellow (#FFD93D)
@@ -2223,7 +2305,7 @@ GAME TYPE: simonSays
     - Round tracking and best round display
     - useUser for score/recordGamePlayed, useAudio for correct/wrong/complete
 
-./src/components/game/SimonSays.module.css
+./src/games/simon-says/SimonSays.module.css
     Styles for Simon Says:
     - Dark gradient background (#1a1a2e → #16213e → #0f3460)
     - 2x2 button grid with rounded corners and shine overlay
@@ -2233,48 +2315,6 @@ GAME TYPE: simonSays
 CATEGORY ADDED:
     Category: simon-says (שמעון אומר) under hebrew-toddler topic
     Color: #6C5CE7 (purple), Background: #EDE7F6
-
-GAME TYPE: jigsawPuzzle
-    - Self-contained component, bypasses the question-based GameContext flow
-    - Game.jsx detects gameType === 'jigsawPuzzle' and renders <JigsawPuzzle>
-    - No questions array needed - the component manages its own state
-    - Emoji-based jigsaw puzzle: select a piece from tray, click correct grid slot
-    - 6 puzzles: חיות (2x2), פירות (2x2), כלי תחבורה (2x2),
-      אוכל (3x3), טבע (3x3), חיות ים (3x3)
-    - Tap piece to select (gold highlight), tap slot to place
-    - Wrong placement plays wrong sound, correct plays correct sound
-    - Stars based on wrong attempts: 0=3, ≤3=2, else 1
-    - "Next puzzle" flow: complete one → next → etc.
-    - Phases: waiting → playing → complete (per puzzle, with next button)
-
-    Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → jigsaw-puzzle (פאזל)
-
-./src/data/games/jigsawPuzzle.js
-    Game definition:
-    - id: 'jigsaw-puzzle'
-    - categoryId: 'jigsaw-puzzle'
-    - gameType: 'jigsawPuzzle'
-    - icon: '🧩'
-
-./src/components/game/JigsawPuzzle.jsx
-    Self-contained jigsaw puzzle game component.
-    Key features:
-    - PUZZLES array with 6 themed emoji sets (2x2 and 3x3 grids)
-    - Selected piece highlighting, slot hover highlighting
-    - correctIdx matching for placement validation
-    - Multi-puzzle progression with completion tracking
-
-./src/components/game/JigsawPuzzle.module.css
-    Styles for Jigsaw Puzzle:
-    - Light gradient background (#F8F9FA → #E9ECEF → #DEE2E6)
-    - Puzzle board with dashed-border slots and filled state
-    - Piece tray with white cards and blue borders
-    - Selected piece: gold border, yellow background, scale(1.1)
-    - piecePlace animation on correct placement
-
-CATEGORY ADDED:
-    Category: jigsaw-puzzle (פאזל) under hebrew-toddler topic
-    Color: #4D96FF (blue), Background: #E3F2FD
 
 GAME TYPE: sortGame
     - Self-contained component, bypasses the question-based GameContext flow
@@ -2299,14 +2339,14 @@ GAME TYPE: sortGame
 
     Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → sort-game (סדרו בסדר!)
 
-./src/data/games/sortGame.js
+./src/games/sort/game.js
     Game definition:
     - id: 'sort-game'
     - categoryId: 'sort-game'
     - gameType: 'sortGame'
     - icon: '🔢'
 
-./src/components/game/SortGame.jsx
+./src/games/sort/SortGame.jsx
     Self-contained sort game component.
     Key features:
     - Mode selector (numbers/letters) and difficulty selector on start screen
@@ -2317,7 +2357,7 @@ GAME TYPE: sortGame
     - Wrong attempt shake animation, 3-round progression
     - useUser for score/recordGamePlayed, useAudio for sound effects
 
-./src/components/game/SortGame.module.css
+./src/games/sort/SortGame.module.css
     Styles for Sort Game:
     - Purple gradient background (#667eea → #764ba2)
     - Drop zone with dashed border slots and filled state
@@ -2370,7 +2410,7 @@ GAME TYPE: photoWord (התמונה שלי!)
 
     Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → photo-words (התמונה שלי!)
 
-./src/data/games/photoWords.js
+./src/games/photo-words/game.js
     - photoWordsList: [{id, letters, displayLetters (with nikud), fullName,
       image, nameAudio}] - played in list order. Currently 15 words:
       kedem (קֶדֶם), carmel (כַּרְמֶל) = real photos, then kelev (כֶּלֶב),
@@ -2396,13 +2436,13 @@ GAME TYPE: photoWord (התמונה שלי!)
        WARNING: a negative rate ("-10%") breaks the edge-tts CLI - use "+0%".
     3. Add entry to photoWordsList
 
-./src/components/game/PhotoWordGame.jsx
+./src/games/photo-words/PhotoWordGame.jsx
     Self-contained photo-word game component (phases: intro/playing/celebrate).
     buildTiles() = name letters + shuffled distractors (TILE_COUNT 12).
     tryPlace() shared by tap click and drag drop. useUser for score,
     useAudio for voices. Next empty slot pulses as a hint.
 
-./src/components/game/PhotoWordGame.module.css
+./src/games/photo-words/PhotoWordGame.module.css
     Teal-blue gradient (#43cea2 → #185a9d), white photo card with slots row,
     yellow letter tiles grid (6 cols), shake keyframe for wrong tile,
     confettiFall keyframe, intro + celebrate overlays.
@@ -2448,12 +2488,12 @@ GAME TYPE: mathGame (חיבור וחיסור)
 
     Hierarchy: numbers → numbers-math (משחקי חשבון) → math-plus-minus
 
-./src/data/games/mathGame.js
+./src/games/math/game.js
     - id/categoryId: 'math-plus-minus', gameType: 'mathGame', icon ➕
     - levels: [{id, label, emoji, yValues}], maxResult: 30, questionsPerRound: 10
       (change level rules / range / round size here)
 
-./src/components/game/MathGame.jsx
+./src/games/math/MathGame.jsx
     makeQuestion() / makeRound() build the random questions. makeOptions(
     answer, swappedResult, maxResult, exclude) builds a 4-option set - used
     for the first set (showQuestion) and after every wrong pick.
@@ -2461,7 +2501,7 @@ GAME TYPE: mathGame (חיבור וחיסור)
     utils/shuffle for option order. Pending next-question timer is cleared
     on unmount.
 
-./src/components/game/MathGame.module.css
+./src/games/math/MathGame.module.css
     Blue gradient (#56CCF2 → #2F80ED), white equation card, dashed yellow
     "?" box, 2x2 option buttons (.optionWrong = short red flash,
     .optionRight), .options pop-in on every new set, level buttons,
@@ -2498,7 +2538,7 @@ WORDS USED (letter → word → correct letters):
     ר → דבורה (word-dvora) → ד,ב,ר      ש → שולחן (word-shulchan) → ש,ל,ח
     ת → תפוח (word-tapuach) → ת,פ,ו
 
-./src/data/wordLettersBank.js
+./src/data/banks/wordLettersBank.js
     - LETTER_ICON: Hebrew letter → letter-X icon key map
     - buildWordLettersQuestion({id, word, image, audio, letters, distractors}):
       builds the multiSelect question object (3 correct + 6 distractors)
@@ -2534,6 +2574,10 @@ AUDIO (public/audio/which-letters-*.mp3, 11 files):
     - playBoom() - explosion: bomb tap / rocket smash (noise + low saw drop)
     - playLevelUp() - level/speed up (5-note square fanfare)
     - playGameOver() - game over (gentle descending triangle, not scary)
+
+./src/utils/shuffle.js
+    shuffleArray(array) - Fisher-Yates, returns a new array. Used by Game.jsx
+    (option order per question), MathGame, PhotoWordGame.
 
 ./src/utils/canvasPolyfills.js
     ctx.roundRect polyfill (Safari <16 / Chrome <99). Without it BrickBreaker's
@@ -2579,3 +2623,42 @@ nothing but the page background. Four root causes were found and ALL fixed:
 
 ## Analytics
 - index.html has the hits page-view snippet (data-site="kids-game") -> https://bbot.genericgs.com/t/stats. See ttd/hits/files.txt
+
+## Git
+- Repo: https://github.com/oribrook/kids.git (origin), branch main.
+- 2026-10-29: commit 5b8bea2 "Snapshot before re-organization" = full state of the project right before the big re-org.
+- 2026-10-29: branch `reorg` (from 5b8bea2): one commit per step ("reorg step 0" .. "reorg step 11") of the re-organization plan (OriAi conv #3687 = plan, #3689 = implementation). Structure only - same routes, game ids, asset URLs, localStorage keys; registry dump before/after = zero diff. Merge into main + push = Ori.
+
+================================================================================
+                    KNOWN BUGS (found in the re-org, NOT fixed - need Ori's OK)
+================================================================================
+1. src/data/categories.js: nikud-start.games = ['learn-tzeirei'] only, but 5
+   nikud lessons exist (learn-chirik, learn-patach, learn-cholam, learn-shuruk
+   also have categoryId 'nikud-start'). Because the list has length 1,
+   Topic.jsx jumps straight to /game/learn-tzeirei and the other 4 are
+   reachable only by direct URL. Fix = add the 4 ids to that array (changes
+   navigation).
+2. 9 referenced files do not exist (silent 404; the list is KNOWN_MISSING in
+   scripts/check-assets.mjs):
+   /audio/ar/word-udhun.mp3, /audio/en/word-starts-x.mp3, /audio/en/word-x-ray.mp3,
+   /audio/en/word-zebra.mp3, /audio/word-arye.mp3, /audio/word-banana.mp3,
+   /audio/word-shemesh.mp3, /sounds/click.mp3, /sounds/star.mp3
+   (the two /sounds files are listed in useAudio.js but playSound() is never
+   called).
+3. The English X lesson uses image key 'word-x-ray' - no icon has that key, so
+   the card shows the text label. (An unused 'word-xray' icon existed and was
+   deleted with the other unused keys; add the icon under the key the data uses.)
+4. PhotoWordGame records score / recordGamePlayed only on the last word of the
+   list (see the photo-words section).
+5. Game objects carry legacy fields type: 'selection' and availableIn: ['easy']
+   that no code reads. Harmless; left in place (120 files).
+
+LINT DEBT (npm run lint)
+------------------------
+After the re-org: 36 errors / 9 warnings (before: 87 / 9 - the 26 false
+"motion is unused" errors are gone thanks to react/jsx-uses-vars).
+Remaining, all inside game logic and left for a later pass because touching
+them changes behavior: 12 no-empty (empty catch {} blocks), 6 no-unused-vars,
+3 react-refresh/only-export-components, 24 react-hooks compiler rules
+(exhaustive-deps, purity, immutability, set-state-in-effect,
+preserve-manual-memoization).
