@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useUser } from '../../context/UserContext';
 import { useAudio } from '../../hooks/useAudio';
 import { photoWordsList } from './game';
-import { letterAudioByChar } from '../../data/hebrewLetterBank';
+import { letterAudioByChar } from '../../data/banks/hebrewLetterBank';
 import { shuffleArray } from '../../utils/shuffle';
 import styles from './PhotoWordGame.module.css';
 

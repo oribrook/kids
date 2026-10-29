@@ -4,7 +4,7 @@
 // Player picks grid size (4x4 or 6x6), then flips cards to find matching pairs.
 // Each card flip plays the letter name audio.
 
-import { hebrewLetters } from '../../data/hebrewLetterBank';
+import { hebrewLetters } from '../../data/banks/hebrewLetterBank';
 
 export const memoryHebrewLetters = {
   id: 'memory-hebrew-letters',

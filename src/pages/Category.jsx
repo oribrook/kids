@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getCategoryById, getTopicForCategory } from '../data/categories';
-import { getGamesByCategory, getQuestionsForDifficulty } from '../data/games';
+import { getGamesByCategory, getQuestionsForDifficulty } from '../data/registry';
 import { useUser } from '../context/UserContext';
 import { Button } from '../components/common';
 import styles from './Category.module.css';

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useGame } from '../context/GameContext';
 import { useUser } from '../context/UserContext';
 import { useAudio } from '../hooks/useAudio';
-import { getGameById, getQuestionsForDifficulty } from '../data/games';
+import { getGameById, getQuestionsForDifficulty } from '../data/registry';
 import { getCategoryById, getTopicForCategory } from '../data/categories';
 import { shuffleArray } from '../utils/shuffle';
 import { ProgressBar, ScoreDisplay, AudioButton, Button, Mascot } from '../components/common';
