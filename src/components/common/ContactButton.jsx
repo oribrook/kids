@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
+import styles from './ContactButton.module.css';
 
 const LONG_PRESS_MS = 1200;
-import styles from './ContactButton.module.css';
 
 export function ContactButton() {
   const [isOpen, setIsOpen] = useState(false);
