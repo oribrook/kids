@@ -137,6 +137,7 @@ export function GameProvider({ children }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- provider and hook live together on purpose
 export function useGame() {
   const context = useContext(GameContext);
   if (!context) {

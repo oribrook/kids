@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styles from './HiddenLetterInstruction.module.css';
 
 /**
@@ -53,11 +53,6 @@ const HIDE_PATTERNS = [
 
 function HiddenLetterInstruction({ instruction, isIntro, className }) {
   const [revealedIndex, setRevealedIndex] = useState(null);
-
-  // Reset revealed state when instruction changes
-  useEffect(() => {
-    setRevealedIndex(null);
-  }, [instruction]);
 
   if (!instruction) return null;
 

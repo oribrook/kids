@@ -32,7 +32,7 @@ function BrickBreaker({ game, onClose }) {
   useEffect(() => { phaseRef.current = phase; }, [phase]);
 
   const { addScore, recordGamePlayed } = useUser();
-  const { playCorrect, playComplete } = useAudio();
+  const { playComplete } = useAudio();
 
   // Check orientation
   useEffect(() => {
@@ -154,6 +154,7 @@ function BrickBreaker({ game, onClose }) {
 
       // Update
       if (gs.ball.launched) {
+        // eslint-disable-next-line react-hooks/immutability -- callback declared later in the file, called only at runtime
         updateBall(gs);
       } else {
         // Ball follows paddle
@@ -162,6 +163,7 @@ function BrickBreaker({ game, onClose }) {
       }
 
       // Draw
+      // eslint-disable-next-line react-hooks/immutability -- callback declared later in the file, called only at runtime
       draw(ctx, gs);
 
       animFrameRef.current = requestAnimationFrame(loop);
@@ -249,6 +251,7 @@ function BrickBreaker({ game, onClose }) {
 
         // Check win
         if (gs.bricksLeft <= 0) {
+          // eslint-disable-next-line react-hooks/immutability -- callback declared later in the file, called only at runtime
           handleWin(gs);
         }
         break; // one brick per frame

@@ -146,12 +146,12 @@ function loadRecentColors() {
       const parsed = JSON.parse(stored);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed.slice(0, MAX_RECENT_COLORS);
     }
-  } catch {}
+  } catch { /* ignore */ }
   return DEFAULT_COLORS;
 }
 
 function saveRecentColors(colors) {
-  try { localStorage.setItem(STORAGE_KEY_RECENT_COLORS, JSON.stringify(colors)); } catch {}
+  try { localStorage.setItem(STORAGE_KEY_RECENT_COLORS, JSON.stringify(colors)); } catch { /* ignore */ }
 }
 
 function loadSavedDrawings() {
@@ -161,12 +161,12 @@ function loadSavedDrawings() {
       const parsed = JSON.parse(stored);
       if (Array.isArray(parsed)) return parsed;
     }
-  } catch {}
+  } catch { /* ignore */ }
   return [];
 }
 
 function saveSavedDrawings(drawings) {
-  try { localStorage.setItem(STORAGE_KEY_SAVED_DRAWINGS, JSON.stringify(drawings)); } catch {}
+  try { localStorage.setItem(STORAGE_KEY_SAVED_DRAWINGS, JSON.stringify(drawings)); } catch { /* ignore */ }
 }
 
 /**
@@ -208,7 +208,7 @@ function DrawingBoard({ game, onClose }) {
       try {
         const dataUrl = canvas.toDataURL('image/png');
         localStorage.setItem(STORAGE_KEY_AUTOSAVE, dataUrl);
-      } catch {}
+      } catch { /* ignore */ }
     }, AUTOSAVE_DEBOUNCE_MS);
   }, []);
 
@@ -312,6 +312,7 @@ function DrawingBoard({ game, onClose }) {
     if (pixel[3] > 0) {
       const hex = '#' + [pixel[0], pixel[1], pixel[2]]
         .map(v => v.toString(16).padStart(2, '0')).join('');
+      // eslint-disable-next-line react-hooks/immutability -- callback declared later in the file, called only at runtime
       addToRecentColors(hex);
       setSelectedColor(hex);
       setShowColorWheel(false);
@@ -363,7 +364,7 @@ function DrawingBoard({ game, onClose }) {
         };
         img.src = autosaved;
       }
-    } catch {}
+    } catch { /* ignore */ }
 
     setCanvasReady(true);
   }, []);

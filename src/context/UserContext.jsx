@@ -88,6 +88,7 @@ export function UserProvider({ children }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- provider and hook live together on purpose
 export function useUser() {
   const context = useContext(UserContext);
   if (!context) {

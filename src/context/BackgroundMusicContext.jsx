@@ -81,6 +81,7 @@ export function BackgroundMusicProvider({ children }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- provider and hook live together on purpose
 export function useBackgroundMusic() {
   const context = useContext(BackgroundMusicContext);
   if (!context) {

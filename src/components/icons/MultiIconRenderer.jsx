@@ -1,26 +1,30 @@
-// Helper component to render multiple icons with random offsets
+import { useMemo } from 'react';
+
+const getRandomOffset = () => ({
+  x: (Math.random() - 0.5) * 8,
+  y: (Math.random() - 0.5) * 8,
+  rotate: (Math.random() - 0.5) * 10,
+});
+
+const getIconSize = (count) => {
+  if (count <= 2) return '45%';
+  if (count <= 4) return '42%';
+  if (count <= 6) return '30%';
+  return '25%';
+};
+
+// Renders IconComponent `count` times with small random offsets (fixed per count)
 const MultiIconRenderer = ({ IconComponent, count, containerClass }) => {
+  const offsets = useMemo(
+    () => Array.from({ length: count > 1 ? count : 0 }, () => getRandomOffset()),
+    [count]
+  );
+
   if (!IconComponent || count <= 1) {
     return IconComponent ? <IconComponent /> : null;
   }
 
-  // Generate random offsets for each icon (small variations for natural look)
-  const getRandomOffset = () => ({
-    x: (Math.random() - 0.5) * 8,
-    y: (Math.random() - 0.5) * 8,
-    rotate: (Math.random() - 0.5) * 10,
-  });
-
-  // Calculate icon size based on count
-  const getIconSize = (count) => {
-    if (count <= 2) return '45%';
-    if (count <= 4) return '42%';
-    if (count <= 6) return '30%';
-    return '25%';
-  };
-
   const iconSize = getIconSize(count);
-  const offsets = Array.from({ length: count }, () => getRandomOffset());
 
   return (
     <div className={containerClass} style={{
