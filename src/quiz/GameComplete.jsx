@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Mascot, Button } from '../common';
+import { Mascot, Button } from '../components/common';
 import styles from './GameComplete.module.css';
 
 function GameComplete({ score, maxScore, stars, onPlayAgain }) {

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAudio } from '../../hooks/useAudio';
 import { useUser } from '../../context/UserContext';
 import { Button } from '../../components/common';
-import GameComplete from '../../components/game/GameComplete';
+import GameComplete from '../../quiz/GameComplete';
 import styles from './MemoryCardGame.module.css';
 
 /**

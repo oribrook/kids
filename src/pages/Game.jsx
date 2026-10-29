@@ -8,9 +8,9 @@ import { getGameById, getQuestionsForDifficulty } from '../data/games';
 import { getCategoryById, getTopicForCategory } from '../data/categories';
 import { shuffleArray } from '../utils/shuffle';
 import { ProgressBar, ScoreDisplay, AudioButton, Button, Mascot } from '../components/common';
-import GameComplete from '../components/game/GameComplete';
-import SelectionQuestion from '../components/game/SelectionQuestion';
-import HiddenLetterInstruction from '../components/game/HiddenLetterInstruction';
+import GameComplete from '../quiz/GameComplete';
+import SelectionQuestion from '../quiz/SelectionQuestion';
+import HiddenLetterInstruction from '../quiz/HiddenLetterInstruction';
 import { STANDALONE_GAMES } from '../games';
 import styles from './Game.module.css';
 

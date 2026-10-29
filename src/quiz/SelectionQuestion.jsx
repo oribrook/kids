@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
-import { Card } from '../common';
+import { Card } from '../components/common';
 import styles from './SelectionQuestion.module.css';
-import { ItemIcons, MultiIconRenderer } from '../icons';
+import { ItemIcons, MultiIconRenderer } from '../components/icons';
 
 function SelectionQuestion({
   question,
