@@ -75,8 +75,8 @@ ROOT FILES
     Dev tool: scans src for /audio, /images, /sounds paths and checks they
     exist in public/; checks every id in categories.js exists in the
     registry; lists orphan audio files (on disk, never referenced).
-    Exits 1 only for NEW problems (KNOWN_MISSING inside = the 9 known 404s,
-    see KNOWN BUGS).  npm run check:assets
+    Exits 1 only for NEW problems (KNOWN_MISSING inside = the 6 audio files
+    that still have to be generated, see KNOWN BUGS).  npm run check:assets
 
 ================================================================================
                               PUBLIC FOLDER
@@ -108,8 +108,9 @@ ROOT FILES
     Voice feedback audio files (Hebrew TTS, he-IL-HilaNeural):
     - correct-1.mp3 to correct-4.mp3 - Correct answer phrases
       (כל הכבוד, נהדר, יופי, מצוין) - rate +5%, pitch +3Hz
-    - wrong-1.mp3 to wrong-4.mp3 - Wrong answer phrases
-      (טעות/לא נכון/אופס/כמעט + נסה שוב) - rate -5%, pitch -2Hz
+    - wrong-3.mp3, wrong-4.mp3 - Wrong answer phrases (אופס / כמעט + נסו שוב)
+      rate -5%, pitch -2Hz. wrong-1/wrong-2 (טעות / לא נכון) were deleted in
+      the kid-ux pass - too harsh for ages 3-5.
     - complete-1.mp3 to complete-3.mp3 - Game completion phrases
       (סיימנו, כל הכבוד סיימת, מדהים עשית את זה) - rate +10%, pitch +5Hz
     - encourage-1.mp3 to encourage-3.mp3 - Encouragement phrases
@@ -1106,10 +1107,9 @@ ARABIC ALPHABET COMPLETION:
 ./src/hooks/useAudio.js
     Audio playback hook with random voice feedback selection:
     - playCorrect() - Play random correct answer voice (4 variations: כל הכבוד, נהדר, יופי, מצוין)
-    - playWrong() - Play random wrong answer voice (4 variations: טעות/לא נכון/אופס/כמעט)
+    - playWrong() - Play random wrong answer voice (2 variations: אופס/כמעט)
     - playComplete() - Play random game completion voice (3 variations)
     - playEncourage() - Play random encouragement voice (3 variations)
-    - playSound(type) - Play sound effects (click, star)
     - playInstruction(url) - Play voice instruction audio
     - stopInstruction() - Stop current instruction
     - stopAllAudio() - Stop all audio playback
@@ -1146,7 +1146,8 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
     Topic selection for a language:
     - Route: /language/:languageId
     - Header = components/layout/NavHeader (back → /home, icon, name)
-    - Topic cards grid (אותיות, ניקוד for Hebrew)
+    - Topic cards grid (אותיות, ניקוד for Hebrew) with the topic icon on
+      each card; topics with 0 categories are hidden (numbers-counting today)
     - Clicking topic navigates to /topic/:topicId
     - Reuses Home.module.css styles; decorations = PageDecorations
 
@@ -1166,6 +1167,7 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
     - Route: /category/:categoryId
     - Header with back button (→ parent topic) and category info
     - List of games with icons
+    - Best stars (⭐⭐⭐, from user.gamesPlayed) under the icon once played
     - Play buttons for each game
     - Clicking game navigates to /game/:gameId
 
@@ -1180,16 +1182,25 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
       (gameState.currentGame?.id === game.id)
     - exitPath: single-game categories exit to the parent TOPIC instead of the
       one-card category page
-    - Progress bar with step indicators
-    - Score display with multiplier
+    - Progress bar; step labels only when the game has <= 10 questions
+      (quizzes have 15 - too cramped on a phone). Score badge without the x2
+      multiplier (meaningless for a toddler).
+    - Two-tap exit: first tap on ✕ turns it into a wobbling 🏠 for 2s, the
+      second tap leaves (no accidental exits). Standalone games keep single-tap ✕.
     - Otherwise renders the question engine: src/quiz/SelectionQuestion
       (+ HiddenLetterInstruction for the text, GameComplete at the end)
     - Handles answer feedback with mascot
     - Audio button for instructions
-    - Shows GameComplete when finished
+    - WRONG-ANSWER FLOW (kid-ux pass): after the wrong voice the instruction
+      audio replays ~1.4s later (REPLAY_DELAY_MS). Single-select: the tapped
+      card is added to wrongIds (kept per question id) and stays dim/disabled
+      (.triedWrong). Multi-select: found ✓ cards stay, only the tapped card
+      turns red; submitAnswer(false) counts the attempt for scoring.
+      All timers live in timersRef and are cleared on question change/unmount.
+    - GameComplete: "שחקו שוב" restarts the same game (startGame again, local
+      state reset), "הביתה" goes to exitPath.
     - Supports multi-select questions (multiSelect: true flag)
       Multi-select mode: user must find ALL correct answers
-      Wrong selection shows error immediately and advances
     - Supports multiple correct answers via isCorrect flag on options
       (checks option.isCorrect first, falls back to correctAnswerId)
 
@@ -1251,13 +1262,15 @@ Navigation hierarchy: Home → Language → Topic → Category → Game
 
 ./src/components/common/ContactButton.jsx + ContactButton.module.css
     Floating contact button (bottom-left on nav pages, hidden during games).
+    LONG PRESS ONLY (1.2s, pointer events; works with a mouse too) - a quick
+    tap does nothing, so a kid cannot open it by accident. No pulse animation.
     Opens modal with Hebrew message for parents, Telegram link (t.me/ori_br)
     and email (brook.ori@gmail.com). Big noticeable close button for easy
     dismissal by kids. Rendered in App.jsx with same !isInGame guard as MusicToggle.
 
 ./src/components/common/SpeakerButton.jsx + SpeakerButton.module.css
-    Small round green 🔊 button shown under a card that has optionAudio
-    (intro cards and word-choice cards). Props: audio, label, onPlay.
+    Round green 🔊 button (44px, 40px on phones) shown under a card that has
+    optionAudio (intro cards and word-choice cards). Props: audio, label, onPlay.
     Stops click propagation so the card is not selected. Used by
     src/quiz/SelectionQuestion.jsx (was copy-pasted twice there).
 
@@ -1291,7 +1304,8 @@ renders these three components.
     - Modes: intro multi-select (isIntroMultiSelect - all correct, a click
       plays the word audio, checkmark overlay), multi-select (multiSelect -
       find ALL correct options; props multiSelectState / onMultiSelectAnswer),
-      standard single select (onAnswer)
+      standard single select (onAnswer; prop wrongIds = options already tried
+      and wrong -> rendered disabled + .triedWrong)
     - SpeakerButton under every card that has optionAudio (needs
       onPlayOptionAudio from Game.jsx) - lets kids hear a word before choosing.
       Works across all languages (Hebrew, English, Arabic)
@@ -1309,11 +1323,12 @@ renders these three components.
     Game completion celebration screen:
     - Excited mascot
     - Star rating (1-3 based on score percentage)
-    - Score display with progress bar
-    - Congratulation message
-    - Play again / Home buttons
-    - Confetti animation
-    Also used by src/games/memory-cards/MemoryCardGame.jsx.
+    - Congratulation message, then the buttons, then the numeric score box
+    - Props: score, maxScore, stars, onPlayAgain, onHome (both xlarge buttons;
+      the Home button renders only when onHome is given)
+    - Confetti pieces are computed once (useState initializer)
+    Also used by src/games/memory-cards/MemoryCardGame.jsx (play again ->
+    size screen, home -> onClose).
 
 ./src/quiz/SelectionQuestion.module.css
 ./src/quiz/HiddenLetterInstruction.module.css
@@ -1384,7 +1399,7 @@ lesson data. 471 keys, split by family (one file each), merged in index.js.
     Initial welcome screen:
     - Large greeting title "שלום! 👋"
     - Subtitle about learning games
-    - Feature icons (counting, colors, logic)
+    - Feature icons (🔤 אותיות, 🔢 מספרים, 🎈 משחקים)
     - Excited mascot
     - "בואו נתחיל!" button
     - Floating decorations
@@ -1393,7 +1408,7 @@ lesson data. 471 keys, split by family (one file each), merged in index.js.
     Name input step:
     - "מה השם שלך?" title
     - Text input field
-    - Continue/Skip buttons
+    - Continue/Skip buttons (Skip is size large - the parent must see it)
 
 ./src/components/onboarding/WelcomeScreen.module.css
 ./src/components/onboarding/NameInput.module.css
@@ -1799,7 +1814,8 @@ Quiz file: quizXY.js in he-letters/ (e.g., quizVavYod.js), game id quiz-x-y
 OVERVIEW:
     New game type: memoryCard - classic flip-and-match memory card game.
     Hierarchy: hebrew → hebrew-memory (משחקי זיכרון) → memory-hebrew-letters (אותיות)
-    Player selects grid size (4×4 or 6×6), then flips cards to find matching pairs.
+    Player selects grid size (🐣 3×4, 🐥 4×4 or 🦁 6×6; the size screen has a ✕),
+    then flips cards to find matching pairs.
     Each card flip plays the letter name audio (TTS).
     Matched pairs stay face-up. Mismatches silently flip back after 1.3s.
     Tapping an already-matched card replays its audio (educational re-listen).
@@ -1829,7 +1845,7 @@ GAME TYPE: memoryCard
     - id: 'memory-hebrew-letters'
     - categoryId: 'memory-hebrew-letters'
     - gameType: 'memoryCard'
-    - gridSizes: 4×4 (8 pairs) and 6×6 (18 pairs)
+    - gridSizes: 3×4 (6 pairs), 4×4 (8 pairs) and 6×6 (18 pairs)
     - itemPool: hebrewLettersAll (27 letters)
     - Randomly picks N/2 items from pool per game session
 
@@ -2040,7 +2056,8 @@ CONTROLS (mobile-first):
     - Particle + floating-text systems, camera shake, dust puffs
     - Level progression with themed scenery (mountains, sky object, side props)
     - Red flash overlay on hit, level-up flash overlay
-    - Game over screen with diamond count, stars, play-again/back buttons
+    - Game over screen ("כל הכבוד! 🐰") with diamond count, stars, play-again/back
+      buttons. Start screen = 2 icon lines (👆 לחיצה = קפיצה / 👈 👉 לחיצה בצד = לזוז)
     - SFX via utils/soundManager (playDing/playSparkle/playThud/playWhoosh/
       playJump/playSlide/playHeart/playBoom/playLevelUp/playGameOver/playTone)
     - Voice via useAudio (playWrong on hit, playComplete at game over)
@@ -2076,6 +2093,7 @@ GAME TYPE: mazeGame
     - Configurable grid size via game.mazeConfig: { cols, rows, wallWidth }
     - Default: 6 columns x 8 rows
     - Buttons: undo (remove last cell), clear path, new maze
+    - Win: playComplete() voice (useAudio) + overlay with "מבוך חדש" and "🏠 חזרה" (onClose)
     - Green highlighted cells show visited path
     - Red line through cell centers with dot at current head position
 
@@ -2353,7 +2371,8 @@ GAME TYPE: sortGame
     - generateItems() function creates items based on mode + difficulty
     - HEBREW_LETTERS array (22 letters in order) for letter mode
     - Drop zone with numbered dashed slots, items area with white cards
-    - Selected item highlighting, next-slot highlighting
+    - ONE TAP: tapping a tray item places it in the next slot (tryPlace);
+      tapping a slot after selecting an item still works. Tray items 64px.
     - Wrong attempt shake animation, 3-round progression
     - useUser for score/recordGamePlayed, useAudio for sound effects
 
@@ -2387,8 +2406,9 @@ GAME TYPE: photoWord (התמונה שלי!)
       right: -i*100%, so the slices line up seamlessly. The img needs
       max-width:none (beats the global img{max-width:100%}) and scale(1.2)
       so the blur's soft edges stay outside the frame.
-    - AUDIO: the word's name audio auto-plays when a word starts; 🔊 button in
-      the top bar + a "🔊 שמעו" button next to the instruction replay it.
+    - AUDIO: the intro instruction auto-plays once on mount; the word's name
+      audio auto-plays when a word starts; 🔊 button in the top bar + a
+      "🔊 שמעו" button next to the instruction replay it.
       On the intro screen the top-bar 🔊 plays the intro instruction instead.
       Every CORRECT letter plays that letter's name (letterAudioByChar from
       hebrewLetterBank, e.g. ל → lamed.mp3), replacing the generic praise
@@ -2405,8 +2425,9 @@ GAME TYPE: photoWord (התמונה שלי!)
       ≤2 wrong=2, else 1), score = stars*16 per word.
     - Multi-photo ready: photoWordsList array; "next photo" button appears
       automatically when more entries exist.
-    - NOTE: score/recordGamePlayed only fire on the LAST word of the list.
-      With 8 words most sessions end before that, so no score is recorded.
+    - Every completed word calls addScore(stars*16) + recordGamePlayed (one
+      play record per word), so the Category badge / Home score update after
+      the first word.
 
     Hierarchy: hebrew → hebrew-toddler (לגיל הרך) → photo-words (התמונה שלי!)
 
@@ -2628,37 +2649,47 @@ nothing but the page background. Four root causes were found and ALL fixed:
 - Repo: https://github.com/oribrook/kids.git (origin), branch main.
 - 2026-10-29: commit 5b8bea2 "Snapshot before re-organization" = full state of the project right before the big re-org.
 - 2026-10-29: branch `reorg` (from 5b8bea2): one commit per step ("reorg step 0" .. "reorg step 11") of the re-organization plan (OriAi conv #3687 = plan, #3689 = implementation). Structure only - same routes, game ids, asset URLs, localStorage keys; registry dump before/after = zero diff. Merge into main + push = Ori.
+- 2026-10-29: branch `kid-ux` (from reorg): kid-ux pass (OriAi conv #3690 plan, #3692 implementation) - commits "kid-ux A".."kid-ux E" + D2. Bug fixes (nikud list, x-ray icon, photo-words score, memory css vars, empty topic), quiz-engine wrong-answer flow, GameComplete buttons, long-press contact, per-game quick wins, lint 36 -> 0 errors. Merged into main and pushed by the implementing agent (Ori approved).
 
 ================================================================================
-                    KNOWN BUGS (found in the re-org, NOT fixed - need Ori's OK)
+                    KNOWN BUGS / OPEN ITEMS
 ================================================================================
-1. src/data/categories.js: nikud-start.games = ['learn-tzeirei'] only, but 5
-   nikud lessons exist (learn-chirik, learn-patach, learn-cholam, learn-shuruk
-   also have categoryId 'nikud-start'). Because the list has length 1,
-   Topic.jsx jumps straight to /game/learn-tzeirei and the other 4 are
-   reachable only by direct URL. Fix = add the 4 ids to that array (changes
-   navigation).
-2. 9 referenced files do not exist (silent 404; the list is KNOWN_MISSING in
-   scripts/check-assets.mjs):
-   /audio/ar/word-udhun.mp3, /audio/en/word-starts-x.mp3, /audio/en/word-x-ray.mp3,
-   /audio/en/word-zebra.mp3, /audio/word-arye.mp3, /audio/word-banana.mp3,
-   /audio/word-shemesh.mp3, /sounds/click.mp3, /sounds/star.mp3
-   (the two /sounds files are listed in useAudio.js but playSound() is never
-   called).
-3. The English X lesson uses image key 'word-x-ray' - no icon has that key, so
-   the card shows the text label. (An unused 'word-xray' icon existed and was
-   deleted with the other unused keys; add the icon under the key the data uses.)
-4. PhotoWordGame records score / recordGamePlayed only on the last word of the
-   list (see the photo-words section).
-5. Game objects carry legacy fields type: 'selection' and availableIn: ['easy']
+Fixed in the kid-ux pass (branch kid-ux, 2026-10-29): nikud-start category
+list (5 games), word-x-ray icon key, learnZ zebra audio path (reuses
+/audio/en/word-zebra-en.mp3), PhotoWordGame score per word, Memory CSS
+variables (--space-*), dead click/star sounds in useAudio, empty
+numbers-counting topic hidden on the Language page.
+
+Still open:
+1. 6 audio files are referenced but do not exist (KNOWN_MISSING in
+   scripts/check-assets.mjs). edge-tts returned HTTP 403 for every request
+   during the kid-ux pass, so they could not be generated. Texts to generate
+   (same voices as the rest: he-IL-HilaNeural / ar-SA-ZariyahNeural /
+   en-US female):
+   /audio/word-arye.mp3        he  אַרְיֵה
+   /audio/word-banana.mp3      he  בַּנָנָה
+   /audio/word-shemesh.mp3     he  שֶׁמֶשׁ
+   /audio/en/word-x-ray.mp3    en  X-ray
+   /audio/en/word-starts-x.mp3 he  אֵיזוֹ מִילָּה מַתְחִילָה בָּאוֹת X?
+   /audio/ar/word-udhun.mp3    ar  أُذُن
+   After generating: drop them in public/, set KNOWN_MISSING = [] and run
+   npm run check:assets (must print 0 missing).
+2. Game objects carry legacy fields type: 'selection' and availableIn: ['easy']
    that no code reads. Harmless; left in place (120 files).
+3. Not verified on a real iPhone: does the first question's instruction audio
+   auto-play after tapping a game card (iOS autoplay policy)? If not, make the
+   big 🔊 button pulse until the first manual play.
+4. Music ducking (lower background music while a voice plays) was skipped -
+   needs a "voices playing" counter so the music never gets stuck low.
 
 LINT DEBT (npm run lint)
 ------------------------
-After the re-org: 36 errors / 9 warnings (before: 87 / 9 - the 26 false
-"motion is unused" errors are gone thanks to react/jsx-uses-vars).
-Remaining, all inside game logic and left for a later pass because touching
-them changes behavior: 12 no-empty (empty catch {} blocks), 6 no-unused-vars,
-3 react-refresh/only-export-components, 24 react-hooks compiler rules
-(exhaustive-deps, purity, immutability, set-state-in-effect,
-preserve-manual-memoization).
+After the kid-ux pass: 0 errors / 9 warnings (was 36 / 9). The 9 warnings are
+react-hooks/exhaustive-deps in BrickBreaker, DrawingBoard, StoryDraw, MazeGame
+and Game.jsx (deps are intentionally partial - changing them changes behavior).
+Suppressed with an inline comment + reason: react-hooks/immutability in
+BrickBreaker (3), DrawingBoard, StoryDraw (callbacks declared later, called at
+runtime), react-refresh/only-export-components in the 3 contexts (provider +
+hook in one file), react-hooks/preserve-manual-memoization in Game.jsx
+(shuffle memo keyed by question id). Lint is a useful signal again: a new
+error means a new problem.
