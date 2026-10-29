@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUser } from '../../context/UserContext';
 import { useAudio } from '../../hooks/useAudio';
@@ -78,6 +78,10 @@ function PhotoWordGame({ game, onClose }) {
 
   const { addScore, recordGamePlayed } = useUser();
   const { playCorrect, playWrong, playComplete, playInstruction } = useAudio();
+
+  useEffect(() => {
+    playInstruction(INTRO_AUDIO);
+  }, [playInstruction]);
 
   const word = photoWordsList[wordIndex];
   const totalLetters = word.letters.length;

@@ -128,28 +128,13 @@ function SortGame({ game, onClose }) {
     setPhase('playing');
   }, [mode, difficulty]);
 
-  const handleItemClick = useCallback((item) => {
+  const tryPlace = useCallback((item) => {
     if (phase !== 'playing') return;
-
-    // If already placed, ignore
     if (placed.find(p => p.value === item.value)) return;
 
-    setSelectedItem(item.value === selectedItem ? null : item.value);
-  }, [phase, placed, selectedItem]);
-
-  const handleSlotClick = useCallback((slotIdx) => {
-    if (selectedItem === null) return;
-    if (placed[slotIdx]) return; // Already filled
-
-    // The next slot to fill should be the leftmost empty one
     const nextEmptyIdx = placed.length;
-    if (slotIdx !== nextEmptyIdx) return;
-
-    const item = shuffledItems.find(i => i.value === selectedItem);
-    if (!item) return;
-
-    // Check if this is the correct next item in sorted order
     const correctItem = items[nextEmptyIdx];
+    if (!correctItem) return;
 
     if (item.value === correctItem.value) {
       // Correct!
@@ -191,7 +176,17 @@ function SortGame({ game, onClose }) {
       setWrongFlash(true);
       setTimeout(() => setWrongFlash(false), 400);
     }
-  }, [selectedItem, placed, items, shuffledItems, roundsCompleted, wrongAttempts, mode, difficulty, playCorrect, playWrong, playComplete, addScore, recordGamePlayed, game.id]);
+  }, [phase, placed, items, roundsCompleted, wrongAttempts, mode, difficulty, playCorrect, playWrong, playComplete, addScore, recordGamePlayed, game.id]);
+
+  // One tap on a tray item places it in the next slot
+  const handleItemClick = tryPlace;
+
+  const handleSlotClick = useCallback((slotIdx) => {
+    if (selectedItem === null) return;
+    if (slotIdx !== placed.length) return;
+    const item = shuffledItems.find(i => i.value === selectedItem);
+    if (item) tryPlace(item);
+  }, [selectedItem, placed, shuffledItems, tryPlace]);
 
   const handlePlayAgain = () => {
     setPhase('waiting');

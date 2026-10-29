@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAudio } from '../../hooks/useAudio';
 import styles from './MazeGame.module.css';
 
 // Maze generation using recursive backtracking
@@ -183,6 +184,11 @@ function MazeGame({ game, onClose }) {
   const [mazeKey, setMazeKey] = useState(0);
   const [won, setWon] = useState(false);
   const [pathLength, setPathLength] = useState(0); // triggers re-render for undo button state
+  const { playComplete } = useAudio();
+
+  useEffect(() => {
+    if (won) playComplete();
+  }, [won, playComplete]);
 
   // Convert pixel coordinates to grid cell
   const pixelToCell = useCallback((x, y) => {
@@ -490,9 +496,14 @@ function MazeGame({ game, onClose }) {
               <div className={styles.winEmoji}>{'\uD83C\uDF1F'}</div>
               <h2 className={styles.winTitle}>{'\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3!'}</h2>
               <p className={styles.winSubtitle}>{'\u05DE\u05E6\u05D0\u05EA\u05DD \u05D0\u05EA \u05D4\u05D3\u05E8\u05DA \u05D1\u05DE\u05D1\u05D5\u05DA!'}</p>
-              <button className={styles.winButton} onClick={newMaze}>
-                {'\uD83D\uDD04 \u05DE\u05D1\u05D5\u05DA \u05D7\u05D3\u05E9'}
-              </button>
+              <div className={styles.winButtons}>
+                <button className={styles.winButton} onClick={newMaze}>
+                  {'\uD83D\uDD04 \u05DE\u05D1\u05D5\u05DA \u05D7\u05D3\u05E9'}
+                </button>
+                <button className={`${styles.winButton} ${styles.winButtonSecondary}`} onClick={onClose}>
+                  🏠 חזרה
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}

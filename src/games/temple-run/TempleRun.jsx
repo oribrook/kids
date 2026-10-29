@@ -1230,11 +1230,8 @@ function TempleRun({ game, onClose }) {
           <div className={styles.startBunny}>🐰</div>
           <div className={styles.startText}>!רוץ שפנפן</div>
           <div className={styles.startSubtext}>
-            אספו 💎 יהלומים - כל 5 נותנים ❤️<br />
-            קפצו מעל 🪨 סלעים ו-🚧 מחסומים<br />
-            החליקו למטה כדי להתגלגל מתחת ל-🦉<br />
-            מתנות: 🛡️ מגן, 🧲 מגנט, 🥕 גזר, 🚀 טיל-על<br />
-            לחצו על נתיב אחר כדי לזוז, על הנתיב שלכם כדי לקפוץ
+            👆 לחיצה = קפיצה<br />
+            👈 👉 לחיצה בצד = לזוז
           </div>
           <button className={styles.startBtn} onClick={handleStart}>!בואו נרוץ 🏃</button>
         </div>
@@ -1243,7 +1240,7 @@ function TempleRun({ game, onClose }) {
       {/* Game over overlay */}
       {phase === 'gameOver' && (
         <div className={styles.gameOverOverlay}>
-          <div className={styles.gameOverText}>!המשחק נגמר</div>
+          <div className={styles.gameOverText}>כל הכבוד! 🐰</div>
           <div className={styles.gameOverScore}>💎 {diamonds} יהלומים</div>
           <div className={styles.gameOverStars}>
             {[1, 2, 3].map(s => (
