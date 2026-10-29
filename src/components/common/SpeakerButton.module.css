@@ -1,6 +1,6 @@
 .speakerButton {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: none;
   background: rgba(46, 204, 113, 0.15);
@@ -24,18 +24,18 @@
 }
 
 .speakerIcon {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
 }
 
 @media (max-width: 768px) {
   .speakerButton {
-    width: 28px;
-    height: 28px;
+    width: 40px;
+    height: 40px;
   }
 
   .speakerIcon {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
   }
 }

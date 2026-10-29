@@ -7,7 +7,7 @@ function SelectionQuestion({
   question,
   selectedAnswer,
   showFeedback,
-  isCorrect,
+  wrongIds = [],
   onAnswer,
   // Multi-select props
   multiSelectState,
@@ -150,6 +150,7 @@ function SelectionQuestion({
 
           // Standard single-select mode
           const isSelected = selectedAnswer === option.id;
+          const triedWrong = wrongIds.includes(option.id);
           let cardState = null;
           if (showFeedback && isSelected) {
             cardState = isThisCorrect;
@@ -173,7 +174,8 @@ function SelectionQuestion({
                 selected={isSelected && !showFeedback}
                 correct={cardState}
                 onClick={() => onAnswer(option.id)}
-                disabled={showFeedback}
+                disabled={showFeedback || triedWrong}
+                className={triedWrong ? styles.triedWrong : ''}
               >
                 {ItemIcon ? (
                   <MultiIconRenderer

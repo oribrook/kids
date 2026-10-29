@@ -16,8 +16,9 @@ export const memoryHebrewLetters = {
   gameType: 'memoryCard',
   availableIn: ['easy'],
   gridSizes: [
-    { size: 16, label: '4×4', pairs: 8 },
-    { size: 36, label: '6×6', pairs: 18 },
+    { size: 12, label: '🐣 3×4', pairs: 6 },
+    { size: 16, label: '🐥 4×4', pairs: 8 },
+    { size: 36, label: '🦁 6×6', pairs: 18 },
   ],
   itemPool: hebrewLetters, // 22 standard letters (no sofit - too similar visually)
   // No questions array - this game type manages its own flow
@@ -96,8 +97,9 @@ export const memoryObjects = {
   gameType: 'memoryCard',
   availableIn: ['easy'],
   gridSizes: [
-    { size: 16, label: '4\u00D74', pairs: 8 },
-    { size: 36, label: '6\u00D76', pairs: 18 },
+    { size: 12, label: '🐣 3×4', pairs: 6 },
+    { size: 16, label: '🐥 4×4', pairs: 8 },
+    { size: 36, label: '🦁 6×6', pairs: 18 },
   ],
   itemPool: objectItemPool,
   questions: { easy: [] },

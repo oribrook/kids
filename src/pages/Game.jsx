@@ -14,6 +14,9 @@ import HiddenLetterInstruction from '../quiz/HiddenLetterInstruction';
 import { STANDALONE_GAMES } from '../games';
 import styles from './Game.module.css';
 
+const REPLAY_DELAY_MS = 1400;
+const EXIT_ARM_MS = 2000;
+
 function Game() {
   const { gameId } = useParams();
   const navigate = useNavigate();
@@ -38,13 +41,23 @@ function Game() {
   const [multiSelectState, setMultiSelectState] = useState({});
   const [multiSelectCorrectCount, setMultiSelectCorrectCount] = useState(0);
 
+  // Single-select: options already tried and wrong, kept per question id
+  const [wrongTries, setWrongTries] = useState({ questionId: null, ids: [] });
+
+  const [exitArmed, setExitArmed] = useState(false);
+
   // Track the previous isComplete value to detect transition from false -> true
   // Initialize to true to prevent playing on mount when context has stale isComplete=true
   const prevIsCompleteRef = useRef(true);
 
+  // Pending timers (feedback, advance, instruction replay) - cleared on question change / unmount
+  const timersRef = useRef([]);
+
   const currentQuestion = getCurrentQuestion();
+  const wrongIds = wrongTries.questionId === currentQuestion?.id ? wrongTries.ids : [];
 
   // Shuffle options for current question (memoized per question id)
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization -- re-shuffle only when the question id changes
   const shuffledQuestion = useMemo(() => {
     if (!currentQuestion || !currentQuestion.options) return currentQuestion;
 
@@ -78,6 +91,19 @@ function Game() {
     };
   }, [endGame]);
 
+  const clearTimers = () => {
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
+  };
+
+  const later = (fn, ms) => {
+    timersRef.current.push(setTimeout(fn, ms));
+  };
+
+  useEffect(() => {
+    return () => clearTimers();
+  }, [currentQuestion?.id]);
+
   // Where to go when exiting this game. Single-game categories skip their
   // useless middle page (Category with one card) and go straight to the topic.
   const exitPath = useMemo(() => {
@@ -103,7 +129,7 @@ function Game() {
     }
   }, [gameState.isComplete, gameState.score, game?.id, playComplete, addScore, recordGamePlayed, getStars]);
 
-  // Auto-play instruction audio 1 second after new question loads
+  // Auto-play instruction audio shortly after a new question loads
   useEffect(() => {
     if (currentQuestion?.instructionAudio && !gameState.isComplete) {
       const timer = setTimeout(() => {
@@ -133,6 +159,19 @@ function Game() {
     );
   }
 
+  const replayInstruction = () => {
+    if (!currentQuestion?.instructionAudio) return;
+    later(() => playInstruction(currentQuestion.instructionAudio), REPLAY_DELAY_MS);
+  };
+
+  const resetQuestionState = () => {
+    setSelectedAnswer(null);
+    setShowFeedback(false);
+    setIsCorrect(null);
+    setMultiSelectState({});
+    setMultiSelectCorrectCount(0);
+  };
+
   const handleAnswer = (answerId) => {
     if (showFeedback) return;
 
@@ -152,22 +191,36 @@ function Game() {
     setIsCorrect(correct);
 
     if (correct) {
+      clearTimers();
       playCorrect();
-    } else {
-      playWrong();
+      later(() => {
+        submitAnswer(true);
+        resetQuestionState();
+      }, 1500);
+      return;
     }
 
-    // Auto-advance after delay
-    setTimeout(() => {
-      submitAnswer(correct);
+    playWrong();
+    later(() => {
+      submitAnswer(false);
+      setWrongTries(prev => ({
+        questionId: currentQuestion.id,
+        ids: prev.questionId === currentQuestion.id ? [...prev.ids, answerId] : [answerId],
+      }));
       setSelectedAnswer(null);
       setShowFeedback(false);
       setIsCorrect(null);
-    }, correct ? 1500 : 1000);
+    }, 1000);
+    replayInstruction();
   };
 
   const handleClose = () => {
-    navigate(exitPath);
+    if (exitArmed) {
+      navigate(exitPath);
+      return;
+    }
+    setExitArmed(true);
+    later(() => setExitArmed(false), EXIT_ARM_MS);
   };
 
   const handlePlayInstruction = () => {
@@ -182,9 +235,10 @@ function Game() {
     if (multiSelectState[optionId] === 'correct' || multiSelectState[optionId] === 'wrong') {
       return;
     }
+    // Question already completed, waiting to advance
+    if (showFeedback && isCorrect) return;
 
     if (isOptionCorrect) {
-      // Correct selection!
       playCorrect();
       const newCorrectCount = multiSelectCorrectCount + 1;
       setMultiSelectCorrectCount(newCorrectCount);
@@ -195,35 +249,28 @@ function Game() {
         currentQuestion.options.filter(opt => opt.isCorrect).length;
 
       if (newCorrectCount >= totalCorrect) {
-        // All found! Complete the question
+        clearTimers();
         setShowFeedback(true);
         setIsCorrect(true);
-        setTimeout(() => {
+        later(() => {
           submitAnswer(true);
-          setSelectedAnswer(null);
-          setShowFeedback(false);
-          setIsCorrect(null);
-          setMultiSelectState({});
-          setMultiSelectCorrectCount(0);
+          resetQuestionState();
         }, 1500);
       }
-    } else {
-      // Wrong selection - show error immediately
-      playWrong();
-      setMultiSelectState(prev => ({ ...prev, [optionId]: 'wrong' }));
-      setShowFeedback(true);
-      setIsCorrect(false);
-
-      // Brief delay then advance (wrong answer)
-      setTimeout(() => {
-        submitAnswer(false);
-        setSelectedAnswer(null);
-        setShowFeedback(false);
-        setIsCorrect(null);
-        setMultiSelectState({});
-        setMultiSelectCorrectCount(0);
-      }, 1000);
+      return;
     }
+
+    // Wrong tap: keep the found cards, mark this one wrong, count the attempt
+    playWrong();
+    submitAnswer(false);
+    setMultiSelectState(prev => ({ ...prev, [optionId]: 'wrong' }));
+    setShowFeedback(true);
+    setIsCorrect(false);
+    later(() => {
+      setShowFeedback(false);
+      setIsCorrect(null);
+    }, 1000);
+    replayInstruction();
   };
 
   // Handle intro multi-select answer (for introduction questions - all correct, plays word audio)
@@ -249,22 +296,21 @@ function Game() {
     const totalOptions = currentQuestion.options.length;
 
     if (newCorrectCount >= totalOptions) {
-      // All selected! Complete the question
       setShowFeedback(true);
       setIsCorrect(true);
-      setTimeout(() => {
+      later(() => {
         submitAnswer(true);
-        setSelectedAnswer(null);
-        setShowFeedback(false);
-        setIsCorrect(null);
-        setMultiSelectState({});
-        setMultiSelectCorrectCount(0);
+        resetQuestionState();
       }, 1500);
     }
   };
 
   const handlePlayAgain = () => {
-    navigate(exitPath);
+    clearTimers();
+    resetQuestionState();
+    setWrongTries({ questionId: null, ids: [] });
+    setExitArmed(false);
+    startGame({ ...game, questions });
   };
 
   // The context session must belong to THIS game. It resets on unmount, but the
@@ -280,6 +326,7 @@ function Game() {
         maxScore={questions.length * 16}
         stars={getStars()}
         onPlayAgain={handlePlayAgain}
+        onHome={() => navigate(exitPath)}
       />
     );
   }
@@ -288,17 +335,13 @@ function Game() {
   const renderQuestion = () => {
     if (!shuffledQuestion) return null;
 
-    const commonProps = {
-      question: shuffledQuestion,
-      selectedAnswer,
-      showFeedback,
-      isCorrect,
-      onAnswer: handleAnswer,
-    };
-
     return (
       <SelectionQuestion
-        {...commonProps}
+        question={shuffledQuestion}
+        selectedAnswer={selectedAnswer}
+        showFeedback={showFeedback}
+        wrongIds={wrongIds}
+        onAnswer={handleAnswer}
         multiSelectState={multiSelectState}
         onMultiSelectAnswer={handleMultiSelectAnswer}
         onIntroMultiSelectAnswer={handleIntroMultiSelectAnswer}
@@ -314,22 +357,22 @@ function Game() {
     >
       {/* Header */}
       <header className={styles.header}>
-        <button className={styles.closeButton} onClick={handleClose}>
-          ✕
+        <button
+          className={`${styles.closeButton} ${exitArmed ? styles.closeArmed : ''}`}
+          onClick={handleClose}
+          aria-label={exitArmed ? 'לחצו שוב ליציאה' : 'יציאה'}
+        >
+          {exitArmed ? '🏠' : '✕'}
         </button>
         <div className={styles.progressWrapper}>
           <ProgressBar
             current={gameState.currentQuestionIndex + 1}
             total={questions.length}
             color={category.color}
-            showLabels={true}
+            showLabels={questions.length <= 10}
           />
         </div>
-        <ScoreDisplay
-          score={gameState.score}
-          multiplier={gameState.attempts === 0 ? 2 : 1}
-          showMultiplier={gameState.attempts === 0}
-        />
+        <ScoreDisplay score={gameState.score} showMultiplier={false} />
       </header>
 
       {/* Main game area */}

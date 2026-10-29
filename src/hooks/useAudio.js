@@ -9,8 +9,6 @@ const CORRECT_SOUNDS = [
 ];
 
 const WRONG_SOUNDS = [
-  '/sounds/wrong-1.mp3',    // טעות, נסה שנית
-  '/sounds/wrong-2.mp3',    // לא נכון, נסו שוב
   '/sounds/wrong-3.mp3',    // אופס, נסו עוד פעם
   '/sounds/wrong-4.mp3',    // כמעט, נסו שוב
 ];

@@ -1,8 +1,23 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mascot, Button } from '../components/common';
 import styles from './GameComplete.module.css';
 
-function GameComplete({ score, maxScore, stars, onPlayAgain }) {
+const CONFETTI_COLORS = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#A29BFE', '#FD79A8'];
+
+function makeConfetti() {
+  return Array.from({ length: 30 }, (_, i) => ({
+    id: i,
+    left: Math.random() * 100,
+    color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+    rotate: Math.random() * 720,
+    duration: 2 + Math.random() * 2,
+    delay: Math.random() * 0.5,
+  }));
+}
+
+function GameComplete({ score, maxScore, stars, onPlayAgain, onHome }) {
+  const [confetti] = useState(makeConfetti);
   const percentage = Math.round((score / maxScore) * 100);
 
   const getMessageByStars = () => {
@@ -33,23 +48,23 @@ function GameComplete({ score, maxScore, stars, onPlayAgain }) {
       {/* Confetti */}
       {stars >= 2 && (
         <div className={styles.confetti}>
-          {Array.from({ length: 30 }).map((_, i) => (
+          {confetti.map((piece) => (
             <motion.div
-              key={i}
+              key={piece.id}
               className={styles.confettiPiece}
               style={{
-                left: `${Math.random() * 100}%`,
-                backgroundColor: ['#FF6B6B', '#4ECDC4', '#FFE66D', '#A29BFE', '#FD79A8'][Math.floor(Math.random() * 5)],
+                left: `${piece.left}%`,
+                backgroundColor: piece.color,
               }}
               initial={{ y: -20, opacity: 1 }}
               animate={{
                 y: '100vh',
-                rotate: Math.random() * 720,
+                rotate: piece.rotate,
                 opacity: 0,
               }}
               transition={{
-                duration: 2 + Math.random() * 2,
-                delay: Math.random() * 0.5,
+                duration: piece.duration,
+                delay: piece.delay,
                 ease: 'linear',
               }}
             />
@@ -95,16 +110,31 @@ function GameComplete({ score, maxScore, stars, onPlayAgain }) {
           ))}
         </motion.div>
 
-        {/* Buttons - placed right after stars for easy access */}
+        {/* Message */}
+        <motion.p
+          className={styles.message}
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.8 }}
+        >
+          {getMessageByStars()}
+        </motion.p>
+
+        {/* Buttons - right after the stars for easy access */}
         <motion.div
           className={styles.buttons}
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.9 }}
         >
-          <Button onClick={onPlayAgain} variant="primary" size="large" icon="🔄">
+          <Button onClick={onPlayAgain} variant="primary" size="xlarge" icon="🔄">
             שחקו שוב
           </Button>
+          {onHome && (
+            <Button onClick={onHome} variant="secondary" size="xlarge" icon="🏠">
+              הביתה
+            </Button>
+          )}
         </motion.div>
 
         {/* Score */}
@@ -126,16 +156,6 @@ function GameComplete({ score, maxScore, stars, onPlayAgain }) {
             />
           </div>
         </motion.div>
-
-        {/* Message */}
-        <motion.p
-          className={styles.message}
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 1.3 }}
-        >
-          {getMessageByStars()}
-        </motion.p>
       </div>
     </motion.div>
   );

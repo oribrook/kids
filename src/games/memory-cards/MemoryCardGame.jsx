@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAudio } from '../../hooks/useAudio';
 import { useUser } from '../../context/UserContext';
@@ -37,7 +37,7 @@ function calculateStars(moves, pairs) {
  * 3. complete - Shows results with stars
  */
 function MemoryCardGame({ game, onClose }) {
-  const { playInstruction, playCorrect, playWrong, playComplete, stopInstruction } = useAudio();
+  const { playInstruction, playCorrect, playComplete, stopInstruction } = useAudio();
   const { addScore, recordGamePlayed } = useUser();
 
   const [phase, setPhase] = useState('select-size');
@@ -55,7 +55,7 @@ function MemoryCardGame({ game, onClose }) {
    * Start game with selected grid size
    */
   const startGame = useCallback((sizeConfig) => {
-    const { size, pairs } = sizeConfig;
+    const { pairs } = sizeConfig;
     setGridSize(sizeConfig);
 
     // Pick random items from pool
@@ -174,6 +174,9 @@ function MemoryCardGame({ game, onClose }) {
   if (phase === 'select-size') {
     return (
       <div className={styles.container}>
+        <div className={styles.gameHeader}>
+          <button className={styles.closeBtn} onClick={onClose}>✕</button>
+        </div>
         <div className={styles.sizeSelection}>
           <h2 className={styles.sizeTitle}>בחרו גודל</h2>
           <p className={styles.sizeSubtitle}>כמה קלפים?</p>
@@ -203,7 +206,8 @@ function MemoryCardGame({ game, onClose }) {
         score={stars * 16}
         maxScore={48}
         stars={stars}
-        onPlayAgain={onClose}
+        onPlayAgain={() => setPhase('select-size')}
+        onHome={onClose}
       />
     );
   }
