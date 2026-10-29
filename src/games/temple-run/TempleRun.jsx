@@ -1219,7 +1219,7 @@ function TempleRun({ game, onClose }) {
       {levelUpShow && (
         <div className={styles.levelUpOverlay}>
           <div className={styles.levelUpText}>
-            !{LEVELS[level - 1].emoji} שלב {level}
+            {LEVELS[level - 1].emoji} שלב {level}!
           </div>
         </div>
       )}
@@ -1228,12 +1228,12 @@ function TempleRun({ game, onClose }) {
       {phase === 'waiting' && (
         <div className={styles.startOverlay}>
           <div className={styles.startBunny}>🐰</div>
-          <div className={styles.startText}>!רוץ שפנפן</div>
+          <div className={styles.startText}>רוץ שפנפן!</div>
           <div className={styles.startSubtext}>
             👆 לחיצה = קפיצה<br />
             👈 👉 לחיצה בצד = לזוז
           </div>
-          <button className={styles.startBtn} onClick={handleStart}>!בואו נרוץ 🏃</button>
+          <button className={styles.startBtn} onClick={handleStart}>בואו נרוץ! 🏃</button>
         </div>
       )}
 

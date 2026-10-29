@@ -484,7 +484,7 @@ function FastBalloon({ game, onClose }) {
       {/* Combo + milestone + speed-up flashes */}
       {comboText && <div className={styles.comboFlash}>{comboText}</div>}
       {milestoneText && <div className={styles.milestoneFlash}>{milestoneText}</div>}
-      {speedFlash && <div className={styles.speedFlash}>!מהר יותר 🚀</div>}
+      {speedFlash && <div className={styles.speedFlash}>מהר יותר! 🚀</div>}
 
       {/* Start overlay */}
       {phase === 'waiting' && (

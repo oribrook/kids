@@ -215,7 +215,7 @@ function SortGame({ game, onClose }) {
       {phase === 'playing' && (
         <div className={styles.gameArea}>
           <div className={styles.instruction}>
-            {mode === 'numbers' ? '!סדרו את המספרים מהקטן לגדול' : '!סדרו את האותיות לפי הא"ב'}
+            {mode === 'numbers' ? 'סדרו את המספרים מהקטן לגדול!' : 'סדרו את האותיות לפי הא"ב!'}
           </div>
 
           {/* Drop zone */}
@@ -259,7 +259,7 @@ function SortGame({ game, onClose }) {
       {phase === 'waiting' && (
         <div className={styles.startOverlay}>
           <div className={styles.startIcon}>🔢</div>
-          <div className={styles.startText}>!סדרו בסדר</div>
+          <div className={styles.startText}>סדרו בסדר!</div>
           <div className={styles.startSubtext}>סדרו מספרים או אותיות בסדר הנכון</div>
 
           {/* Mode selector */}
@@ -290,7 +290,7 @@ function SortGame({ game, onClose }) {
           </div>
 
           <button className={styles.startBtn} onClick={startGame}>
-            !יאללה 🚀
+            יאללה! 🚀
           </button>
         </div>
       )}
@@ -298,7 +298,7 @@ function SortGame({ game, onClose }) {
       {/* End overlay */}
       {phase === 'ended' && (
         <div className={styles.endOverlay}>
-          <div className={styles.endText}>!כל הכבוד 🎉</div>
+          <div className={styles.endText}>כל הכבוד! 🎉</div>
           <div className={styles.endScore}>סיימתם 3 סיבובים עם {wrongAttempts} טעויות!</div>
           <div className={styles.endStars}>
             {[1, 2, 3].map(s => (

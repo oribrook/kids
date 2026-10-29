@@ -370,7 +370,7 @@ function BrickBreaker({ game, onClose }) {
     return (
       <div className={styles.rotateOverlay}>
         <div className={styles.rotateIcon}>📱</div>
-        <div className={styles.rotateText}>!סובבו את המסך</div>
+        <div className={styles.rotateText}>סובבו את המסך!</div>
         <button className={styles.closeBtn} onClick={onClose} style={{ position: 'absolute', top: 16, right: 16 }}>
           ✕
         </button>

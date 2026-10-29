@@ -166,7 +166,7 @@ function SimonSays({ game, onClose }) {
       {phase === 'waiting' && (
         <div className={styles.startOverlay}>
           <div className={styles.startIcon}>🔴🔵🟢🟡</div>
-          <div className={styles.startText}>!שמעון אומר</div>
+          <div className={styles.startText}>שמעון אומר!</div>
           <div className={styles.startSubtext}>זכרו את סדר הצבעים ולחצו באותו סדר!</div>
           <button className={styles.startBtn} onClick={handleStart}>
             !התחילו 🧠
@@ -177,7 +177,7 @@ function SimonSays({ game, onClose }) {
       {/* End overlay */}
       {phase === 'ended' && (
         <div className={styles.endOverlay}>
-          <div className={styles.endText}>{round > 1 ? 'כל הכבוד! 🎉' : '!נסו שוב 💪'}</div>
+          <div className={styles.endText}>{round > 1 ? 'כל הכבוד! 🎉' : 'נסו שוב! 💪'}</div>
           <div className={styles.endScore}>הגעתם לסיבוב {round}!</div>
           <div className={styles.endStars}>
             {[1, 2, 3].map(s => (
