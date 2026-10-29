@@ -25,7 +25,7 @@ const learnZ = {
         questionImage: 'letter-Z',
         isIntroMultiSelect: true,
         options: [
-          { id: 'opt-1', image: 'word-zebra', label: 'Zebra', isCorrect: true, optionAudio: '/audio/en/word-zebra.mp3' },
+          { id: 'opt-1', image: 'word-zebra', label: 'Zebra', isCorrect: true, optionAudio: '/audio/en/word-zebra-en.mp3' },
           { id: 'opt-2', image: 'word-zoo', label: 'Zoo', isCorrect: true, optionAudio: '/audio/en/word-zoo.mp3' },
           { id: 'opt-3', image: 'word-zero', label: 'Zero', isCorrect: true, optionAudio: '/audio/en/word-zero.mp3' },
         ],

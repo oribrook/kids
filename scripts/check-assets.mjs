@@ -12,17 +12,14 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = join(ROOT, 'src');
 const PUBLIC = join(ROOT, 'public');
 
-// Existing 404s, listed in files.txt ("known bugs"). Not touched by the re-org.
+// Still-missing audio (edge-tts was unreachable during the kid-ux pass). Goal: empty list.
 const KNOWN_MISSING = [
   '/audio/ar/word-udhun.mp3',
   '/audio/en/word-starts-x.mp3',
   '/audio/en/word-x-ray.mp3',
-  '/audio/en/word-zebra.mp3',
   '/audio/word-arye.mp3',
   '/audio/word-banana.mp3',
   '/audio/word-shemesh.mp3',
-  '/sounds/click.mp3', // listed in useAudio.js, playSound('click'/'star') is never called
-  '/sounds/star.mp3',
 ];
 
 const [registryPath = '/src/data/registry.js'] = process.argv.slice(2);

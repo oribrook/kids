@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   background: linear-gradient(180deg, #EDE7F6 0%, #FFF 100%);
-  padding: var(--spacing-sm);
+  padding: var(--space-sm);
   direction: rtl;
 }
 
@@ -17,8 +17,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-xl);
-  padding: var(--spacing-xl);
+  gap: var(--space-xl);
+  padding: var(--space-xl);
 }
 
 .sizeTitle {
@@ -29,13 +29,13 @@
 
 .sizeSubtitle {
   font-size: var(--font-size-lg);
-  color: var(--color-neutral-600);
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 .sizeButtons {
   display: flex;
-  gap: var(--spacing-lg);
+  gap: var(--space-lg);
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -44,8 +44,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-xl) var(--spacing-2xl);
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-2xl);
   border: 3px solid var(--color-primary);
   border-radius: var(--radius-xl);
   background: white;
@@ -73,7 +73,7 @@
 
 .sizeCount {
   font-size: var(--font-size-md);
-  color: var(--color-neutral-600);
+  color: var(--color-text-secondary);
 }
 
 /* ========== Game Header ========== */
@@ -82,8 +82,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-sm) var(--spacing-md);
-  gap: var(--spacing-md);
+  padding: var(--space-sm) var(--space-md);
+  gap: var(--space-md);
 }
 
 .closeBtn {
@@ -91,7 +91,7 @@
   height: 40px;
   border-radius: 50%;
   border: none;
-  background: var(--color-neutral-200);
+  background: #F5F5F5;
   font-size: var(--font-size-lg);
   cursor: pointer;
   display: flex;
@@ -101,16 +101,16 @@
 }
 
 .closeBtn:hover {
-  background: var(--color-neutral-300);
+  background: var(--color-border);
 }
 
 .movesCounter,
 .pairsCounter {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--space-xs);
   background: white;
-  padding: var(--spacing-xs) var(--spacing-md);
+  padding: var(--space-xs) var(--space-md);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
@@ -118,7 +118,7 @@
 .movesLabel,
 .pairsLabel {
   font-size: var(--font-size-sm);
-  color: var(--color-neutral-600);
+  color: var(--color-text-secondary);
 }
 
 .movesValue,
@@ -134,8 +134,8 @@
   flex: 1;
   display: grid;
   grid-template-columns: repeat(var(--grid-cols, 4), 1fr);
-  gap: var(--spacing-xs);
-  padding: var(--spacing-sm);
+  gap: var(--space-xs);
+  padding: var(--space-sm);
   max-width: 600px;
   margin: 0 auto;
   width: 100%;
@@ -253,12 +253,12 @@
 
 @media (max-width: 480px) {
   .container {
-    padding: var(--spacing-xs);
+    padding: var(--space-xs);
   }
 
   .grid {
     gap: 4px;
-    padding: var(--spacing-xs);
+    padding: var(--space-xs);
   }
 
   .cardChar {
@@ -294,7 +294,7 @@
   }
 
   .sizeButton {
-    padding: var(--spacing-lg) var(--spacing-xl);
+    padding: var(--space-lg) var(--space-xl);
     min-width: 120px;
   }
 }

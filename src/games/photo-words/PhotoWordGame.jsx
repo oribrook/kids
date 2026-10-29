@@ -74,7 +74,6 @@ function PhotoWordGame({ game, onClose }) {
     try { return localStorage.getItem('photoWordInputMode') || 'tap'; } catch { return 'tap'; }
   });
 
-  const scoreRef = useRef(0);
   const dropRef = useRef(null);
 
   const { addScore, recordGamePlayed } = useUser();
@@ -118,11 +117,8 @@ function PhotoWordGame({ game, onClose }) {
 
       if (newPlaced.length === totalLetters) {
         const stars = wrongCount === 0 ? 3 : wrongCount <= 2 ? 2 : 1;
-        scoreRef.current += stars * 16;
-        if (isLastWord) {
-          addScore(scoreRef.current);
-          recordGamePlayed(game.id, scoreRef.current, stars);
-        }
+        addScore(stars * 16);
+        recordGamePlayed(game.id, stars * 16, stars);
         // Let the final un-blur reveal breathe, then celebrate
         setTimeout(() => {
           setConfetti(makeConfetti());
@@ -160,7 +156,6 @@ function PhotoWordGame({ game, onClose }) {
   };
 
   const handlePlayAgain = () => {
-    scoreRef.current = 0;
     setWordIndex(0);
     startWord(0);
   };

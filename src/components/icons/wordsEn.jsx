@@ -147,6 +147,9 @@ export default {
   'word-yogurt': () => (
     <img src="/images/word-yogurt.png" alt="Yogurt" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),
+  'word-x-ray': () => (
+    <img src="/images/word-xray.png" alt="X-ray" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  ),
   'word-yarn': () => (
     <img src="/images/word-yarn.png" alt="Yarn" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),

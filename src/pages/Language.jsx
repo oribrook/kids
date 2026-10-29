@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { getLanguageById, getTopicsByLanguage } from '../data/categories';
+import { getLanguageById, getTopicsByLanguage, getCategoriesByTopic } from '../data/categories';
 import { Button } from '../components/common';
 import NavHeader from '../components/layout/NavHeader';
 import PageDecorations from '../components/layout/PageDecorations';
@@ -10,7 +10,7 @@ function Language() {
   const { languageId } = useParams();
   const navigate = useNavigate();
   const language = getLanguageById(languageId);
-  const topics = getTopicsByLanguage(languageId);
+  const topics = getTopicsByLanguage(languageId).filter(t => getCategoriesByTopic(t.id).length > 0);
 
   if (!language) {
     return (

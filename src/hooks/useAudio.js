@@ -27,12 +27,6 @@ const ENCOURAGE_SOUNDS = [
   '/sounds/encourage-3.mp3', // אל תוותר
 ];
 
-// Simple sound effects (optional - can be added later)
-const SOUNDS = {
-  click: '/sounds/click.mp3',
-  star: '/sounds/star.mp3',
-};
-
 // Helper to get random item from array
 const getRandomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
@@ -71,13 +65,6 @@ export function useAudio() {
     }
   }, []);
 
-  const playSound = useCallback((soundType) => {
-    const soundUrl = SOUNDS[soundType];
-    if (soundUrl) {
-      playAudioFile(soundUrl, 0.5);
-    }
-  }, [playAudioFile]);
-
   const playCorrect = useCallback(() => {
     const soundUrl = getRandomItem(CORRECT_SOUNDS);
     playAudioFile(soundUrl, 0.8);
@@ -97,14 +84,6 @@ export function useAudio() {
     const soundUrl = getRandomItem(ENCOURAGE_SOUNDS);
     playAudioFile(soundUrl, 0.8);
   }, [playAudioFile]);
-
-  const playClick = useCallback(() => {
-    playSound('click');
-  }, [playSound]);
-
-  const playStar = useCallback(() => {
-    playSound('star');
-  }, [playSound]);
 
   const playInstruction = useCallback((audioUrl) => {
     try {
@@ -140,13 +119,10 @@ export function useAudio() {
   }, []);
 
   return {
-    playSound,
     playCorrect,
     playWrong,
     playComplete,
     playEncourage,
-    playClick,
-    playStar,
     playInstruction,
     stopInstruction,
     stopAllAudio,

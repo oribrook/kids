@@ -203,7 +203,7 @@ export const categories = [
     icon: 'בֵּ',
     color: '#E17055',
     backgroundColor: '#FFEAA7',
-    games: ['learn-tzeirei'],
+    games: ['learn-tzeirei', 'learn-chirik', 'learn-patach', 'learn-cholam', 'learn-shuruk'],
   },
   // Hebrew Toddler categories (לגיל הרך)
   {
