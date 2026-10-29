@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dump:registry": "node scripts/dump-registry.mjs",
+    "check:assets": "node scripts/check-assets.mjs"
   },
   "dependencies": {
     "framer-motion": "^12.23.26",
