@@ -138,9 +138,6 @@ export default {
   'word-xylophone': () => (
     <img src="/images/word-xylophone.png" alt="Xylophone" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),
-  'word-xray': () => (
-    <img src="/images/word-xray.png" alt="X-ray" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-  ),
   'word-fox': () => (
     <img src="/images/word-fox.png" alt="Fox" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),

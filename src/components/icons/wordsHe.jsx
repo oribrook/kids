@@ -2,17 +2,6 @@ import styles from './icons.module.css';
 
 export default {
   // ===== Word Image Icons (for letters games) =====
-  'word-naalayim': () => (
-    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
-      {/* Shoes / נעליים */}
-      <ellipse cx="30" cy="60" rx="22" ry="12" fill="#E74C3C" />
-      <ellipse cx="30" cy="55" rx="18" ry="8" fill="#C0392B" />
-      <ellipse cx="70" cy="60" rx="22" ry="12" fill="#E74C3C" />
-      <ellipse cx="70" cy="55" rx="18" ry="8" fill="#C0392B" />
-      <ellipse cx="30" cy="50" rx="10" ry="6" fill="#2C3E50" />
-      <ellipse cx="70" cy="50" rx="10" ry="6" fill="#2C3E50" />
-    </svg>
-  ),
   'word-bayit': () => (
     <svg viewBox="0 0 100 100" className={styles.itemSvg}>
       {/* House / בית - reuse existing house icon style */}
@@ -51,61 +40,11 @@ export default {
   'word-banana': () => (
     <img src="/images/word-banana.png" alt="בננה" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),
-  'word-aba': () => (
-    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
-      {/* Dad / אבא - man face */}
-      <circle cx="50" cy="45" r="30" fill="#FDBF60" />
-      <circle cx="50" cy="42" r="27" fill="#FFD89B" />
-      <circle cx="38" cy="40" r="4" fill="#2C3E50" />
-      <circle cx="62" cy="40" r="4" fill="#2C3E50" />
-      <path d="M 42 55 Q 50 62 58 55" stroke="#2C3E50" strokeWidth="3" fill="none" />
-      <rect x="25" y="18" width="50" height="12" rx="3" fill="#5D4E37" />
-      <rect x="20" y="25" width="60" height="8" rx="2" fill="#5D4E37" />
-    </svg>
-  ),
-  'word-ima': () => (
-    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
-      {/* Mom / אמא - woman face */}
-      <circle cx="50" cy="48" r="28" fill="#FDBF60" />
-      <circle cx="50" cy="45" r="25" fill="#FFD89B" />
-      <circle cx="40" cy="42" r="3" fill="#2C3E50" />
-      <circle cx="60" cy="42" r="3" fill="#2C3E50" />
-      <path d="M 44 55 Q 50 60 56 55" stroke="#E74C3C" strokeWidth="3" fill="none" />
-      <path d="M 22 35 Q 25 15 50 12 Q 75 15 78 35" stroke="#5D4E37" strokeWidth="12" fill="none" />
-      <ellipse cx="22" cy="45" rx="8" ry="12" fill="#5D4E37" />
-      <ellipse cx="78" cy="45" rx="8" ry="12" fill="#5D4E37" />
-    </svg>
-  ),
   'word-mamtak': () => (
     <img src="/images/word-mamtak.png" alt="ממתק" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),
-  'word-sababa': () => (
-    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
-      {/* Thumbs up / סבבה */}
-      <ellipse cx="50" cy="60" rx="20" ry="25" fill="#FDBF60" />
-      <rect x="35" y="70" width="30" height="25" rx="5" fill="#FDBF60" />
-      <ellipse cx="50" cy="35" rx="12" ry="20" fill="#FFD89B" />
-      <ellipse cx="50" cy="30" rx="10" ry="15" fill="#FDBF60" />
-    </svg>
-  ),
   'word-avatiach': () => (
     <img src="/images/word-avatiach.png" alt="אבטיח" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-  ),
-  'word-avatiach-slice': () => (
-    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
-      {/* Watermelon slice / אבטיח */}
-      <path d="M 15 75 C 15 45 35 20 50 20 C 65 20 85 45 85 75 Z" fill="#E53935" />
-      <path d="M 15 75 C 15 78 30 82 50 82 C 70 82 85 78 85 75" fill="#E53935" />
-      <path d="M 12 77 C 12 80 28 85 50 85 C 72 85 88 80 88 77 L 85 75 C 85 78 70 82 50 82 C 30 82 15 78 15 75 Z" fill="#43A047" />
-      <path d="M 10 80 C 10 83 27 88 50 88 C 73 88 90 83 90 80 L 88 77 C 88 80 72 85 50 85 C 28 85 12 80 12 77 Z" fill="#2E7D32" />
-      <ellipse cx="35" cy="50" rx="4" ry="6" fill="#2D3436" />
-      <ellipse cx="50" cy="42" rx="4" ry="6" fill="#2D3436" />
-      <ellipse cx="65" cy="50" rx="4" ry="6" fill="#2D3436" />
-      <ellipse cx="40" cy="65" rx="4" ry="5" fill="#2D3436" />
-      <ellipse cx="55" cy="62" rx="4" ry="5" fill="#2D3436" />
-      <ellipse cx="70" cy="68" rx="3" ry="4" fill="#2D3436" />
-      <ellipse cx="30" cy="62" rx="3" ry="4" fill="#2D3436" />
-    </svg>
   ),
   'word-kiseh': () => (
     <svg viewBox="0 0 100 100" className={styles.itemSvg}>
@@ -188,9 +127,6 @@ export default {
   ),
   'word-dinozaur': () => (
     <img src="/images/word-dinozaur.png" alt="דינוזאור" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-  ),
-  'word-daf': () => (
-    <img src="/images/word-daf.png" alt="דף" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
   ),
   'word-dvash': () => (
     <img src="/images/word-dvash.png" alt="דבש" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />

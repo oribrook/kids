@@ -134,12 +134,6 @@ export default {
   ),
 
   // ===== Letters with Cholam Nikud (for Q1 intro) =====
-  'letter-gimel-cholam': () => (
-    <svg viewBox="0 0 100 100" className={styles.itemSvg}>
-      <rect x="10" y="10" width="80" height="80" rx="12" fill="#F39C12" />
-      <text x="50" y="72" textAnchor="middle" fontSize="55" fontFamily="Arial, sans-serif" fill="white" fontWeight="bold">גֹּ</text>
-    </svg>
-  ),
   'letter-chet-cholam': () => (
     <svg viewBox="0 0 100 100" className={styles.itemSvg}>
       <rect x="10" y="10" width="80" height="80" rx="12" fill="#F39C12" />
